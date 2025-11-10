@@ -2,7 +2,6 @@ from abc import ABC, abstractmethod
 from collections.abc import Awaitable, Callable
 from typing import Optional, Union
 
-from maxo.types import Callback, CallbackKeyboardButton
 from maxo.dialogs.api.entities import ChatEvent
 from maxo.dialogs.api.internal import RawKeyboard
 from maxo.dialogs.api.protocols import DialogManager, DialogProtocol
@@ -12,6 +11,7 @@ from maxo.dialogs.widgets.widget_event import (
     WidgetEventProcessor,
     ensure_event_processor,
 )
+from maxo.types import Callback, CallbackKeyboardButton
 
 from .base import Keyboard
 

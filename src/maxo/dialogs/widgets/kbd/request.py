@@ -1,10 +1,10 @@
 from collections.abc import Callable
 from typing import Optional, Union
 
-from maxo.types import CallbackKeyboardButton, MessageKeyboardButton
 from maxo.dialogs.api.internal import RawKeyboard
 from maxo.dialogs.api.protocols import DialogManager
 from maxo.dialogs.widgets.text import Text
+from maxo.types import CallbackKeyboardButton, MessageKeyboardButton
 
 from .base import Keyboard
 

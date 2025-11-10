@@ -2,12 +2,6 @@ from collections.abc import Callable, Iterable
 from typing import Optional, Union
 
 from maxo import Router
-from maxo.fsm import State, StatesGroup
-from maxo.fsm.state import any_state
-from maxo.fsm.storages.base import BaseEventIsolation
-from maxo.fsm.storages.memory import SimpleEventIsolation
-from maxo.routing.interfaces import BaseRouter
-from maxo.routing.observers import UpdateObserver
 from maxo.dialogs.api.entities import DialogUpdateEvent
 from maxo.dialogs.api.exceptions import UnregisteredDialogError
 from maxo.dialogs.api.internal import DialogManagerFactory
@@ -34,6 +28,12 @@ from maxo.dialogs.manager.manager_middleware import (
 )
 from maxo.dialogs.manager.message_manager import MessageManager
 from maxo.dialogs.manager.update_handler import handle_update
+from maxo.fsm import State, StatesGroup
+from maxo.fsm.state import any_state
+from maxo.fsm.storages.base import BaseEventIsolation
+from maxo.fsm.storages.memory import SimpleEventIsolation
+from maxo.routing.interfaces import BaseRouter
+from maxo.routing.observers import UpdateObserver
 
 from .context.access_validator import DefaultAccessValidator
 
@@ -128,28 +128,26 @@ def _register_middleware(
         )
     )
 
-    router.message_created.middleware.inner(manager_middleware)
-    router.message_callback.middleware.inner(manager_middleware)
-    update_handler.middleware.inner(manager_middleware)
-    router.bot_added.middleware.inner(manager_middleware)
-    router.bot_removed.middleware.inner(manager_middleware)
-    router.exception.middleware.inner(manager_middleware)
-
     router.message_created.middleware.outer(intent_middleware.process_message)
     router.message_callback.middleware.outer(intent_middleware.process_callback)
+    router.bot_started.middleware.outer(intent_middleware.process_bot_started)
     update_handler.middleware.outer(intent_middleware.process_aiogd_update)
 
     router.message_created.middleware.outer(context_unlocker_middleware)
     router.message_callback.middleware.outer(context_unlocker_middleware)
+    router.bot_started.middleware.outer(context_unlocker_middleware)
     update_handler.middleware.outer(context_unlocker_middleware)
-    router.bot_added.middleware.inner(manager_middleware)
-    router.bot_removed.middleware.inner(manager_middleware)
+
+    router.message_created.middleware.inner(manager_middleware)
+    router.message_callback.middleware.inner(manager_middleware)
+    router.bot_started.middleware.inner(manager_middleware)
+    update_handler.middleware.inner(manager_middleware)
+    router.exception.middleware.inner(manager_middleware)
 
     router.message_created.middleware.inner(context_saver_middleware)
     router.message_callback.middleware.inner(context_saver_middleware)
+    router.bot_started.middleware.inner(context_saver_middleware)
     update_handler.middleware.inner(context_saver_middleware)
-    router.bot_added.middleware.inner(manager_middleware)
-    router.bot_removed.middleware.inner(manager_middleware)
 
     bg_factory_middleware = BgFactoryMiddleware(bg_manager_factory)
     for observer in router.observers.values():

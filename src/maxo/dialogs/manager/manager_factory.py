@@ -1,5 +1,4 @@
 from maxo import Ctx
-from maxo.routing.interfaces import BaseRouter
 from maxo.dialogs.api.entities import ChatEvent
 from maxo.dialogs.api.internal import DialogManagerFactory
 from maxo.dialogs.api.protocols import (
@@ -8,6 +7,7 @@ from maxo.dialogs.api.protocols import (
     MediaIdStorageProtocol,
     MessageManagerProtocol,
 )
+from maxo.routing.interfaces import BaseRouter
 
 from .manager import ManagerImpl
 

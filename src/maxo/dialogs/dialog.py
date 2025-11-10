@@ -9,6 +9,14 @@ from typing import (
 )
 
 from maxo import Router
+from maxo.dialogs.api.entities import Context, Data, LaunchMode, NewMessage
+from maxo.dialogs.api.exceptions import UnregisteredWindowError
+from maxo.dialogs.api.internal import Widget, WindowProtocol
+from maxo.dialogs.api.protocols import (
+    CancelEventProcessing,
+    DialogManager,
+    DialogProtocol,
+)
 from maxo.enums import ChatType
 from maxo.fsm import State, StatesGroup
 from maxo.routing.ctx import Ctx
@@ -18,14 +26,6 @@ from maxo.routing.updates import MessageCallback
 from maxo.types import Callback
 from maxo.types.message import Message
 from maxo.types.update_context import UpdateContext
-from maxo.dialogs.api.entities import Context, Data, LaunchMode, NewMessage
-from maxo.dialogs.api.exceptions import UnregisteredWindowError
-from maxo.dialogs.api.internal import Widget, WindowProtocol
-from maxo.dialogs.api.protocols import (
-    CancelEventProcessing,
-    DialogManager,
-    DialogProtocol,
-)
 
 from .context.intent_filter import IntentFilter
 from .utils import remove_intent_id

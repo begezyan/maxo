@@ -1,14 +1,14 @@
 from typing import Any
 
-from maxo.routing.ctx import Ctx
-from maxo.routing.interfaces import BaseMiddleware, BaseRouter, NextMiddleware
-from maxo.routing.updates.base import MaxUpdate
 from maxo.dialogs.api.internal import STORAGE_KEY, DialogManagerFactory
 from maxo.dialogs.api.protocols import (
     BgManagerFactory,
     DialogManager,
     DialogRegistryProtocol,
 )
+from maxo.routing.ctx import Ctx
+from maxo.routing.interfaces import BaseMiddleware, BaseRouter, NextMiddleware
+from maxo.routing.updates.base import MaxUpdate
 
 MANAGER_KEY = "dialog_manager"
 BG_FACTORY_KEY = "dialog_bg_factory"

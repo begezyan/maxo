@@ -4,11 +4,6 @@ from time import time
 from typing import Any
 
 from maxo import Bot, Dispatcher, Router
-from maxo.fsm import State, StatesGroup
-from maxo.fsm.key_builder import DefaultKeyBuilder
-from maxo.fsm.storages.memory import MemoryStorage, SimpleEventIsolation
-from maxo.routing.updates import MessageCreated
-from maxo.tools.long_polling import LongPolling
 from maxo.dialogs import (
     Dialog,
     DialogManager,
@@ -19,6 +14,11 @@ from maxo.dialogs import (
 )
 from maxo.dialogs.widgets.kbd import Back, Next, SwitchTo
 from maxo.dialogs.widgets.text import Const, Format, Multi
+from maxo.fsm import State, StatesGroup
+from maxo.fsm.key_builder import DefaultKeyBuilder
+from maxo.fsm.storages.memory import MemoryStorage, SimpleEventIsolation
+from maxo.routing.updates import MessageCreated
+from maxo.tools.long_polling import LongPolling
 
 
 class StartSG(StatesGroup):

@@ -2,7 +2,6 @@ import dataclasses
 from collections.abc import Callable
 from typing import Any, Optional, Union
 
-from maxo.routing.updates import MessageCallback
 from maxo.dialogs.api.internal import RawKeyboard, Widget
 from maxo.dialogs.api.protocols import (
     DialogManager,
@@ -14,6 +13,7 @@ from maxo.dialogs.widgets.common.items import (
     ItemsGetterVariant,
     get_items_getter,
 )
+from maxo.routing.updates import MessageCallback
 
 from .base import Keyboard
 

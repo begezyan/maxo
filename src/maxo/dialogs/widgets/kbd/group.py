@@ -2,10 +2,10 @@ from collections.abc import Iterable
 from itertools import chain
 from typing import Optional
 
-from maxo.types import Callback, CallbackKeyboardButton
 from maxo.dialogs.api.internal import ButtonVariant, RawKeyboard
 from maxo.dialogs.api.protocols import DialogManager, DialogProtocol
 from maxo.dialogs.widgets.common import WhenCondition
+from maxo.types import Callback, CallbackKeyboardButton
 
 from .base import Keyboard
 

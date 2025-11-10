@@ -26,12 +26,13 @@ class FacadeMiddleware(BaseMiddleware[Update[Any]]):
         next: NextMiddleware[Update[Any]],
     ) -> Any:
         facade = self._facade_cls_factory(type(update.update))
-        ctx["facade"] = facade(ctx["bot"], update.update)
+        if facade:
+            ctx["facade"] = facade(ctx["bot"], update.update)
 
         return await next(ctx)
 
     def _facade_cls_factory(
         self,
         update_tp: type[BaseUpdate],
-    ) -> type[BaseUpdateFacade[Any]]:
-        return _FACADES_MAP[update_tp]
+    ) -> type[BaseUpdateFacade[Any]] | None:
+        return _FACADES_MAP.get(update_tp)

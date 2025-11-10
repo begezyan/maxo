@@ -2,11 +2,11 @@ from abc import abstractmethod
 from typing import Optional, Protocol
 
 from maxo import Bot
-from maxo.routing.updates import MessageEdited
-from maxo.types import Callback
 from maxo.dialogs import ShowMode
 from maxo.dialogs.api.entities import NewMessage, OldMessage
 from maxo.dialogs.api.exceptions import DialogsError
+from maxo.routing.updates import MessageEdited
+from maxo.types import Callback
 
 
 class MessageNotModified(DialogsError):

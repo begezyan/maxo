@@ -1,11 +1,11 @@
 from typing import Optional
 
+from maxo.dialogs.api.entities import Context
+from maxo.dialogs.api.internal import CONTEXT_KEY
 from maxo.fsm import StatesGroup
 from maxo.routing.ctx import Ctx
 from maxo.routing.filters import BaseFilter
 from maxo.types import MaxoType
-from maxo.dialogs.api.entities import Context
-from maxo.dialogs.api.internal import CONTEXT_KEY
 
 
 class IntentFilter(BaseFilter):

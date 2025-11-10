@@ -5,19 +5,6 @@ from logging import getLogger
 from typing import Any, Optional, cast
 
 from maxo import Ctx
-from maxo.enums import ChatStatusType, ChatType
-from maxo.fsm import State
-from maxo.routing.interfaces import BaseRouter
-from maxo.routing.middlewares.update_context import UPDATE_CONTEXT_KEY
-from maxo.routing.signals.exception import ErrorEvent
-from maxo.routing.updates import MessageCallback
-from maxo.types import (
-    Chat,
-    Message,
-    MessageKeyboardButton,
-    Recipient,
-    User,
-)
 from maxo.dialogs.api.entities import (
     DEFAULT_STACK_ID,
     EVENT_CONTEXT_KEY,
@@ -57,6 +44,19 @@ from maxo.dialogs.api.protocols import (
     MessageNotModified,
 )
 from maxo.dialogs.context.storage import StorageProxy
+from maxo.enums import ChatStatusType, ChatType
+from maxo.fsm import State
+from maxo.routing.interfaces import BaseRouter
+from maxo.routing.middlewares.update_context import UPDATE_CONTEXT_KEY
+from maxo.routing.signals.exception import ErrorEvent
+from maxo.routing.updates import MessageCallback
+from maxo.types import (
+    Chat,
+    Message,
+    MessageKeyboardButton,
+    Recipient,
+    User,
+)
 
 from .bg_manager import BgManager
 

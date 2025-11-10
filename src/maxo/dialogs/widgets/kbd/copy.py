@@ -1,11 +1,11 @@
 from typing import Any
 
-from maxo.types import CallbackKeyboardButton
 from maxo.dialogs import DialogManager
 from maxo.dialogs.api.internal import RawKeyboard
 from maxo.dialogs.widgets.common import WhenCondition
 from maxo.dialogs.widgets.kbd import Keyboard
 from maxo.dialogs.widgets.text import Text
+from maxo.types import CallbackKeyboardButton
 
 
 class CopyText(Keyboard):

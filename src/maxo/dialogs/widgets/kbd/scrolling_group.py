@@ -1,6 +1,5 @@
 from typing import Optional
 
-from maxo.types import Callback, CallbackKeyboardButton
 from maxo.dialogs.api.internal import RawKeyboard
 from maxo.dialogs.api.protocols import DialogManager, DialogProtocol
 from maxo.dialogs.widgets.common import (
@@ -8,6 +7,7 @@ from maxo.dialogs.widgets.common import (
     OnPageChangedVariants,
     WhenCondition,
 )
+from maxo.types import Callback, CallbackKeyboardButton
 
 from .base import Keyboard
 from .group import Group

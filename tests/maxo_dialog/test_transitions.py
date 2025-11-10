@@ -2,24 +2,25 @@ import pytest
 
 from maxo import Ctx, Dispatcher
 from maxo.bot.bot import Bot
+from maxo.dialogs import (
+    BotClient,
+    Dialog,
+    DialogManager,
+    FakeBot,
+    MockMessageManager,
+    StartMode,
+    Window,
+    setup_dialogs,
+)
+from maxo.dialogs.test_tools.keyboard import InlineButtonTextLocator
+from maxo.dialogs.test_tools.memory_storage import JsonMemoryStorage
+from maxo.dialogs.widgets import Back, Cancel, Next, Start
+from maxo.dialogs.widgets.text import Const, Format
 from maxo.fsm.key_builder import DefaultKeyBuilder
 from maxo.fsm.state import State, StatesGroup
 from maxo.fsm.storages.memory import SimpleEventIsolation
 from maxo.routing.filters.command import CommandStart
 from maxo.types.message import Message
-from maxo.dialogs import (
-    Dialog,
-    DialogManager,
-    StartMode,
-    Window,
-    setup_dialogs,
-)
-from maxo.dialogs import BotClient, MockMessageManager
-from maxo.dialogs import FakeBot
-from maxo.dialogs.test_tools.keyboard import InlineButtonTextLocator
-from maxo.dialogs.test_tools.memory_storage import JsonMemoryStorage
-from maxo.dialogs.widgets import Back, Cancel, Next, Start
-from maxo.dialogs.widgets.text import Const, Format
 
 
 class MainSG(StatesGroup):

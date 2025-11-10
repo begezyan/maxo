@@ -6,13 +6,6 @@ from typing import TYPE_CHECKING, Any, Optional
 
 from jinja2 import Environment, PackageLoader, select_autoescape
 
-from maxo.enums import AttachmentType
-from maxo.fsm import State, StatesGroup
-from maxo.routing.interfaces import BaseRouter
-from maxo.routing.middlewares.event_context import EVENT_FROM_USER_KEY
-from maxo.routing.middlewares.update_context import UPDATE_CONTEXT_KEY
-from maxo.types import Callback, CallbackKeyboardButton, Chat, User
-from maxo.types.message import Message
 from maxo.dialogs.api.entities import (
     EVENT_CONTEXT_KEY,
     AccessSettings,
@@ -34,6 +27,13 @@ from maxo.dialogs.api.protocols.manager import BaseDialogManager, DialogManager
 from maxo.dialogs.manager.manager_middleware import MANAGER_KEY
 from maxo.dialogs.setup import collect_dialogs
 from maxo.dialogs.utils import split_reply_callback
+from maxo.enums import AttachmentType
+from maxo.fsm import State, StatesGroup
+from maxo.routing.interfaces import BaseRouter
+from maxo.routing.middlewares.event_context import EVENT_FROM_USER_KEY
+from maxo.routing.middlewares.update_context import UPDATE_CONTEXT_KEY
+from maxo.types import Callback, CallbackKeyboardButton, Chat, User
+from maxo.types.message import Message
 
 if TYPE_CHECKING:
     from maxo.dialogs.dialog import Dialog

@@ -1,12 +1,12 @@
 from collections.abc import Callable
 from typing import Any, Optional
 
-from maxo.routing.updates import MessageCreated
 from maxo.dialogs.api.protocols import (
     DialogManager,
     DialogProtocol,
 )
 from maxo.dialogs.tools.filter_object import FilterObject
+from maxo.routing.updates import MessageCreated
 
 from .base import BaseInput
 

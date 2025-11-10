@@ -1,6 +1,11 @@
 from logging import getLogger
 from typing import Optional, Union
 
+from maxo.dialogs.api.entities import (
+    ChatEvent,
+    DialogUpdateEvent,
+)
+from maxo.dialogs.api.internal import RawKeyboard
 from maxo.routing.signals.exception import ErrorEvent
 from maxo.types import (
     Callback,
@@ -11,11 +16,6 @@ from maxo.types import (
     User,
 )
 from maxo.types.message import Message
-from maxo.dialogs.api.entities import (
-    ChatEvent,
-    DialogUpdateEvent,
-)
-from maxo.dialogs.api.internal import RawKeyboard
 
 logger = getLogger(__name__)
 

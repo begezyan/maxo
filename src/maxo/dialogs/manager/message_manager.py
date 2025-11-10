@@ -2,6 +2,16 @@ from logging import getLogger
 from typing import Optional, Union
 
 from maxo import Bot
+from maxo.dialogs.api.entities import (
+    MediaAttachment,
+    NewMessage,
+    OldMessage,
+    ShowMode,
+)
+from maxo.dialogs.api.protocols import (
+    MessageManagerProtocol,
+    MessageNotModified,
+)
 from maxo.enums import AttachmentType
 from maxo.errors import MaxBotApiError, MaxBotBadRequestError
 from maxo.tools.helpers import attachment_to_request
@@ -17,16 +27,6 @@ from maxo.types import (
     # ReplyKeyboardMarkup,
     # ReplyKeyboardRemove,
     # URLInputFile,
-)
-from maxo.dialogs.api.entities import (
-    MediaAttachment,
-    NewMessage,
-    OldMessage,
-    ShowMode,
-)
-from maxo.dialogs.api.protocols import (
-    MessageManagerProtocol,
-    MessageNotModified,
 )
 
 logger = getLogger(__name__)

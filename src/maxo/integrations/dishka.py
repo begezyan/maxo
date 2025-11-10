@@ -7,11 +7,11 @@ from typing import Any, ParamSpec, TypeVar, overload
 
 from dishka import AsyncContainer
 
-from maxo.routing.handlers.signal import SignalHandlerFn
+from maxo.routing.handlers.signal import SignalHandler, SignalHandlerFn
 from maxo.routing.handlers.update import UpdateHandler, UpdateHandlerFn
 from maxo.routing.interfaces import BaseRouter
 from maxo.routing.interfaces.middleware import BaseMiddleware, NextMiddleware
-from maxo.routing.observers import UpdateObserver
+from maxo.routing.observers import SignalObserver, UpdateObserver
 from maxo.routing.signals.base import BaseSignal
 from maxo.routing.signals.update import Update
 
@@ -36,6 +36,8 @@ _ReturnT = TypeVar("_ReturnT")
 _ParamsP = ParamSpec("_ParamsP")
 _UpdateT = TypeVar("_UpdateT", bound=BaseUpdate)
 _SignalT = TypeVar("_SignalT", bound=BaseSignal)
+_Handler = TypeVar("_Handler", bound=UpdateHandler | SignalHandler)
+
 
 # FIXME
 # _SignalHandlerFn = Callable[_ParamsP, _ReturnT]
@@ -99,7 +101,7 @@ def inject_router(router: BaseRouter) -> None:
 
     for sub_router in chain_tail(router):
         for observer in sub_router.observers.values():
-            if not isinstance(observer, UpdateObserver):
+            if not isinstance(observer, (UpdateObserver, SignalObserver)):
                 continue
 
             for handler in observer.handlers:
@@ -107,7 +109,7 @@ def inject_router(router: BaseRouter) -> None:
                     inject_handler(handler)
 
 
-def inject_handler(handler: UpdateHandler) -> UpdateHandler:
+def inject_handler(handler: _Handler) -> _Handler:
     temp_handler = type(handler)(
         handler_fn=inject(handler._handler_fn),
         filter=handler._filter,

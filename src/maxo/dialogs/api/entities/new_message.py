@@ -2,6 +2,8 @@ from dataclasses import dataclass
 from enum import Enum
 from typing import Optional, Sequence, Union
 
+from maxo.dialogs.api.entities import ShowMode
+from maxo.dialogs.api.entities.link_preview import LinkPreviewOptions
 from maxo.enums import TextFormat
 from maxo.types import (
     InlineKeyboardAttachmentRequest,
@@ -11,8 +13,6 @@ from maxo.types import (
 from maxo.types.attachments import Attachments
 from maxo.types.keyboard_buttons import KeyboardButtons
 from maxo.types.request_attachments import AttachmentsRequests
-from maxo.dialogs.api.entities import ShowMode
-from maxo.dialogs.api.entities.link_preview import LinkPreviewOptions
 
 MarkupVariant = list[list[KeyboardButtons]]
 

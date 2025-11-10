@@ -1,11 +1,6 @@
 from collections.abc import Awaitable, Callable
 from typing import Optional, Union
 
-from maxo.types import (
-    Callback,
-    CallbackKeyboardButton,
-    # WebAppInfo,
-)
 from maxo.dialogs.api.internal import RawKeyboard
 from maxo.dialogs.api.protocols import DialogManager, DialogProtocol
 from maxo.dialogs.widgets.common import WhenCondition
@@ -13,6 +8,11 @@ from maxo.dialogs.widgets.text import Text
 from maxo.dialogs.widgets.widget_event import (
     WidgetEventProcessor,
     ensure_event_processor,
+)
+from maxo.types import (
+    Callback,
+    CallbackKeyboardButton,
+    # WebAppInfo,
 )
 
 from .base import Keyboard

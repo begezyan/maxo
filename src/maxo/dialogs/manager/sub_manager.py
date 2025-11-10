@@ -1,8 +1,6 @@
 import dataclasses
 from typing import Any, Optional
 
-from maxo.fsm import State
-from maxo.types import Message
 from maxo.dialogs.api.entities import (
     AccessSettings,
     ChatEvent,
@@ -17,6 +15,8 @@ from maxo.dialogs.api.protocols import (
     BaseDialogManager,
     DialogManager,
 )
+from maxo.fsm import State
+from maxo.types import Message
 
 
 class SubManager(DialogManager):

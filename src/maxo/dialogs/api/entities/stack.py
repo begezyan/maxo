@@ -4,9 +4,9 @@ import time
 from dataclasses import dataclass, field
 from typing import Optional
 
+from maxo.dialogs.api.exceptions import DialogStackOverflow
 from maxo.fsm import State
 from maxo.types.attachments import Attachments
-from maxo.dialogs.api.exceptions import DialogStackOverflow
 
 from .access import AccessSettings
 from .context import Context, Data

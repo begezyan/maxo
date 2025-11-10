@@ -3,9 +3,9 @@ from typing import NamedTuple, Optional, cast
 
 from cachetools import LRUCache
 
-from maxo.enums import AttachmentType
 from maxo.dialogs.api.entities import MediaId
 from maxo.dialogs.api.protocols import MediaIdStorageProtocol
+from maxo.enums import AttachmentType
 
 
 class CachedMediaId(NamedTuple):

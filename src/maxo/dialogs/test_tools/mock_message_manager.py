@@ -3,6 +3,12 @@ from typing import Optional
 from uuid import uuid4
 
 from maxo import Bot
+from maxo.dialogs import ShowMode
+from maxo.dialogs.api.entities import MediaAttachment, NewMessage, OldMessage
+from maxo.dialogs.api.protocols import (
+    MessageManagerProtocol,
+    MessageNotModified,
+)
 from maxo.enums import ChatType
 from maxo.types import (
     AudioAttachment,
@@ -12,12 +18,6 @@ from maxo.types import (
     MessageBody,
     Recipient,
     VideoAttachment,
-)
-from maxo.dialogs import ShowMode
-from maxo.dialogs.api.entities import MediaAttachment, NewMessage, OldMessage
-from maxo.dialogs.api.protocols import (
-    MessageManagerProtocol,
-    MessageNotModified,
 )
 
 

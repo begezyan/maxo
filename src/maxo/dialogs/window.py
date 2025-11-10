@@ -2,6 +2,12 @@ import warnings
 from logging import getLogger
 from typing import Any, Optional
 
+from maxo.dialogs.api.entities import (
+    MarkupVariant,
+    MediaAttachment,
+    NewMessage,
+)
+from maxo.dialogs.api.internal import Widget, WindowProtocol
 from maxo.fsm import State
 from maxo.routing.middlewares.update_context import UPDATE_CONTEXT_KEY
 from maxo.routing.updates import MessageCallback, MessageCreated
@@ -10,12 +16,6 @@ from maxo.types import (
     Recipient,
 )
 from maxo.types.update_context import UpdateContext
-from maxo.dialogs.api.entities import (
-    MarkupVariant,
-    MediaAttachment,
-    NewMessage,
-)
-from maxo.dialogs.api.internal import Widget, WindowProtocol
 
 from .api.entities import Data
 from .api.internal.widgets import MarkupFactory

@@ -8,12 +8,12 @@ from typing import (
     runtime_checkable,
 )
 
-from maxo.routing.updates import MessageCallback, MessageCreated
-from maxo.types import CallbackKeyboardButton, MessageKeyboardButton
 from maxo.dialogs import DialogManager
 from maxo.dialogs.api.entities import MarkupVariant, MediaAttachment
 from maxo.dialogs.api.entities.link_preview import LinkPreviewOptions
 from maxo.dialogs.api.protocols import DialogProtocol
+from maxo.routing.updates import MessageCallback, MessageCreated
+from maxo.types import CallbackKeyboardButton, MessageKeyboardButton
 
 
 @runtime_checkable

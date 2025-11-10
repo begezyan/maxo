@@ -3,7 +3,6 @@ from enum import Enum
 from typing import Any, Optional, Protocol
 
 from maxo import Bot
-from maxo.fsm import State
 from maxo.dialogs.api.entities import (
     AccessSettings,
     ChatEvent,
@@ -13,6 +12,7 @@ from maxo.dialogs.api.entities import (
     Stack,
     StartMode,
 )
+from maxo.fsm import State
 
 
 class UnsetId(Enum):

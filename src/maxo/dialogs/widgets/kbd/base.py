@@ -1,7 +1,6 @@
 from abc import abstractmethod
 from typing import Optional, Union
 
-from maxo.routing.updates import MessageCallback
 from maxo.dialogs.api.internal import KeyboardWidget, RawKeyboard
 from maxo.dialogs.api.protocols import DialogManager, DialogProtocol
 from maxo.dialogs.widgets.common import (
@@ -9,6 +8,7 @@ from maxo.dialogs.widgets.common import (
     WhenCondition,
     Whenable,
 )
+from maxo.routing.updates import MessageCallback
 
 
 class Keyboard(Actionable, Whenable, KeyboardWidget):

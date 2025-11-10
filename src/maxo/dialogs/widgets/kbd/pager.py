@@ -2,11 +2,11 @@ from abc import ABC
 from enum import Enum
 from typing import Optional, TypedDict, Union
 
-from maxo.types import Callback, CallbackKeyboardButton
 from maxo.dialogs.api.internal import RawKeyboard
 from maxo.dialogs.api.protocols import DialogManager, DialogProtocol
 from maxo.dialogs.widgets.common import ManagedScroll, Scroll, WhenCondition
 from maxo.dialogs.widgets.text import Const, Format, Text
+from maxo.types import Callback, CallbackKeyboardButton
 
 from .base import Keyboard
 

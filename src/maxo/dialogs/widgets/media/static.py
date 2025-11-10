@@ -1,11 +1,11 @@
 from pathlib import Path
 from typing import Optional, Union
 
-from maxo.enums import AttachmentType
 from maxo.dialogs.api.entities import MediaAttachment
 from maxo.dialogs.api.protocols import DialogManager
 from maxo.dialogs.widgets.common import WhenCondition
 from maxo.dialogs.widgets.text import Const, Text
+from maxo.enums import AttachmentType
 
 from .base import Media
 

@@ -14,11 +14,11 @@ from typing import (
 from dishka import AsyncContainer
 from dishka.integrations.base import wrap_injection
 
-from maxo.integrations.dishka import CONTAINER_NAME
 from maxo.dialogs import Data, DialogManager
 from maxo.dialogs.api.entities import ChatEvent
 from maxo.dialogs.api.internal import Widget
 from maxo.dialogs.widgets.common import ManagedWidget
+from maxo.integrations.dishka import CONTAINER_NAME
 
 ON_DIALOG_EVENT_LEN_ARGS: Final = 2
 

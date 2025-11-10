@@ -1,12 +1,12 @@
 from abc import abstractmethod
 from typing import Any, Optional, Protocol, runtime_checkable
 
-from maxo.fsm import State, StatesGroup
 from maxo.dialogs.api.entities import (
     Data,
     LaunchMode,
     NewMessage,
 )
+from maxo.fsm import State, StatesGroup
 
 from .manager import DialogManager
 

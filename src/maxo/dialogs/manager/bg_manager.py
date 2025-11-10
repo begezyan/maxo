@@ -3,10 +3,6 @@ from logging import getLogger
 from typing import Any, Optional
 
 from maxo import Bot, Dispatcher
-from maxo.enums import ChatStatusType, ChatType
-from maxo.fsm import State
-from maxo.routing.interfaces import BaseRouter
-from maxo.types import User
 from maxo.dialogs.api.entities import (
     DEFAULT_STACK_ID,
     AccessSettings,
@@ -30,6 +26,10 @@ from maxo.dialogs.api.protocols import (
 )
 from maxo.dialogs.manager.updater import Updater
 from maxo.dialogs.utils import is_user_loaded
+from maxo.enums import ChatStatusType, ChatType
+from maxo.fsm import State
+from maxo.routing.interfaces import BaseRouter
+from maxo.types import User
 
 logger = getLogger(__name__)
 

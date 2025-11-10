@@ -4,10 +4,6 @@ from typing import Any, Optional, Union
 
 from magic_filter import F
 
-from maxo.enums import AttachmentType
-from maxo.integrations.magic_filter import MagicFilter
-from maxo.routing.updates import MessageCreated
-from maxo.types import Message
 from maxo.dialogs.api.internal import InputWidget
 from maxo.dialogs.api.protocols import (
     DialogManager,
@@ -19,6 +15,10 @@ from maxo.dialogs.widgets.widget_event import (
     WidgetEventProcessor,
     ensure_event_processor,
 )
+from maxo.enums import AttachmentType
+from maxo.integrations.magic_filter import MagicFilter
+from maxo.routing.updates import MessageCreated
+from maxo.types import Message
 
 MessageHandlerFunc = Callable[
     [Message, "MessageInput", DialogManager],

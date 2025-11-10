@@ -5,8 +5,6 @@ from typing import TYPE_CHECKING
 from diagrams import Cluster, Diagram, Edge
 from diagrams.custom import Custom
 
-from maxo.fsm import State
-from maxo.routing.interfaces import BaseRouter
 from maxo.dialogs.api.internal import WindowProtocol
 from maxo.dialogs.setup import collect_dialogs
 from maxo.dialogs.widgets.kbd import (
@@ -17,6 +15,8 @@ from maxo.dialogs.widgets.kbd import (
     Start,
     SwitchTo,
 )
+from maxo.fsm import State
+from maxo.routing.interfaces import BaseRouter
 
 if TYPE_CHECKING:
     from maxo.dialogs import Dialog

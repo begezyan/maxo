@@ -1,8 +1,8 @@
 from abc import abstractmethod
 from typing import Optional, Protocol
 
-from maxo.enums import AttachmentType
 from maxo.dialogs.api.entities import MediaId
+from maxo.enums import AttachmentType
 
 
 class MediaIdStorageProtocol(Protocol):

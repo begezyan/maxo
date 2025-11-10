@@ -1,20 +1,6 @@
 from logging import getLogger
 from typing import Any, Optional, cast
 
-from maxo.fsm.storages.base import BaseEventIsolation, BaseStorage
-from maxo.routing.ctx import Ctx
-from maxo.routing.interfaces import BaseMiddleware, BaseRouter, NextMiddleware
-from maxo.routing.middlewares.event_context import (
-    EVENT_FROM_USER_KEY,
-)
-from maxo.routing.middlewares.update_context import UPDATE_CONTEXT_KEY
-from maxo.routing.sentinels import UNHANDLED
-from maxo.routing.signals.exception import ErrorEvent
-from maxo.routing.updates.base import MaxUpdate
-from maxo.routing.updates.message_callback import MessageCallback
-from maxo.routing.updates.message_created import MessageCreated
-from maxo.tools.facades import MessageCallbackFacade
-from maxo.types import Message
 from maxo.dialogs.api.entities import (
     DEFAULT_STACK_ID,
     EVENT_CONTEXT_KEY,
@@ -31,17 +17,27 @@ from maxo.dialogs.api.exceptions import (
     UnknownIntent,
     UnknownState,
 )
-from maxo.dialogs.api.internal import (
-    CONTEXT_KEY,
-    STACK_KEY,
-    STORAGE_KEY,
-    ReplyCallback,
-)
+from maxo.dialogs.api.internal import CONTEXT_KEY, STACK_KEY, STORAGE_KEY
 from maxo.dialogs.api.protocols import (
     DialogRegistryProtocol,
     StackAccessValidator,
 )
-from maxo.dialogs.utils import remove_intent_id, split_reply_callback
+from maxo.dialogs.utils import remove_intent_id
+from maxo.enums.chat_type import ChatType
+from maxo.fsm.storages.base import BaseEventIsolation, BaseStorage
+from maxo.routing.ctx import Ctx
+from maxo.routing.interfaces import BaseMiddleware, NextMiddleware
+from maxo.routing.middlewares.event_context import (
+    EVENT_FROM_USER_KEY,
+)
+from maxo.routing.middlewares.update_context import UPDATE_CONTEXT_KEY
+from maxo.routing.sentinels import UNHANDLED
+from maxo.routing.signals.exception import ErrorEvent
+from maxo.routing.updates.base import MaxUpdate
+from maxo.routing.updates.bot_started import BotStarted
+from maxo.routing.updates.message_callback import MessageCallback
+from maxo.routing.updates.message_created import MessageCreated
+from maxo.tools.facades import MessageCallbackFacade
 
 from .storage import StorageProxy
 
@@ -62,13 +58,27 @@ def event_context_from_callback(event: MessageCallback, ctx: Ctx) -> EventContex
 
 
 def event_context_from_message(event: MessageCreated, ctx: Ctx) -> EventContext:
+    user = ctx.get(EVENT_FROM_USER_KEY)
+    _event_user_id = getattr(event.message.sender, "user_id", None)
+    user_id = _event_user_id or getattr(user, "user_id", None)
     return EventContext(
         bot=ctx["bot"],
-        user=event.message.sender,
-        user_id=event.message.sender.user_id,
+        user=user,
+        user_id=user_id,
         chat=None,
         chat_id=event.message.recipient.chat_id,
         chat_type=event.message.recipient.chat_type,
+    )
+
+
+def event_context_from_bot_started(event: BotStarted, ctx: Ctx) -> EventContext:
+    return EventContext(
+        bot=ctx["bot"],
+        user=event.user,
+        user_id=event.user.user_id,
+        chat_id=event.chat_id,
+        chat_type=ChatType.DIALOG,
+        chat=None,
     )
 
 
@@ -84,13 +94,14 @@ def event_context_from_aiogd(event: DialogUpdateEvent) -> EventContext:
 
 
 def event_context_from_error(event: ErrorEvent, ctx: Ctx) -> EventContext:
-    # TODO: ???
     if isinstance(event.update, MessageCreated):
         return event_context_from_message(event.update, ctx)
-    elif isinstance(event.update, MessageCallback):
+    if isinstance(event.update, MessageCallback):
         return event_context_from_callback(event.update, ctx)
-    elif isinstance(event.update, DialogUpdate) and event.update.aiogd_update:
+    if isinstance(event.update, DialogUpdate) and event.update.aiogd_update:
         return event_context_from_aiogd(event.update.aiogd_update)
+    if isinstance(event.update, BotStarted):
+        return event_context_from_bot_started(event.update, ctx)
     raise ValueError("Unsupported event type in ErrorEvent.update")
 
 
@@ -100,7 +111,7 @@ class IntentMiddlewareFactory:
         registry: DialogRegistryProtocol,
         access_validator: StackAccessValidator,
         events_isolation: BaseEventIsolation,
-    ):
+    ) -> None:
         super().__init__()
         self.registry = registry
         self.access_validator = access_validator
@@ -135,10 +146,8 @@ class IntentMiddlewareFactory:
 
     async def _load_stack(
         self,
-        event: ChatEvent,
         stack_id: Optional[str],
         proxy: StorageProxy,
-        ctx: Ctx,
     ) -> Optional[Stack]:
         if stack_id is None:
             raise InvalidStackIdError("Both stack id and intent id are None")
@@ -157,7 +166,7 @@ class IntentMiddlewareFactory:
             proxy.user_id,
             proxy.chat_id,
         )
-        stack = await self._load_stack(event, stack_id, proxy, ctx)
+        stack = await self._load_stack(stack_id, proxy)
         if not stack:
             return
         if stack.empty():
@@ -192,7 +201,7 @@ class IntentMiddlewareFactory:
         self,
         event: ChatEvent,
         proxy: StorageProxy,
-        intent_id: Optional[str],
+        intent_id: str,
         ctx: Ctx,
     ) -> None:
         logger.debug(
@@ -202,7 +211,7 @@ class IntentMiddlewareFactory:
             proxy.chat_id,
         )
         context = await proxy.load_context(intent_id)
-        stack = await self._load_stack(event, context.stack_id, proxy, ctx)
+        stack = await self._load_stack(context.stack_id, proxy)
         if not stack:
             return
         try:
@@ -243,24 +252,6 @@ class IntentMiddlewareFactory:
             ctx=ctx,
         )
 
-    def _intent_id_from_reply(
-        self,
-        event: MessageCreated,
-        ctx: Ctx,
-    ) -> Optional[str]:
-        if not (
-            event.message.link
-            and event.message.link.sender.id == ctx["bot"].state.info.user_id
-            and event.message.link.message.reply_markup.buttons
-        ):
-            return None
-        for row in event.message.link.message.reply_markup.buttons:
-            for button in row:
-                if button.payload:
-                    intent_id, _ = remove_intent_id(button.payload)
-                    return intent_id
-        return None
-
     async def process_message(
         self,
         update: MessageCreated,
@@ -269,34 +260,7 @@ class IntentMiddlewareFactory:
     ) -> Any:
         event_context = event_context_from_message(update, ctx)
         ctx[EVENT_CONTEXT_KEY] = event_context
-
-        text, payload = split_reply_callback(update.message.unsafe_body.text)
-        if payload:
-            # FIXME
-            query = ReplyCallback(
-                id="",
-                message=Message(
-                    chat=update.message.chat,
-                    message_id=update.message.message_id,
-                ),
-                original_message=update,
-                data=payload,
-                from_user=update.message.from_user,
-                # we cannot know real chat instance
-                chat_instance=str(update.message.chat.id),
-            ).as_(ctx["bot"])
-            router: BaseRouter = ctx["event_router"]
-            return await router.trigger(ctx)
-
-        if intent_id := self._intent_id_from_reply(update, ctx):
-            await self._load_context_by_intent(
-                event=update,
-                proxy=self.storage_proxy(event_context, ctx["fsm_storage"]),
-                intent_id=intent_id,
-                ctx=ctx,
-            )
-        else:
-            await self._load_default_context(update, ctx, event_context)
+        await self._load_default_context(update, ctx, event_context)
         return await next(ctx)
 
     async def process_aiogd_update(
@@ -356,14 +320,25 @@ class IntentMiddlewareFactory:
             await facade.callback_answer(notification="")
         return result
 
+    async def process_bot_started(
+        self,
+        update: BotStarted,
+        ctx: Ctx,
+        next: NextMiddleware,
+    ) -> Any:
+        if UPDATE_CONTEXT_KEY not in ctx:
+            return await next(ctx)
+
+        event_context = event_context_from_bot_started(update, ctx)
+        ctx[EVENT_CONTEXT_KEY] = event_context
+        await self._load_default_context(update, ctx, event_context)
+        return await next(ctx)
+
 
 SUPPORTED_ERROR_EVENTS = (
     MessageCreated,
     MessageCallback,
-    # BotRemoved,
-    # BotAdded,
-    # UserAdded,
-    # UserRemoved,
+    BotStarted,
     DialogUpdateEvent,
 )
 

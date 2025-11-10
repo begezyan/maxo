@@ -3,9 +3,6 @@ from copy import copy
 from typing import Optional
 
 from maxo import Bot
-from maxo.fsm import State, StatesGroup
-from maxo.fsm.key_builder import StorageKey
-from maxo.fsm.storages.base import BaseEventIsolation, BaseStorage
 from maxo.dialogs.api.entities import (
     DEFAULT_STACK_ID,
     AccessSettings,
@@ -13,6 +10,9 @@ from maxo.dialogs.api.entities import (
     Stack,
 )
 from maxo.dialogs.api.exceptions import UnknownIntent, UnknownState
+from maxo.fsm import State, StatesGroup
+from maxo.fsm.key_builder import StorageKey
+from maxo.fsm.storages.base import BaseEventIsolation, BaseStorage
 
 
 class StorageProxy:

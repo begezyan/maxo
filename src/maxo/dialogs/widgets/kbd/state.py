@@ -1,13 +1,13 @@
 from typing import Any, Optional
 
-from maxo.fsm import State
-from maxo.types import Callback
 from maxo.dialogs.api.entities import ChatEvent, Data, ShowMode, StartMode
 from maxo.dialogs.api.protocols import DialogManager
 from maxo.dialogs.widgets.common import WhenCondition
 from maxo.dialogs.widgets.kbd.button import Button, OnClick
 from maxo.dialogs.widgets.text import Const, Text
 from maxo.dialogs.widgets.widget_event import WidgetEventProcessor
+from maxo.fsm import State
+from maxo.types import Callback
 
 BACK_TEXT = Const("Back")
 NEXT_TEXT = Const("Next")
