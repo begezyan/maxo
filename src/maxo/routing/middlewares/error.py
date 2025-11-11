@@ -3,7 +3,7 @@ from typing import Any
 from maxo.routing.ctx import Ctx
 from maxo.routing.interfaces.middleware import BaseMiddleware, NextMiddleware
 from maxo.routing.interfaces.router import BaseRouter
-from maxo.routing.sentinels import UNHANDLED
+from maxo.routing.sentinels import UNHANDLED, CancelHandler, SkipHandler
 from maxo.routing.signals.exception import ErrorEvent
 
 
@@ -21,6 +21,8 @@ class ErrorMiddleware(BaseMiddleware[Any]):
     ) -> Any:
         try:
             return await next(ctx)
+        except (SkipHandler, CancelHandler):  # pragma: no cover
+            raise
         except Exception as exception:
             exception_event = ErrorEvent(
                 exception=exception,

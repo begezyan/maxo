@@ -8,3 +8,11 @@ class Sentinels(Enum):
 
 UNHANDLED = Sentinels.UNHANDLED
 REJECTED = Sentinels.REJECTED
+
+
+class SkipHandler(Exception):
+    pass
+
+
+class CancelHandler(Exception):
+    pass

@@ -70,6 +70,9 @@ class UpdateHandler(
     async def __call__(self, ctx: Ctx) -> _ReturnT_co:
         update = ctx.pop("update")
         wrapped = partial(self._handler_fn, update, **self._prepare_kwargs(ctx))
-        if self._awaitable:
-            return await wrapped()
-        return await asyncio.to_thread(wrapped)
+        try:
+            if self._awaitable:
+                return await wrapped()
+            return await asyncio.to_thread(wrapped)
+        finally:
+            ctx["update"] = update

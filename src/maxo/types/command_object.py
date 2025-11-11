@@ -1,22 +1,25 @@
+from dataclasses import field
+from typing import Match
+
 from maxo.types.base import MaxoType
 
 
 class CommandObject(MaxoType):
     prefix: str = "/"
     command: str = ""
-    args: str | None = None
     mention: str | None = None
+    args: str | None = field(repr=False, default=None)
+    regexp_match: Match[str] | None = field(repr=False, default=None)
 
     @property
     def mentioned(self) -> bool:
-        return self.mention is not None
+        return bool(self.mention)
 
     @property
     def text(self) -> str:
-        line = f"@{self.mention} " if self.mention else ""
-
-        line = f"{line} {self.prefix}{self.command}"
+        line = self.prefix + self.command
+        if self.mention:
+            line += "@" + self.mention
         if self.args:
             line += " " + self.args
-
         return line

@@ -1,10 +1,10 @@
-from typing import Any, final
-
 try:
     from magic_filter import AttrDict, MagicFilter as OriginMagicFilter
 except ImportError as e:
     e.add_note(" * Please run `pip install maxo[magic_filter]`")
     raise
+
+from typing import Any, final
 
 from maxo.routing.ctx import Ctx
 from maxo.routing.filters.base import BaseFilter
