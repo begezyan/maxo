@@ -16,9 +16,7 @@ from maxo.dialogs.widgets.widget_event import (
     WidgetEventProcessor,
     ensure_event_processor,
 )
-from maxo.enums import AttachmentType
 from maxo.routing.updates import MessageCreated
-from maxo.types import Message
 
 from .base import BaseInput
 
@@ -30,7 +28,7 @@ class OnSuccess(Protocol[T]):
     @abstractmethod
     async def __call__(
         self,
-        message: Message,
+        message: MessageCreated,
         widget: "ManagedTextInput[T]",
         dialog_manager: DialogManager,
         data: T,
@@ -43,7 +41,7 @@ class OnError(Protocol[T]):
     @abstractmethod
     async def __call__(
         self,
-        message: Message,
+        message: MessageCreated,
         widget: "ManagedTextInput[T]",
         dialog_manager: DialogManager,
         error: ValueError,
@@ -76,15 +74,18 @@ class TextInput(BaseInput, Generic[T]):
         dialog: DialogProtocol,
         manager: DialogManager,
     ) -> bool:
-        if message.content_type != AttachmentType.TEXT:
+        if message.message.body is None:
             return False
+        if message.message.body.text is None:
+            return False
+
         if self.filter and not await self.filter.call(
             manager.event,
             **manager.middleware_data,
         ):
             return False
         try:
-            value = self.type_factory(message.text)
+            value = self.type_factory(message.message.body.text)
         except ValueError as err:
             await self.on_error.process_event(
                 message,
@@ -94,7 +95,7 @@ class TextInput(BaseInput, Generic[T]):
             )
         else:
             # store original text
-            self.set_widget_data(manager, message.text)
+            self.set_widget_data(manager, message.message.body.text)
             await self.on_success.process_event(
                 message,
                 self.managed(manager),

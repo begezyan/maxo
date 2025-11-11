@@ -9,15 +9,12 @@ from maxo.dialogs.widgets.widget_event import (
     WidgetEventProcessor,
     ensure_event_processor,
 )
-from maxo.types import (
-    Callback,
-    CallbackKeyboardButton,
-    # WebAppInfo,
-)
+from maxo.routing.updates import MessageCallback
+from maxo.types import CallbackKeyboardButton
 
 from .base import Keyboard
 
-OnClick = Callable[[Callback, "Button", DialogManager], Awaitable]
+OnClick = Callable[[MessageCallback, "Button", DialogManager], Awaitable]
 
 
 class Button(Keyboard):
@@ -34,7 +31,7 @@ class Button(Keyboard):
 
     async def _process_own_callback(
         self,
-        callback: Callback,
+        callback: MessageCallback,
         dialog: DialogProtocol,
         manager: DialogManager,
     ) -> bool:

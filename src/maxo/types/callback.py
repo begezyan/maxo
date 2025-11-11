@@ -9,3 +9,7 @@ class Callback(MaxoType):
     callback_id: str
     payload: str | None = None
     user: User
+
+    @property
+    def id(self) -> str:
+        return self.callback_id
