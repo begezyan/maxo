@@ -228,6 +228,7 @@ class MaxApiClient(AiohttpClient):
         else:
             url = method.__url__.format_map(url_vars)
 
+        # TODO: Вынести в retort dumper?
         headers: dict[str, Any] = request_context.get(HeaderMarker) or {}
         headers["Authorization"] = headers.get("Authorization", self._token)
 

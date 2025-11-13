@@ -1,11 +1,11 @@
-__all__ = [
+__all__ = (
     "create_deep_link",
     "create_start_link",
     "create_startapp_link",
     "create_telegram_link",
     "decode_payload",
     "encode_payload",
-]
+)
 
 import re
 from typing import TYPE_CHECKING, Callable, Literal, Optional, cast

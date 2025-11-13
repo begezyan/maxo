@@ -1,7 +1,6 @@
 import dataclasses
 import types
 import typing
-from dataclasses import MISSING
 from decimal import Decimal
 from enum import Enum
 from fractions import Fraction
@@ -50,7 +49,6 @@ class Payload:
             )
 
         super().__init_subclass__(**kwargs)
-
 
     def _encode_value(self, key: str, value: Any) -> str:
         if value is None:
@@ -105,12 +103,8 @@ class Payload:
         payload = {}
 
         for field, value in zip(fields, parts, strict=True):
-            if (
-                value == ""
-                and _check_field_is_nullable(field)
-                and field.default != ""
-            ):
-                value = None if field.default is MISSING else field.default
+            if value == "" and _check_field_is_nullable(field) and field.default != "":
+                value = None if field.default is dataclasses.MISSING else field.default
             payload[field.name] = value
         return cls(**payload)
 
@@ -139,7 +133,7 @@ class MessageCallbackFilter(BaseFilter[MessageCallback]):
 
     def __str__(self) -> str:
         return self._signature_to_string(
-            payload  =self.payload,
+            payload=self.payload,
             filter=self.filter,
         )
 

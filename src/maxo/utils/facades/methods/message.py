@@ -128,7 +128,7 @@ class MessageMethodsFacade(BaseMethodsFacade, ABC):
         media: Sequence[InputFile] | None = None,
         link: NewMessageLink | None = None,
         notify: bool = True,
-        format: TextFormat | None = None
+        format: TextFormat | None = None,
     ) -> Message:
         message_id = self.message.unsafe_body.mid
 

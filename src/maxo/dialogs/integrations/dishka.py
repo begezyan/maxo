@@ -1,4 +1,7 @@
-__all__ = ["CONTAINER_NAME", "inject"]
+__all__ = (
+    "CONTAINER_NAME",
+    "inject",
+)
 
 from collections.abc import Awaitable, Callable
 from typing import (

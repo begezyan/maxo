@@ -61,14 +61,17 @@ def parse_webapp_init_data(
     *,
     loads: Callable[..., Any] = json.loads,
 ) -> WebAppInitData:
-    result = {}
+    result: dict[str, Any] = {}
     for key, value in parse_qsl(init_data):
         if (value.startswith("[") and value.endswith("]")) or (
             value.startswith("{") and value.endswith("}")
         ):
             value = loads(value)
         result[key] = value
-    return WebAppInitData(**result)
+
+    chat: dict[str, Any] = result.pop("chat", {})
+    user: dict[str, Any] = result.pop("user", {})
+    return WebAppInitData(**result, chat=WebAppChat(**chat), user=WebAppUser(**user))
 
 
 def safe_parse_webapp_init_data(
