@@ -1,3 +1,6 @@
+import html
+from typing import Any
+
 from maxo.dialogs.api.protocols import DialogManager
 from maxo.dialogs.widgets.common import WhenCondition
 
@@ -37,3 +40,27 @@ class Format(Text):
         if manager.is_preview():
             return self.text.format_map(_FormatDataStub(data=data))
         return self.text.format_map(data)
+
+
+class _HtmlSafeDict:
+    def __init__(self, data: dict) -> None:
+        self._data = data
+
+    def __getitem__(self, key: Any) -> str:
+        return html.escape(self._data[key], quote=False)
+
+
+class HtmlSafeFormat(Text):
+    def __init__(self, text: str, when: WhenCondition = None):
+        super().__init__(when=when)
+        self.text = text
+
+    async def _render_text(
+        self,
+        data: dict,
+        manager: DialogManager,
+    ) -> str:
+        if manager.is_preview():
+            return self.text.format_map(_FormatDataStub(data=data))
+
+        return self.text.format_map(_HtmlSafeDict(data))

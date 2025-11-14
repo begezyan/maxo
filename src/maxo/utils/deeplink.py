@@ -19,7 +19,7 @@ if TYPE_CHECKING:
 BAD_PATTERN = re.compile(r"[^a-zA-Z0-9-_]")
 
 
-async def create_start_link(
+def create_start_link(
     bot: "Bot",
     payload: str,
     encode: bool = False,
@@ -34,7 +34,7 @@ async def create_start_link(
     )
 
 
-async def create_startapp_link(
+def create_startapp_link(
     bot: "Bot",
     payload: str,
     encode: bool = False,
@@ -63,7 +63,7 @@ def create_deep_link(
     Create deep link.
 
     :param username:
-    :param link_type: `start`, `startgroup` or `startapp`
+    :param link_type: `start` or `startapp`
     :param payload: any string-convertible data
     :param app_name: if you want direct mini app link
     :param encode: encode payload with base64url or custom encoder
