@@ -29,6 +29,7 @@ class WebAppInitData(MaxoType):
     user: WebAppUser
     auth_date: str | None = None
     hash: str
+    start_param: str | None = None
 
 
 def check_webapp_signature(token: str, init_data: str) -> bool:
@@ -71,6 +72,7 @@ def parse_webapp_init_data(
 
     chat: dict[str, Any] = result.pop("chat", {})
     user: dict[str, Any] = result.pop("user", {})
+
     return WebAppInitData(**result, chat=WebAppChat(**chat), user=WebAppUser(**user))
 
 
