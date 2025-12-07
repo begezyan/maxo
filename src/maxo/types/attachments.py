@@ -1,4 +1,3 @@
-
 from maxo.types.audio_attachment import AudioAttachment
 from maxo.types.contact_attachment import ContactAttachment
 from maxo.types.file_attachment import FileAttachment

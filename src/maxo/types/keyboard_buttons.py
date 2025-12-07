@@ -1,4 +1,3 @@
-
 from maxo.types.callback_keyboard_button import CallbackKeyboardButton
 from maxo.types.link_keyboard_button import LinkKeyboardButton
 from maxo.types.message_keyboard_button import MessageKeyboardButton

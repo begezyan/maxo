@@ -19,6 +19,7 @@ class MediaId:
 
     __hash__ = None
 
+
 class MediaAttachment:
     def __init__(
         self,
