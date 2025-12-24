@@ -1,5 +1,6 @@
 import asyncio
 import contextlib
+import time
 from collections.abc import AsyncIterator, Sequence
 from typing import Any
 
@@ -105,7 +106,6 @@ class LongPolling:
 
         await dispatcher.feed_signal(AfterShutdown())
 
-    # TODO: Нормальный drop_pending_updates?
     async def _get_updates(
         self,
         bot: Bot,
@@ -115,6 +115,7 @@ class LongPolling:
         types: Omittable[str] = Omitted(),
         drop_pending_updates: bool = False,
     ) -> AsyncIterator[Update[Any]]:
+        start_time = time.time()
         backoff = Backoff(self._backoff_config)
         bot_id = bot.state.info.user_id
         bot_username = bot.state.info.username
@@ -124,7 +125,7 @@ class LongPolling:
             try:
                 result = await bot.get_updates(
                     limit=limit,
-                    timeout=timeout if not drop_pending_updates else 3,
+                    timeout=timeout,
                     marker=marker,
                     types=types,
                 )
@@ -157,12 +158,9 @@ class LongPolling:
 
             marker = result.marker
 
-            if drop_pending_updates:
-                for update in result.updates:
-                    loggers.long_polling.debug("Skip update: %s", update)
-                drop_pending_updates = False
-                continue
-
             for update in result.updates:
+                if drop_pending_updates and update.timestamp.timestamp() < start_time:
+                    loggers.long_polling.debug("Skip update: %s", update)
+                    continue
                 loggers.long_polling.debug("New update: %s", update)
                 yield Update(update=update, marker=result.marker)
