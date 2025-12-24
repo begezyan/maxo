@@ -75,7 +75,6 @@ class Bot:
         if self.state.started:
             return
 
-        time.perf_counter()
         api_client = MaxApiClient(self._token, self._warming_up, self._text_format)
         info = await api_client.send_method(GetBotInfo())
         self._state = InitialBotState(info=info, api_client=api_client)
@@ -90,7 +89,7 @@ class Bot:
         exc_value: BaseException | None,
         traceback: TracebackType | None,
     ) -> None:
-        await self.state.api_client.close()
+        await self.close()
 
     async def send_method(
         self,
