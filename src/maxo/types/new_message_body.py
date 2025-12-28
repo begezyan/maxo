@@ -1,6 +1,6 @@
 from maxo.enums.text_format import TextFormat
 from maxo.omit import Omittable, Omitted
-from maxo.types import AttachmentsRequests
+from maxo.types.attachments import AttachmentsRequests
 from maxo.types.base import MaxoType
 from maxo.types.new_message_link import NewMessageLink
 

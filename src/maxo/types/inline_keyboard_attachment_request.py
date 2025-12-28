@@ -1,8 +1,8 @@
 from typing import Self
 
 from maxo.enums.attachment_request_type import AttachmentRequestType
-from maxo.types import InlineButtons
 from maxo.types.attachment_request import AttachmentRequest
+from maxo.types.buttons import InlineButtons
 from maxo.types.inline_keyboard_attachment_request_payload import (
     InlineKeyboardAttachmentRequestPayload,
 )

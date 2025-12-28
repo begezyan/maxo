@@ -33,7 +33,7 @@ Attachments = (
     | ReplyKeyboardAttachment
     | ShareAttachment
     | LocationAttachment
-    | DataAttachment,
+    | DataAttachment
 )
 MediaAttachmentsRequests = (
     PhotoAttachmentRequest

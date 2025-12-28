@@ -30,8 +30,9 @@ from maxo.enums import (
     AttachmentType,
     ButtonType,
     MarkupElementType,
+    UpdateType,
 )
-from maxo.enums.text_fromat import TextFormat
+from maxo.enums.text_format import TextFormat
 from maxo.errors.api import (
     MaxBotBadRequestError,
     MaxBotForbiddenError,
@@ -40,9 +41,17 @@ from maxo.errors.api import (
     MaxBotServiceUnavailableError,
     MaxBotTooManyRequestsError,
     MaxBotUnauthorizedError,
+    MaxBotUnknownServerError,
     RetvalReturnedServerException,
 )
 from maxo.omit import Omittable
+from maxo.routing.updates import (
+    BotStopped,
+    DialogCleared,
+    DialogMuted,
+    DialogRemoved,
+    DialogUnmuted,
+)
 from maxo.routing.updates.bot_added_to_chat import BotAddedToChat
 from maxo.routing.updates.bot_removed_from_chat import BotRemovedFromChat
 from maxo.routing.updates.bot_started import BotStarted
@@ -54,7 +63,12 @@ from maxo.routing.updates.message_edited import MessageEdited
 from maxo.routing.updates.message_removed import MessageRemoved
 from maxo.routing.updates.user_added_to_chat import UserAddedToChat
 from maxo.routing.updates.user_removed_from_chat import UserRemovedFromChat
-from maxo.types import InlineKeyboardAttachment
+from maxo.types import (
+    DataAttachment,
+    InlineKeyboardAttachment,
+    ReplyKeyboardAttachment,
+    ReplyKeyboardAttachmentRequest,
+)
 from maxo.types.audio_attachment import AudioAttachment
 from maxo.types.audio_attachment_request import AudioAttachmentRequest
 from maxo.types.callback_button import CallbackButton
@@ -92,27 +106,38 @@ from maxo.types.video_attachment_request import VideoAttachmentRequest
 
 _has_tag_providers = concat_provider(
     # ---> UpdateType <---
-    has_tag_provider(BotAddedToChat, "update_type", "bot_added"),
-    has_tag_provider(UserAddedToChat, "update_type", "user_added"),
-    has_tag_provider(MessageRemoved, "update_type", "message_removed"),
-    has_tag_provider(MessageEdited, "update_type", "message_edited"),
-    has_tag_provider(MessageCallback, "update_type", "message_callback"),
-    has_tag_provider(MessageChatCreated, "update_type", "message_chat_created"),
-    has_tag_provider(MessageCreated, "update_type", "message_created"),
-    has_tag_provider(BotStarted, "update_type", "bot_started"),
-    has_tag_provider(BotRemovedFromChat, "update_type", "bot_removed"),
-    has_tag_provider(ChatTitleChanged, "update_type", "chat_title_changed"),
-    has_tag_provider(UserRemovedFromChat, "update_type", "user_removed"),
+    has_tag_provider(BotAddedToChat, "update_type", UpdateType.BOT_ADDED),
+    has_tag_provider(BotRemovedFromChat, "update_type", UpdateType.BOT_REMOVED),
+    has_tag_provider(BotStarted, "update_type", UpdateType.BOT_STARTED),
+    has_tag_provider(BotStopped, "update_type", UpdateType.BOT_STOPPED),
+    has_tag_provider(ChatTitleChanged, "update_type", UpdateType.CHAT_TITLE_CHANGED),
+    has_tag_provider(DialogCleared, "update_type", UpdateType.DIALOG_CLEARED),
+    has_tag_provider(DialogMuted, "update_type", UpdateType.DIALOG_MUTED),
+    has_tag_provider(DialogRemoved, "update_type", UpdateType.DIALOG_REMOVED),
+    has_tag_provider(DialogUnmuted, "update_type", UpdateType.DIALOG_UNMUTED),
+    has_tag_provider(MessageCallback, "update_type", UpdateType.MESSAGE_CALLBACK),
+    has_tag_provider(
+        MessageChatCreated,
+        "update_type",
+        UpdateType.MESSAGE_CHAT_CREATED,
+    ),
+    has_tag_provider(MessageCreated, "update_type", UpdateType.MESSAGE_CREATED),
+    has_tag_provider(MessageEdited, "update_type", UpdateType.MESSAGE_EDITED),
+    has_tag_provider(MessageRemoved, "update_type", UpdateType.MESSAGE_REMOVED),
+    has_tag_provider(UserAddedToChat, "update_type", UpdateType.USER_ADDED),
+    has_tag_provider(UserRemovedFromChat, "update_type", UpdateType.USER_REMOVED),
     # ---> AttachmentType <---
     has_tag_provider(AudioAttachment, "type", AttachmentType.AUDIO),
     has_tag_provider(ContactAttachment, "type", AttachmentType.CONTACT),
     has_tag_provider(FileAttachment, "type", AttachmentType.FILE),
     has_tag_provider(PhotoAttachment, "type", AttachmentType.IMAGE),
     has_tag_provider(InlineKeyboardAttachment, "type", AttachmentType.INLINE_KEYBOARD),
+    has_tag_provider(ReplyKeyboardAttachment, "type", AttachmentType.REPLY_KEYBOARD),
     has_tag_provider(LocationAttachment, "type", AttachmentType.LOCATION),
     has_tag_provider(ShareAttachment, "type", AttachmentType.SHARE),
     has_tag_provider(StickerAttachment, "type", AttachmentType.STICKER),
     has_tag_provider(VideoAttachment, "type", AttachmentType.VIDEO),
+    has_tag_provider(DataAttachment, "type", AttachmentType.DATA),
     # ---> MarkupElementType <---
     has_tag_provider(EmphasizedMarkupElement, "type", MarkupElementType.EMPHASIZED),
     # has_tag_provider(HeadingMarkupElement, "type", MarkupElementType.HEADING),
@@ -138,6 +163,11 @@ _has_tag_providers = concat_provider(
         InlineKeyboardAttachmentRequest,
         "type",
         AttachmentRequestType.INLINE_KEYBOARD,
+    ),
+    has_tag_provider(
+        ReplyKeyboardAttachmentRequest,
+        "type",
+        AttachmentRequestType.REPLY_KEYBOARD,
     ),
     has_tag_provider(LocationAttachmentRequest, "type", AttachmentRequestType.LOCATION),
     has_tag_provider(ShareAttachmentRequest, "type", AttachmentRequestType.SHARE),
@@ -274,6 +304,8 @@ class MaxApiClient(AiohttpClient):
             raise MaxBotMethodNotAllowedError(code, message)
         if response.status_code == 429:
             raise MaxBotTooManyRequestsError(code, message)
+        if response.status_code == 500:
+            raise MaxBotUnknownServerError(code, message)
         if response.status_code == 503:
             raise MaxBotServiceUnavailableError(code, message)
 

@@ -5,3 +5,4 @@ class ChatType(StrEnum):
     """Тип чата: диалог, чат"""
 
     CHAT = "chat"
+    DIALOG = "dialog"

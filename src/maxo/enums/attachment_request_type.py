@@ -9,6 +9,7 @@ class AttachmentRequestType(StrEnum):
     FILE = "file"
     IMAGE = "image"
     INLINE_KEYBOARD = "inline_keyboard"
+    REPLY_KEYBOARD = "reply_keyboard"
     LOCATION = "location"
     SHARE = "share"
     STICKER = "sticker"

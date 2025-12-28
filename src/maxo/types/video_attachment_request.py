@@ -1,3 +1,5 @@
+from typing import Self
+
 from maxo.enums.attachment_request_type import AttachmentRequestType
 from maxo.omit import Omittable, Omitted
 from maxo.types.attachment_request import AttachmentRequest

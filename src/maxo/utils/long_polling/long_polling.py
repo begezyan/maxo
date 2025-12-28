@@ -143,6 +143,7 @@ class LongPolling:
                     bot_username,
                     bot_id,
                 )
+                await asyncio.sleep(backoff.current_delay)
                 backoff.next()
                 continue
 

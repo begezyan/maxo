@@ -49,7 +49,7 @@ from maxo.bot.state import (
     EmptyBotState,
     RunningBotState,
 )
-from maxo.enums.text_fromat import TextFormat
+from maxo.enums.text_format import TextFormat
 from maxo.types.base import MaxoType
 
 _MethodResultT = TypeVar("_MethodResultT", bound=MaxoType)
