@@ -83,7 +83,7 @@ class BgManager(BaseDialogManager):
             user=user,
             chat_id=chat_id,
             user_id=user_id,
-            chat_type=ChatType.CHAT,  # FIXME
+            chat_type=ChatType.CHAT,  # TODO: Определить тип чата
             chat=None,
         )
         if stack_id is None:

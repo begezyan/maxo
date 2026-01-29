@@ -4,8 +4,7 @@ from adaptix import Omitted as AdaptixOmitted
 from typing_extensions import TypeIs
 
 Omitted = AdaptixOmitted
-# TODO: Убрать Omitted не из описания методов и моделей, после убрать костыль ниже
-Omitted.__bool__ = lambda _: False
+Omitted.__bool__ = lambda _: False  # Абсолютно осознанное решение
 
 _OmittedValueT = TypeVar("_OmittedValueT")
 Omittable: TypeAlias = _OmittedValueT | Omitted

@@ -41,19 +41,19 @@ _SignalT = TypeVar("_SignalT", bound=BaseSignal)
 _Handler = TypeVar("_Handler", bound=UpdateHandler | SignalHandler)
 
 
-# FIXME: Типы женерики функции сигналы хендлеры
+# TODO: Типы женерики функции сигналы хендлеры
 # _SignalHandlerFn = Callable[_ParamsP, _ReturnT]
 # _UpdateHandlerFn = Callable[[Concatenate[_UpdateT, _ParamsP]], _ReturnT]
 
 
-# FIXME: Типы женерики функции сигналы хендлеры
+# TODO: Типы женерики функции сигналы хендлеры
 @overload
 def inject(
     func,  # _SignalHandlerFn[_SignalT, _ParamsP, _ReturnT],
 ) -> SignalHandlerFn[_SignalT, _ReturnT]: ...
 
 
-# FIXME: Типы женерики функции сигналы хендлеры
+# TODO: Типы женерики функции сигналы хендлеры
 @overload
 def inject(
     func,  # : _UpdateHandlerFn[_UpdateT, _ParamsP, _ReturnT],

@@ -353,7 +353,7 @@ async def render_reply_keyboard(
     dialog: "Dialog",
     simulate_events: bool,
 ):
-    # TODO simulate events using keyboard
+    # TODO: Simulate events using keyboard
     keyboard = []
     for row in reply_markup:
         keyboard_row = []
@@ -385,7 +385,7 @@ async def create_window(
     else:
         text = message.text
 
-    # FIXME
+    # TODO: Нужно ли? Починить или убрать
     if isinstance(message.reply_markup, CallbackButton):
         keyboard = await render_inline_keyboard(
             state,
