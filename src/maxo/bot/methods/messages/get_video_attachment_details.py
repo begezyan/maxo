@@ -1,10 +1,9 @@
 from maxo.bot.methods.base import MaxoMethod
 from maxo.bot.methods.markers import Path
-from maxo.types.base import MaxoType
 from maxo.types.video_attachment_details import VideoAttachmentDetails
 
 
-class GetVideoAttachmentDetails(MaxoMethod[VideoAttachmentDetails], MaxoType):
+class GetVideoAttachmentDetails(MaxoMethod[VideoAttachmentDetails]):
     """Получить информацио о видео."""
 
     __url__ = "videos/{video_token}"

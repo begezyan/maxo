@@ -1,11 +1,10 @@
 from maxo.bot.methods.base import MaxoMethod
 from maxo.bot.methods.markers import Query
 from maxo.omit import Omittable, Omitted
-from maxo.types.base import MaxoType
 from maxo.types.update_list import UpdateList
 
 
-class GetUpdates(MaxoMethod[UpdateList], MaxoType):
+class GetUpdates(MaxoMethod[UpdateList]):
     """Получение обновлений."""
 
     __url__ = "updates"

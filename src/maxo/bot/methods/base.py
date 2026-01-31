@@ -1,5 +1,9 @@
 from unihttp.method import BaseMethod
 
-# TODO: Разобраться с наследованием от BaseMethod,
-#  чтобы убрать из наследников MaxoMethod наследие от MaxoType
-MaxoMethod = BaseMethod
+from maxo.types import MaxoType
+
+
+class MaxoMethod[_MethodResultT](BaseMethod[_MethodResultT], MaxoType):
+    """
+    Базовый метод для методов Bot API Max.
+    """

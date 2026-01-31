@@ -1,10 +1,9 @@
 from maxo.bot.methods.base import MaxoMethod
 from maxo.bot.methods.markers import Query
-from maxo.types.base import MaxoType
 from maxo.types.simple_query_result import SimpleQueryResult
 
 
-class Unsubscribe(MaxoMethod[SimpleQueryResult], MaxoType):
+class Unsubscribe(MaxoMethod[SimpleQueryResult]):
     """Отписка от обновлений."""
 
     __url__ = "subscriptions"

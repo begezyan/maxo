@@ -1,11 +1,10 @@
 from maxo.bot.methods.base import MaxoMethod
 from maxo.bot.methods.markers import Body
 from maxo.omit import Omittable, Omitted
-from maxo.types.base import MaxoType
 from maxo.types.simple_query_result import SimpleQueryResult
 
 
-class Subscribe(MaxoMethod[SimpleQueryResult], MaxoType):
+class Subscribe(MaxoMethod[SimpleQueryResult]):
     """Подписка на обновления."""
 
     __url__ = "subscriptions"

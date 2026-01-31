@@ -1,12 +1,11 @@
 from maxo.bot.methods.base import MaxoMethod
 from maxo.bot.methods.markers import Body, Path
 from maxo.omit import Omittable, Omitted
-from maxo.types.base import MaxoType
 from maxo.types.chat import Chat
 from maxo.types.photo_attachment_request_payload import PhotoAttachmentRequestPayload
 
 
-class EditChat(MaxoMethod[Chat], MaxoType):
+class EditChat(MaxoMethod[Chat]):
     """Изменение информации о групповом чате."""
 
     __url__ = "chats/{chat_id}"

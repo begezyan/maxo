@@ -3,12 +3,11 @@ from maxo.bot.methods.markers import Body, Query
 from maxo.enums.text_format import TextFormat
 from maxo.omit import Omittable, Omitted
 from maxo.types.attachment_request import AttachmentRequest
-from maxo.types.base import MaxoType
 from maxo.types.new_message_link import NewMessageLink
 from maxo.types.simple_query_result import SimpleQueryResult
 
 
-class EditMessage(MaxoMethod[SimpleQueryResult], MaxoType):
+class EditMessage(MaxoMethod[SimpleQueryResult]):
     """Редактировать сообщение."""
 
     __url__ = "messages"

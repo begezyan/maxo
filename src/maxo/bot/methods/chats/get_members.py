@@ -1,11 +1,10 @@
 from maxo.bot.methods.base import MaxoMethod
 from maxo.bot.methods.markers import Path, Query
 from maxo.omit import Omittable, Omitted
-from maxo.types.base import MaxoType
 from maxo.types.chat_members_list import ChatMembersList
 
 
-class GetMembers(MaxoMethod[ChatMembersList], MaxoType):
+class GetMembers(MaxoMethod[ChatMembersList]):
     """Получение участников группового чата."""
 
     __url__ = "chats/{chat_id}/members"

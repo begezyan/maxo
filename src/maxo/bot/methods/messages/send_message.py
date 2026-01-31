@@ -2,13 +2,12 @@ from maxo.bot.methods.base import MaxoMethod
 from maxo.bot.methods.markers import Body, Query
 from maxo.enums.text_format import TextFormat
 from maxo.omit import Omittable, Omitted
-from maxo.types import MaxoType
 from maxo.types.attachments import AttachmentsRequests
 from maxo.types.new_message_link import NewMessageLink
 from maxo.types.send_message_result import SendMessageResult
 
 
-class SendMessage(MaxoMethod[SendMessageResult], MaxoType):
+class SendMessage(MaxoMethod[SendMessageResult]):
     """Отправить сообщение."""
 
     __url__ = "messages"
