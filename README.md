@@ -18,15 +18,19 @@
 [![Tests](https://img.shields.io/github/actions/workflow/status/K1rL3s/maxo/tests.yml?style=flat)](https://github.com/K1rL3s/maxo/actions)
 
 </div>
+
 <p align="center">
     <b>
         Асинхронный фреймворк для разработки ботов из MAX.ru
     </b>
 </p>
 
-[Оригинальный репозиторий](https://github.com/IvanKirpichnikov/maxo)
+<p align="center">
 
+[Оригинальный репозиторий](https://github.com/IvanKirpichnikov/maxo) \
 [maxo/dialogs](./src/maxo/dialogs) переделаны из [aiogram_dialog](https://github.com/Tishka17/aiogram_dialog)
+
+</p>
 
 ## Установка
 
