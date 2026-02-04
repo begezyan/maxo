@@ -26,10 +26,9 @@
 </p>
 
 <p align="center">
-
-[Оригинальный репозиторий](https://github.com/IvanKirpichnikov/maxo) \
-[maxo/dialogs](./src/maxo/dialogs) переделаны из [aiogram_dialog](https://github.com/Tishka17/aiogram_dialog)
-
+    <a href="https://github.com/IvanKirpichnikov/maxo">Оригинальный репозиторий</a>
+    <br>
+    <a href="./src/maxo/dialogs">maxo/dialogs</a> переделаны из <a href="https://github.com/Tishka17/aiogram_dialog">aiogram_dialog</a>
 </p>
 
 ## Установка
