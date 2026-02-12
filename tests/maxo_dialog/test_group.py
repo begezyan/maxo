@@ -2,22 +2,23 @@ import asyncio
 from typing import Any
 
 import pytest
-from aiogram import Dispatcher
-from aiogram.filters import Command, CommandStart
-from aiogram.fsm.state import State, StatesGroup
-from aiogram_dialog import (
+
+from maxo import Dispatcher
+from maxo.dialogs import (
     Dialog,
     DialogManager,
     StartMode,
     Window,
     setup_dialogs,
 )
-from aiogram_dialog.api.entities import GROUP_STACK_ID, AccessSettings
-from aiogram_dialog.test_tools import BotClient, MockMessageManager
-from aiogram_dialog.test_tools.keyboard import InlineButtonTextLocator
-from aiogram_dialog.test_tools.memory_storage import JsonMemoryStorage
-from aiogram_dialog.widgets.kbd import Button
-from aiogram_dialog.widgets.text import Const, Format
+from maxo.dialogs.api.entities import GROUP_STACK_ID, AccessSettings
+from maxo.dialogs.test_tools import BotClient, MockMessageManager
+from maxo.dialogs.test_tools.keyboard import InlineButtonTextLocator
+from maxo.dialogs.test_tools.memory_storage import JsonMemoryStorage
+from maxo.dialogs.widgets.kbd import Button
+from maxo.dialogs.widgets.text import Const, Format
+from maxo.fsm.state import State, StatesGroup
+from maxo.routing.filters import Command, CommandStart
 
 
 class MainSG(StatesGroup):
@@ -31,16 +32,16 @@ window = Window(
 )
 
 
-async def start(event: Any, dialog_manager: DialogManager):
+async def start(event: Any, dialog_manager: DialogManager) -> None:
     await dialog_manager.start(MainSG.start, mode=StartMode.RESET_STACK)
 
 
-async def start_shared(event: Any, dialog_manager: DialogManager):
+async def start_shared(event: Any, dialog_manager: DialogManager) -> None:
     dialog_manager = dialog_manager.bg(stack_id=GROUP_STACK_ID)
     await dialog_manager.start(MainSG.start, mode=StartMode.RESET_STACK)
 
 
-async def add_shared(event: Any, dialog_manager: DialogManager):
+async def add_shared(event: Any, dialog_manager: DialogManager) -> None:
     await dialog_manager.start(
         MainSG.start,
         access_settings=AccessSettings(
@@ -50,12 +51,12 @@ async def add_shared(event: Any, dialog_manager: DialogManager):
 
 
 @pytest.fixture
-def message_manager():
+def message_manager() -> MockMessageManager:
     return MockMessageManager()
 
 
 @pytest.fixture
-def dp(message_manager):
+def dp(message_manager) -> Dispatcher:
     dp = Dispatcher(storage=JsonMemoryStorage())
     dp.include_router(Dialog(window))
     setup_dialogs(dp, message_manager=message_manager)
@@ -63,17 +64,17 @@ def dp(message_manager):
 
 
 @pytest.fixture
-def client(dp):
+def client(dp) -> BotClient:
     return BotClient(dp, chat_id=-1, user_id=1, chat_type="group")
 
 
 @pytest.fixture
-def second_client(dp):
+def second_client(dp) -> BotClient:
     return BotClient(dp, chat_id=-1, user_id=2, chat_type="group")
 
 
 @pytest.mark.asyncio
-async def test_second_user(dp, client, second_client, message_manager):
+async def test_second_user(dp, client, second_client, message_manager) -> None:
     dp.message.register(start, CommandStart())
     await client.send("/start")
     first_message = message_manager.one_message()
@@ -89,7 +90,7 @@ async def test_second_user(dp, client, second_client, message_manager):
 
 
 @pytest.mark.asyncio
-async def test_change_settings(dp, client, second_client, message_manager):
+async def test_change_settings(dp, client, second_client, message_manager) -> None:
     dp.message.register(start, CommandStart())
     dp.message.register(add_shared, Command("add"))
 
@@ -120,7 +121,7 @@ async def test_change_settings(dp, client, second_client, message_manager):
 
 
 @pytest.mark.asyncio
-async def test_change_settings_bg(dp, client, second_client, message_manager):
+async def test_change_settings_bg(dp, client, second_client, message_manager) -> None:
     dp.message.register(start, CommandStart())
     dp.message.register(add_shared, Command("add"))
 
@@ -151,7 +152,7 @@ async def test_change_settings_bg(dp, client, second_client, message_manager):
 
 
 @pytest.mark.asyncio
-async def test_same_user(dp, client, message_manager):
+async def test_same_user(dp, client, message_manager) -> None:
     dp.message.register(start, CommandStart())
     await client.send("/start")
     first_message = message_manager.one_message()
@@ -168,7 +169,7 @@ async def test_same_user(dp, client, message_manager):
 
 
 @pytest.mark.asyncio
-async def test_shared_stack(dp, client, second_client, message_manager):
+async def test_shared_stack(dp, client, second_client, message_manager) -> None:
     dp.message.register(start_shared, CommandStart())
     await client.send("/start")
     await asyncio.sleep(0.02)  # synchronization workaround, fixme

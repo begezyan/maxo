@@ -31,7 +31,7 @@ class SecondarySG(StatesGroup):
     start = State()
 
 
-async def start(message: Message, ctx: Ctx, dialog_manager: DialogManager):
+async def start(message: Message, ctx: Ctx, dialog_manager: DialogManager) -> None:
     await dialog_manager.start(MainSG.start, mode=StartMode.RESET_STACK)
 
 
@@ -126,7 +126,7 @@ async def test_next_back(bot, message_manager, client) -> None:
 
 
 @pytest.mark.asyncio
-async def test_finish_last(_bot, message_manager, client) -> None:
+async def test_finish_last(bot, message_manager, client) -> None:
     await client.send("/start")
     first_message = message_manager.one_message()
 
@@ -142,7 +142,7 @@ async def test_finish_last(_bot, message_manager, client) -> None:
 
 
 @pytest.mark.asyncio
-async def test_reset_stack(_bot, message_manager, client) -> None:
+async def test_reset_stack(bot, message_manager, client) -> None:
     for _ in range(200):
         message_manager.reset_history()
         await client.send("/start")

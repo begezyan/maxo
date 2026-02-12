@@ -1,7 +1,6 @@
 from typing import Any
 
 import pytest
-from maxo.filters import CommandStart
 
 from maxo import Dispatcher
 from maxo.dialogs import (
@@ -15,8 +14,7 @@ from maxo.dialogs.test_tools import BotClient, MockMessageManager
 from maxo.dialogs.test_tools.memory_storage import JsonMemoryStorage
 from maxo.dialogs.widgets.text import Format
 from maxo.fsm.state import State, StatesGroup
-
-# from maxo.types import ChatMemberMember, ChatMemberOwner
+from maxo.routing.filters import CommandStart
 
 
 class MainSG(StatesGroup):

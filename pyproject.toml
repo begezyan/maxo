@@ -46,7 +46,7 @@ redis = ["redis[hiredis]>=5.0.1,<8.0.0"]
 tools = [
     "diagrams",
 ]
-test = [
+tests = [
     "pytest==9.0.1",
     "pytest-asyncio==1.3.0",
 ]
@@ -112,6 +112,8 @@ ignore = [
     "D212",
     "D203",
 
+    "ARG001", # https://docs.astral.sh/ruff/rules/unused-function-argument/
+    "ARG002", # https://docs.astral.sh/ruff/rules/unused-method-argument/
     "ANN401", # https://docs.astral.sh/ruff/rules/any-type/
     "EM", # https://docs.astral.sh/ruff/rules/#flake8-errmsg-em
     "FIX", # https://docs.astral.sh/ruff/rules/#flake8-fixme-fix
@@ -147,7 +149,7 @@ ignore = [
 ]
 
 [tool.ruff.lint.per-file-ignores]
-"tests/**/*.py" = ["S101", "ANN001"]
+"tests/**/*.py" = ["S101", "ANN001", "PLR2004", "FBT003", "ASYNC230"]
 "src/maxo/types/*.py" = ["E501", "D"]
 "src/maxo/enums/*.py" = ["E501", "D"]
 "src/maxo/bot/updates/*.py" = ["E501", "D"]

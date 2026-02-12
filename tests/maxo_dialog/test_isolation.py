@@ -44,4 +44,4 @@ async def test_concurrent_events() -> None:
     event_common.set()
     await t1
     await t2
-    assert len(data) == 2  # noqa: PLR2004
+    assert len(data) == 2
