@@ -1,5 +1,5 @@
 from .attachment_request_type import AttachmentRequestType
-from .attachment_type import AttachmentType
+from .attachment_type import AttachmentType, ContentType
 from .button_type import ButtonType
 from .chat_admin_permission import ChatAdminPermission
 from .chat_status import ChatStatus
@@ -18,6 +18,7 @@ __all__ = (
     "ChatAdminPermission",
     "ChatStatus",
     "ChatType",
+    "ContentType",
     "Intent",
     "MarkupElementType",
     "MessageLinkType",
