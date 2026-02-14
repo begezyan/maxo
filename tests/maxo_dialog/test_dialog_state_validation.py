@@ -21,7 +21,7 @@ async def test_one_state_group_per_dialog() -> None:
     first_dialog = Dialog(Window(Const("foo"), state=First.state))
     second_dialog = Dialog(Window(Const("bar"), state=First.state))
     dp = Dispatcher()
-    dp.include_routers(first_dialog, second_dialog)
+    dp.include(first_dialog, second_dialog)
 
     setup_dialogs(dp)
     with pytest.raises(

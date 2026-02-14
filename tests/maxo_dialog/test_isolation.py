@@ -30,7 +30,7 @@ async def test_concurrent_events() -> None:
         data=data,
         storage=JsonMemoryStorage(),
     )
-    dp.message.register(start, CommandStart())
+    dp.message_created.handler(start, CommandStart())
 
     client = BotClient(dp)
     message_manager = MockMessageManager()
