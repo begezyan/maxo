@@ -62,6 +62,11 @@ lint = [
     "slotscheck==0.19.1",
     "black==25.11.0",
 ]
+dev = [
+    { include-group = "lint" },
+    { include-group = "tests" },
+    "maxo[dishka,redis]"
+]
 
 [project.urls]
 Documentation = "https://maxo.rtfd.io"
