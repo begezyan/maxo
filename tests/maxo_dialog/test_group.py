@@ -58,7 +58,7 @@ def message_manager() -> MockMessageManager:
 @pytest.fixture
 def dp(message_manager) -> Dispatcher:
     dp = Dispatcher(storage=JsonMemoryStorage())
-    dp.include_router(Dialog(window))
+    dp.include(Dialog(window))
     setup_dialogs(dp, message_manager=message_manager)
     return dp
 
@@ -75,7 +75,7 @@ def second_client(dp) -> BotClient:
 
 @pytest.mark.asyncio
 async def test_second_user(dp, client, second_client, message_manager) -> None:
-    dp.message.register(start, CommandStart())
+    dp.message_created.handler(start, CommandStart())
     await client.send("/start")
     first_message = message_manager.one_message()
     assert first_message.text == "stub"
@@ -91,8 +91,8 @@ async def test_second_user(dp, client, second_client, message_manager) -> None:
 
 @pytest.mark.asyncio
 async def test_change_settings(dp, client, second_client, message_manager) -> None:
-    dp.message.register(start, CommandStart())
-    dp.message.register(add_shared, Command("add"))
+    dp.message_created.handler(start, CommandStart())
+    dp.message_created.handler(add_shared, Command("add"))
 
     await client.send("/start")
     message_manager.reset_history()
@@ -122,8 +122,8 @@ async def test_change_settings(dp, client, second_client, message_manager) -> No
 
 @pytest.mark.asyncio
 async def test_change_settings_bg(dp, client, second_client, message_manager) -> None:
-    dp.message.register(start, CommandStart())
-    dp.message.register(add_shared, Command("add"))
+    dp.message_created.handler(start, CommandStart())
+    dp.message_created.handler(add_shared, Command("add"))
 
     await client.send("/start")
     message_manager.reset_history()
@@ -153,7 +153,7 @@ async def test_change_settings_bg(dp, client, second_client, message_manager) ->
 
 @pytest.mark.asyncio
 async def test_same_user(dp, client, message_manager) -> None:
-    dp.message.register(start, CommandStart())
+    dp.message_created.handler(start, CommandStart())
     await client.send("/start")
     first_message = message_manager.one_message()
     assert first_message.text == "stub"
@@ -170,7 +170,7 @@ async def test_same_user(dp, client, message_manager) -> None:
 
 @pytest.mark.asyncio
 async def test_shared_stack(dp, client, second_client, message_manager) -> None:
-    dp.message.register(start_shared, CommandStart())
+    dp.message_created.handler(start_shared, CommandStart())
     await client.send("/start")
     await asyncio.sleep(0.02)  # synchronization workaround, fixme
 
