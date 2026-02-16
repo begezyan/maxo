@@ -4,7 +4,6 @@ from .button_type import ButtonType
 from .chat_admin_permission import ChatAdminPermission
 from .chat_status import ChatStatus
 from .chat_type import ChatType
-from .intent import Intent
 from .markup_element_type import MarkupElementType
 from .message_link_type import MessageLinkType
 from .text_format import TextFormat
@@ -19,7 +18,6 @@ __all__ = (
     "ChatStatus",
     "ChatType",
     "ContentType",
-    "Intent",
     "MarkupElementType",
     "MessageLinkType",
     "TextFormat",
