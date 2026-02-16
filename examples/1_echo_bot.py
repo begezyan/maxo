@@ -15,7 +15,7 @@ async def echo_handler(
     update: MessageCreated,
     facade: MessageCreatedFacade,
 ) -> None:
-    text = update.message.unsafe_body.text or "Текста нет"
+    text = update.message.body.text or "Текста нет"
     await facade.answer_text(text)
 
 

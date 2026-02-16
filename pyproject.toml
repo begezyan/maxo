@@ -155,7 +155,7 @@ ignore = [
 [tool.ruff.lint.per-file-ignores]
 "tests/**/*.py" = [
     "S101", # assert
-    "ANN0", # type annotations
+    "ANN", # type annotations
     "D", # docstrings
     "ASYNC", # async правила
     "E501", # длинные строки

@@ -16,8 +16,8 @@ async def text_decoration_handler(
     update: MessageCreated,
     facade: MessageCreatedFacade,
 ) -> None:
-    html = update.message.unsafe_body.html_text
-    md = update.message.unsafe_body.md_text
+    html = update.message.body.html_text
+    md = update.message.body.md_text
     await facade.reply_text(text=html)
     await facade.reply_text(text=html, format=TextFormat.HTML)
     await facade.reply_text(text=md)

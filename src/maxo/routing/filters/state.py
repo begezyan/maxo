@@ -25,11 +25,7 @@ class StateFilter(BaseFilter[Any]):
                 return True
             if isinstance(state, State) and raw_state == state:
                 return True
-            if (
-                isclass(state)
-                and issubclass(state, StatesGroup)
-                and raw_state in StatesGroup
-            ):
+            if isclass(state) and issubclass(state, StatesGroup) and raw_state in state:
                 return True
 
         return False

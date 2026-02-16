@@ -42,7 +42,7 @@ async def input_name_handler(
 ) -> None:
     await facade.delete_message()
 
-    text = update.message.unsafe_body.text
+    text = update.message.body.text
     if text is None:
         await facade.answer_text("Отправь текстовое сообщение")
         return
@@ -67,7 +67,7 @@ async def input_age_handler(
 ) -> None:
     await facade.delete_message()
 
-    text = update.message.unsafe_body.text
+    text = update.message.body.text
     if text is None:
         await facade.answer_text("Отправь текстовое сообщение")
         return

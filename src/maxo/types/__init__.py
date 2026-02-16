@@ -92,7 +92,6 @@ __all__ = (
     "AttachmentPayload",
     "AttachmentRequest",
     "Attachments",
-    "Attachments",
     "AttachmentsRequests",
     "AudioAttachment",
     "AudioAttachmentRequest",

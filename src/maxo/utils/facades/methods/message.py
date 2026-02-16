@@ -25,7 +25,7 @@ class MessageMethodsFacade(AttachmentsFacade, ABC):
         return self.message.recipient.chat_id
 
     async def delete_message(self) -> SimpleQueryResult:
-        message_id = self.message.unsafe_body.mid
+        message_id = self.message.body.mid
         return await self.bot.delete_message(message_id=message_id)
 
     async def send_message(
@@ -128,10 +128,10 @@ class MessageMethodsFacade(AttachmentsFacade, ABC):
         notify: bool = True,
         format: TextFormat | None = None,
     ) -> Message:
-        message_id = self.message.unsafe_body.mid
+        message_id = self.message.body.mid
 
         if text is None:
-            text = self.message.unsafe_body.text
+            text = self.message.body.text
 
         attachments = await self._build_attachments(
             base=[],
@@ -151,7 +151,7 @@ class MessageMethodsFacade(AttachmentsFacade, ABC):
     def _make_new_message_link(self, type: MessageLinkType) -> NewMessageLink:
         return NewMessageLink(
             type=type,
-            mid=self.message.unsafe_body.mid,
+            mid=self.message.body.mid,
         )
 
     async def get_chat(self) -> Chat:
