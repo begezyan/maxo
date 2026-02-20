@@ -1,3 +1,4 @@
+from dataclasses import field
 from enum import Enum
 
 from maxo.dialogs.api.entities import MediaAttachment, ShowMode
@@ -45,7 +46,7 @@ class OldMessage(MaxoType):
 class NewMessage(MaxoType):
     recipient: Recipient
     keyboard: MarkupVariant | None = None
-    media: MediaAttachment | None = None
+    media: list[MediaAttachment] = field(default_factory=list)
     parse_mode: TextFormat | None = None
     link_preview_options: LinkPreviewOptions | None = None
     show_mode: ShowMode = ShowMode.AUTO

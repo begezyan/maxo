@@ -13,7 +13,7 @@ from maxo.dialogs.api.protocols import (
     MessageManagerProtocol,
     MessageNotModified,
 )
-from maxo.enums import AttachmentType
+from maxo.enums import AttachmentType, UploadType
 from maxo.errors import MaxBotApiError, MaxBotBadRequestError
 from maxo.omit import Omitted
 from maxo.types import (
@@ -38,7 +38,6 @@ SEND_METHODS = {
     AttachmentType.IMAGE: "send_photo",
     AttachmentType.VIDEO: "send_video",
     AttachmentType.STICKER: "send_sticker",
-    # AttachmentType.VOICE: "send_voice",
 }
 
 INPUT_MEDIA_TYPES = {}
@@ -322,27 +321,21 @@ class MessageManager(MessageManagerProtocol):
         self,
         bot: Bot,
         keyboard: Sequence[Sequence[InlineButtons]] | None,
-        media: MediaAttachment | None,
+        media: list[MediaAttachment],
     ) -> Sequence[AttachmentsRequests]:
-        file = await self._media_attachment_to_file(media) if media else None
-        if isinstance(file, FSInputFile):
-            base = []
-            media_ = [file]
-        elif isinstance(file, MediaAttachmentsRequests):
-            base = [file]
-            media_ = None
-        else:
-            base = []
-            media_ = None
+        converted_media = [self._convert_media(m) for m in media]
+        base: list[MediaAttachmentsRequests] = []
+        files: list[InputFile] = []
+        for attach in converted_media:
+            if isinstance(attach, InputFile):
+                files.append(attach)
+            elif isinstance(attach, MediaAttachmentsRequests):
+                base.append(attach)
 
         facade = AttachmentsFacade(bot)
-        return await facade.build_attachments(
-            base=base,
-            keyboard=keyboard,
-            media=media_,
-        )
+        return await facade.build_attachments(base=base, keyboard=keyboard, files=files)
 
-    def _media_attachment_to_file(
+    def _convert_media(
         self,
         media: MediaAttachment,
     ) -> InputFile | MediaAttachmentsRequests | None:
@@ -353,7 +346,7 @@ class MessageManager(MessageManagerProtocol):
             token = None
             url = media.url
         elif media.path:
-            return FSInputFile(media.path, media.type)
+            return FSInputFile(media.path, UploadType(media.type))
         else:
             return None
 

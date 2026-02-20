@@ -388,7 +388,7 @@ class ManagerImpl(DialogManager):
             if new_message.show_mode is ShowMode.AUTO:
                 new_message.show_mode = self._calc_show_mode()
 
-            await self._fix_cached_media_id(new_message)
+            await self._load_cached_media(new_message)
 
             self._ensure_stack_compatible(stack, new_message)
 
@@ -407,37 +407,33 @@ class ManagerImpl(DialogManager):
                 if not new_message.media:
                     return
 
-                sent_media_attach = next(
-                    (
-                        attachment
-                        for attachment in sent_message.attachments
-                        if attachment.type == new_message.media.type
-                    ),
-                    None,
-                )
-                if not sent_media_attach:
-                    return
+                return
+                # TODO: Перенести в другое место, тут не получится
 
-                await self.media_id_storage.save_media_id(
-                    path=new_message.media.path,
-                    url=new_message.media.url,
-                    type=new_message.media.type,
-                    media_id=MediaId(token=sent_media_attach.payload.token),
-                )
+                for request in new_message.media:
+                    for response in sent_message.attachments:
+                        if request.type == response.type:
+                            await self.media_id_storage.save_media_id(
+                                path=request.path,
+                                url=request.url,
+                                type=request.type,
+                                media_id=MediaId(token=response.payload.token),
+                            )
+
         except Exception as e:
             current_state = self.current_context().state
             e.add_note(f"maxo.dialogs state: {current_state}")
             raise
 
-    async def _fix_cached_media_id(self, new_message: NewMessage) -> None:
-        media = new_message.media
-        if media is None or media.media_id:
-            return
-        media.media_id = await self.media_id_storage.get_media_id(
-            path=media.path,
-            url=media.url,
-            type=media.type,
-        )
+    async def _load_cached_media(self, new_message: NewMessage) -> None:
+        for attachment in new_message.media:
+            if attachment.media_id:
+                continue
+            attachment.media_id = await self.media_id_storage.get_media_id(
+                path=attachment.path,
+                url=attachment.url,
+                type=attachment.type,
+            )
 
     def is_event_simulated(self) -> bool:
         return bool(self.middleware_data.get(EVENT_SIMULATED))
@@ -528,7 +524,6 @@ class ManagerImpl(DialogManager):
     def _get_fake_user(self, user_id: int | None = None) -> User:
         """Get User if we have info about him or FakeUser instead."""
         # TODO: Сделать нормально, это нейрослоп
-
         if isinstance(self.event, MessageCreated):
             current_user = self.event.message.unsafe_sender
         else:

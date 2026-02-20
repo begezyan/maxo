@@ -50,7 +50,7 @@ class MockMessageManager(MessageManagerProtocol):
                 PhotoAttachment(
                     payload=PhotoAttachmentPayload(
                         photo_id=123,
-                        token="test_token",
+                        token="test_token",  # noqa: S106
                         url="https://example.com/photo.jpg",
                     ),
                 ),
@@ -99,9 +99,8 @@ async def test_media_id_storage_integration():
         first_call_args = message_manager.show_message_mock.call_args
         first_new_message: NewMessage = first_call_args.args[1]
         first_media_attachment_request = first_new_message.media
-        assert first_media_attachment_request is not None
-        assert first_media_attachment_request.media_id is not None
-        assert first_media_attachment_request.media_id.token is None
+        assert len(first_media_attachment_request) == 1
+        assert first_media_attachment_request[0].media_id is None
 
         saved_media_id = await media_storage.get_media_id(
             path,
@@ -109,7 +108,7 @@ async def test_media_id_storage_integration():
             AttachmentType.IMAGE,
         )
         assert saved_media_id is not None
-        assert saved_media_id.token == "test_token"
+        assert saved_media_id.token == "test_token"  # noqa: S105
 
         # Second show: use cached media id
         message_manager.show_message_mock.reset_mock()
@@ -119,6 +118,6 @@ async def test_media_id_storage_integration():
         second_call_args = message_manager.show_message_mock.call_args
         second_new_message: NewMessage = second_call_args.args[1]
         second_media_attachment_request = second_new_message.media
-        assert second_media_attachment_request is not None
-        assert second_media_attachment_request.media_id is not None
-        assert second_media_attachment_request.media_id.token == saved_media_id.token
+        assert len(second_media_attachment_request) == 1
+        assert second_media_attachment_request[0].media_id is not None
+        assert second_media_attachment_request[0].media_id.token == saved_media_id.token

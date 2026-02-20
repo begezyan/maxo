@@ -47,23 +47,6 @@ class MockMessageManager(MessageManagerProtocol):
         self.assert_one_message()
         return self.first_message()
 
-    def assert_show_message(
-        self,
-        text: str | None = None,
-        attachments: list | None = None,
-    ) -> None:
-        assert len(self.show_message_calls) == 1
-        new_message: NewMessage = self.show_message_calls[0][1]
-        if text is not None:
-            assert new_message.text == text
-        if attachments is not None:
-            assert len(new_message.attachments) == len(attachments)
-            for new_att, expected_att in zip(new_message.attachments, attachments):
-                assert new_att.type == expected_att.type
-                assert new_att.path == expected_att.path
-                assert new_att.url == expected_att.url
-                assert new_att.media_id == expected_att.media_id
-
     async def remove_kbd(
         self,
         bot: Bot,
@@ -132,19 +115,19 @@ class MockMessageManager(MessageManagerProtocol):
         self.last_message_id = message_id
 
         converted_attachments = []
-        media = new_message.media
-        if media and media.type == AttachmentType.IMAGE:
-            converted_attachments.append(
-                PhotoAttachment(
-                    payload=PhotoAttachmentPayload(
-                        photo_id=random.randint(1, 1_000_000),
-                        token=(
-                            media.media_id.token if media.media_id else str(uuid4())
+        for media in new_message.media:
+            if media.type == AttachmentType.IMAGE:
+                converted_attachments.append(  # noqa: PERF401
+                    PhotoAttachment(
+                        payload=PhotoAttachmentPayload(
+                            photo_id=random.randint(1, 1_000_000),
+                            token=(
+                                media.media_id.token if media.media_id else str(uuid4())
+                            ),
+                            url=media.url,
                         ),
-                        url=media.url,
                     ),
-                ),
-            )
+                )
 
         keyboard = new_message.keyboard
         if keyboard:

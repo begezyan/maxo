@@ -91,10 +91,10 @@ class Window(WindowProtocol):
         self,
         data: dict,
         manager: DialogManager,
-    ) -> MediaAttachment | None:
+    ) -> list[MediaAttachment]:
         if self.media:
             return await self.media.render_media(data, manager)
-        return None
+        return []
 
     async def render_kbd(
         self,
@@ -112,7 +112,7 @@ class Window(WindowProtocol):
         self,
         data: dict,
         manager: DialogManager,
-    ) -> None:
+    ) -> LinkPreview | None:
         if self.link_preview:
             return await self.link_preview.render_link_preview(data, manager)
         return None
