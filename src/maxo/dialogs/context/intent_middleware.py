@@ -23,26 +23,30 @@ from maxo.dialogs.api.protocols import (
     StackAccessValidator,
 )
 from maxo.dialogs.utils import remove_intent_id
-from maxo.enums.chat_type import ChatType
+from maxo.enums import ChatType
 from maxo.fsm.storages.base import BaseEventIsolation, BaseStorage
 from maxo.routing.ctx import Ctx
 from maxo.routing.interfaces import BaseMiddleware, NextMiddleware
+from maxo.routing.middlewares.fsm_context import FSM_STORAGE_KEY
 from maxo.routing.middlewares.update_context import (
     EVENT_FROM_USER_KEY,
     UPDATE_CONTEXT_KEY,
 )
 from maxo.routing.sentinels import UNHANDLED
-from maxo.routing.updates.base import MaxUpdate
-from maxo.routing.updates.bot_added_to_chat import BotAddedToChat
-from maxo.routing.updates.bot_removed_from_chat import BotRemovedFromChat
-from maxo.routing.updates.bot_started import BotStarted
-from maxo.routing.updates.bot_stopped import BotStopped
-from maxo.routing.updates.error import ErrorEvent
-from maxo.routing.updates.message_callback import MessageCallback
-from maxo.routing.updates.message_created import MessageCreated
-from maxo.routing.updates.user_added_to_chat import UserAddedToChat
-from maxo.routing.updates.user_removed_from_chat import UserRemovedFromChat
+from maxo.routing.updates import (
+    BotAddedToChat,
+    BotRemovedFromChat,
+    BotStarted,
+    BotStopped,
+    ErrorEvent,
+    MaxUpdate,
+    MessageCallback,
+    MessageCreated,
+    UserAddedToChat,
+    UserRemovedFromChat,
+)
 from maxo.utils.facades import MessageCallbackFacade
+from maxo.utils.facades.middleware import FACADE_KEY
 
 from .storage import StorageProxy
 
@@ -145,7 +149,7 @@ def event_context_from_error(event: ErrorEvent, ctx: Ctx) -> EventContext:
         return event_context_from_bot_added_to_chat(event.event, ctx)
     if isinstance(event.event, BotRemovedFromChat):
         return event_context_from_bot_removed_from_chat(event.event, ctx)
-    raise ValueError(f"Unsupported event type in ErrorEvent.update: {event.event}")
+    raise ValueError(f"Unsupported event in ErrorEvent.event: {event.event}")
 
 
 class IntentMiddlewareFactory:
@@ -291,7 +295,7 @@ class IntentMiddlewareFactory:
     ) -> None:
         return await self._load_context_by_stack(
             event=event,
-            proxy=self.storage_proxy(event_context, ctx["fsm_storage"]),
+            proxy=self.storage_proxy(event_context, ctx[FSM_STORAGE_KEY]),
             stack_id=DEFAULT_STACK_ID,
             ctx=ctx,
         )
@@ -319,14 +323,14 @@ class IntentMiddlewareFactory:
         if update.intent_id:
             await self._load_context_by_intent(
                 event=update,
-                proxy=self.storage_proxy(event_context, ctx["fsm_storage"]),
+                proxy=self.storage_proxy(event_context, ctx[FSM_STORAGE_KEY]),
                 intent_id=update.intent_id,
                 ctx=ctx,
             )
         else:
             await self._load_context_by_stack(
                 event=update,
-                proxy=self.storage_proxy(event_context, ctx["fsm_storage"]),
+                proxy=self.storage_proxy(event_context, ctx[FSM_STORAGE_KEY]),
                 stack_id=update.stack_id,
                 ctx=ctx,
             )
@@ -349,7 +353,7 @@ class IntentMiddlewareFactory:
             if intent_id:
                 await self._load_context_by_intent(
                     event=update,
-                    proxy=self.storage_proxy(event_context, ctx["fsm_storage"]),
+                    proxy=self.storage_proxy(event_context, ctx[FSM_STORAGE_KEY]),
                     intent_id=intent_id,
                     ctx=ctx,
                 )
@@ -360,7 +364,7 @@ class IntentMiddlewareFactory:
             await self._load_default_context(update, ctx, event_context)
         result = await next(ctx)
         if result is UNHANDLED and ctx.get(FORBIDDEN_STACK_KEY):
-            facade = cast(MessageCallbackFacade, ctx["facade"])
+            facade = cast(MessageCallbackFacade, ctx[FACADE_KEY])
             await facade.callback_answer(notification="")
         return result
 
@@ -567,11 +571,12 @@ class IntentErrorMiddleware(BaseMiddleware[ErrorEvent]):
             ctx[EVENT_CONTEXT_KEY] = event_context
             proxy = StorageProxy(
                 bot=event_context.bot,
-                storage=ctx["fsm_storage"],
+                storage=ctx[FSM_STORAGE_KEY],
                 events_isolation=self.events_isolation,
                 state_groups=self.registry.states_groups(),
                 user_id=event_context.user.id,
                 chat_id=event_context.chat_id,
+                chat_type=event_context.chat_type,
             )
             ctx[STORAGE_KEY] = proxy
             stack = await self._load_stack(proxy, update.error)

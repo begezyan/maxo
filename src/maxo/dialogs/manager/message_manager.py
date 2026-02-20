@@ -22,6 +22,7 @@ from maxo.types import (
     Callback,
     FileAttachmentRequest,
     InlineButtons,
+    MediaAttachments,
     MediaAttachmentsRequests,
     Message,
     PhotoAttachmentRequest,
@@ -75,11 +76,11 @@ class MessageManager(MessageManagerProtocol):
                 raise
 
     def had_media(self, old_message: OldMessage) -> bool:
-        # TODO: Нужно ли? Починить или убрать
-        return old_message.media_id is not None
+        return any(
+            isinstance(media, MediaAttachments) for media in old_message.attachments
+        )
 
     def need_media(self, new_message: NewMessage) -> bool:
-        # TODO: Нужно ли? Починить или убрать
         return bool(new_message.media)
 
     def _message_changed(
@@ -89,7 +90,7 @@ class MessageManager(MessageManagerProtocol):
     ) -> bool:
         if (
             (new_message.text != old_message.text)
-            or (new_message.keyboard)
+            or new_message.keyboard
             or
             # we do not know if link preview changed
             new_message.link_preview_options

@@ -9,7 +9,6 @@ def calculate_chat_id_and_user_id(
     chat_id: Omittable[int | None],
     user_id: Omittable[int | None],
 ) -> tuple[Omittable[int], Omittable[int]]:
-    # TODO: Узнать пофиксить
     if chat_type is ChatType.CHAT:
         # Если мы в чате, то нам не надо отправлять сообщение юзеру,
         # поэтому остаётся только chat_id
