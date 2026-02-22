@@ -20,7 +20,7 @@ from maxo.types.video_attachment import VideoAttachment
 from maxo.types.video_attachment_request import VideoAttachmentRequest
 
 MediaAttachments = PhotoAttachment | VideoAttachment | AudioAttachment | FileAttachment
-Attachments = (
+type Attachments = (
     MediaAttachments
     | StickerAttachment
     | ContactAttachment
@@ -28,13 +28,13 @@ Attachments = (
     | ShareAttachment
     | LocationAttachment
 )
-MediaAttachmentsRequests = (
+type MediaAttachmentsRequests = (
     PhotoAttachmentRequest
     | VideoAttachmentRequest
     | AudioAttachmentRequest
     | FileAttachmentRequest
 )
-AttachmentsRequests = (
+type AttachmentsRequests = (
     MediaAttachmentsRequests
     | StickerAttachmentRequest
     | ContactAttachmentRequest
