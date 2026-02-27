@@ -1,3 +1,5 @@
+from typing import TypeAlias
+
 from maxo.enums.update_type import UpdateType
 from maxo.errors import AttributeIsEmptyError
 from maxo.omit import Omittable, Omitted, is_defined
@@ -59,3 +61,6 @@ class MessageCallback(MaxUpdate):
     @property
     def user(self) -> User:
         return self.callback.user
+
+
+CallbackQuery: TypeAlias = MessageCallback  # Подражание aiogram
