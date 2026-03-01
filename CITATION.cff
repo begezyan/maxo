@@ -12,7 +12,7 @@ authors:
     family-names: Лесовой
     email: kirill.lesovoi@mail.ru
 repository-code: 'https://github.com/k1rl3s/maxo'
-url: 'https://maxo.readthedocs.org'
+url: 'https://maxo.readthedocs.io'
 abstract: Асинхронный фреймворк для создания ботов MAX.ru на Python.
 keywords:
   - python
