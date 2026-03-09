@@ -42,9 +42,12 @@ async def start_handler(
     current_state = await state.get_state()
 
     await message.answer(
-        f"Ваш общий ID: {current_user.shared_id}\n\n"
-        f"Отправьте эту команду боту Max: /link {current_user.shared_id}\n\n"
-        f"Или отправьте эту команду этому боту из другого аккаунта, чтобы связать их: /link <shared_id>",
+        (
+            f"Ваш общий ID: {current_user.shared_id}\n\n"
+            f"Отправьте эту команду боту Max: /link {current_user.shared_id}\n\n"
+            "Или отправьте эту команду этому боту из другого аккаунта, "
+            "чтобы связать их: /link <shared_id>"
+        ),
     )
     await message.answer(
         f"Ваше текущее состояние: {current_state}",

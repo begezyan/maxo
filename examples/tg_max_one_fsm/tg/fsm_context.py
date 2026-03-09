@@ -29,9 +29,13 @@ class SharedFSMContextMiddleware(BaseMiddleware):
         event: TelegramObject,
         data: dict[str, Any],
     ) -> Any:
-        current_user: DbUser = data["current_user"]
-        context = self.get_context(current_user)
         data["fsm_storage"] = self.storage
+
+        current_user: DbUser = data.get("current_user")
+        if current_user is None:
+            return await handler(event, data)
+
+        context = self.get_context(current_user)
         async with self.events_isolation.lock(key=context.key):
             data.update({"state": context, "raw_state": await context.get_state()})
             return await handler(event, data)

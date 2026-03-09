@@ -46,7 +46,10 @@ class UserRepo:
     ) -> DbUser:
         async with aiosqlite.connect(self.db_path) as db:
             cursor = await db.execute(
-                "SELECT id, shared_id FROM users WHERE external_id = ? AND external_type = ?",
+                (
+                    "SELECT id, shared_id FROM users "
+                    "WHERE external_id = ? AND external_type = ?"
+                ),
                 (external_id, external_type.value),
             )
             row = await cursor.fetchone()
@@ -61,7 +64,10 @@ class UserRepo:
 
             shared_id = str(uuid.uuid4().int)
             cursor = await db.execute(
-                "INSERT INTO users (external_id, external_type, shared_id) VALUES (?, ?, ?)",
+                (
+                    "INSERT INTO users (external_id, external_type, shared_id) "
+                    "VALUES (?, ?, ?)"
+                ),
                 (external_id, external_type.value, shared_id),
             )
             await db.commit()
@@ -89,7 +95,10 @@ class UserRepo:
     async def get_user_by_shared_id(self, shared_id: SharedId) -> list[DbUser]:
         async with aiosqlite.connect(self.db_path) as db:
             cursor = await db.execute(
-                "SELECT id, external_id, external_type, shared_id FROM users WHERE shared_id = ?",
+                (
+                    "SELECT id, external_id, external_type, shared_id FROM users "
+                    "WHERE shared_id = ?"
+                ),
                 (str(shared_id),),
             )
             rows = await cursor.fetchall()

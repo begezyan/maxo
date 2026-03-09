@@ -57,7 +57,8 @@ class Dispatcher(Router):
             if events_isolation is None:
                 events_isolation = SimpleEventIsolation(key_builder=key_builder)
 
-            # Note that when FSM middleware is disabled, the event isolation is also disabled
+            # Note that when FSM middleware is disabled,
+            # the event isolation is also disabled
             # Because the isolation mechanism is a part of the FS
             self.update.middleware.outer(
                 FSMContextMiddleware(storage, events_isolation),

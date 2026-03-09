@@ -51,9 +51,12 @@ async def start_handler(
     current_state = await fsm_context.get_state()
 
     await facade.send_message(
-        f"Ваш общий ID: {current_user.shared_id}\n\n"
-        f"Отправьте эту команду боту TG: /link {current_user.shared_id}\n\n"
-        f"Или отправьте эту команду этому боту из другого аккаунта, чтобы связать их: /link <shared_id>",
+        (
+            f"Ваш общий ID: {current_user.shared_id}\n\n"
+            f"Отправьте эту команду боту TG: /link {current_user.shared_id}\n\n"
+            "Или отправьте эту команду этому боту из другого аккаунта, "
+            "чтобы связать их: /link <shared_id>"
+        ),
     )
     await facade.send_message(
         text=f"Ваше текущее состояние: {current_state}",
