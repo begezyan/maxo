@@ -54,6 +54,9 @@ class Router(BaseRouter):
         self.user_added_to_chat = UpdateObserver[UserAddedToChat]()
         self.user_removed_from_chat = UpdateObserver[UserRemovedFromChat]()
 
+        self.message = self.message_created  # Подражание aiogram
+        self.callback_query = self.message_callback  # Подражание aiogram
+
         self.exception = self.exceptions = self.error = self.errors = UpdateObserver[
             ErrorEvent[Any, Any]
         ]()
