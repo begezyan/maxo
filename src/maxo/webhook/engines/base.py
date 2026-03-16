@@ -38,7 +38,7 @@ class WebhookEngine(ABC):
         self._background_feed_update_tasks: set[asyncio.Task[Any]] = set()
 
     @abstractmethod
-    def _get_bot_from_request(self, bound_request: BoundRequest) -> Bot | None:
+    def _get_bot_from_request(self, bound_request: BoundRequest[Any]) -> Bot | None:
         raise NotImplementedError
 
     @abstractmethod

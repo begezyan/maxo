@@ -46,7 +46,12 @@ class Text(Iterable[NodeType]):
             *_unparse_entities(
                 text=add_surrogates(text),
                 entities=(
-                    sorted(entities, key=lambda item: item.offset) if entities else []
+                    sorted(
+                        entities,
+                        key=lambda item: (item.offset, -item.length),
+                    )
+                    if entities
+                    else []
                 ),
             ),
         )
@@ -85,7 +90,7 @@ class Text(Iterable[NodeType]):
             )
 
         if _collect_entities and _sort:
-            entities.sort(key=lambda entity: entity.offset)
+            entities.sort(key=lambda entity: (entity.offset, -entity.length))
 
         return text, entities
 

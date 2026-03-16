@@ -20,7 +20,7 @@ class MappingABC(ABC, Generic[M]):
         return self._mapping[name]
 
     def __contains__(self, name: str) -> bool:
-        return name in self.keys()
+        return name in self._mapping
 
     def __len__(self) -> int:
         return len(self._mapping)

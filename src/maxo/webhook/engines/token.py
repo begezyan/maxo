@@ -45,7 +45,7 @@ class TokenEngine(WebhookEngine):
         self.bot_config = bot_config or BotConfig()
         self._bots: dict[str, Bot] = {}
 
-    def _get_bot_from_request(self, bound_request: BoundRequest) -> Bot | None:
+    def _get_bot_from_request(self, bound_request: BoundRequest[Any]) -> Bot | None:
         """
         Get a :class:`Bot` instance from request by token.
 
