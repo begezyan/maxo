@@ -1,5 +1,5 @@
 from asyncio import Transport
-from collections.abc import Awaitable, Callable
+from collections.abc import Awaitable, Callable, Mapping
 from ipaddress import IPv4Address, IPv6Address
 from json import JSONDecodeError
 from typing import Any, cast
@@ -13,6 +13,7 @@ from maxo.webhook.adapters.aiohttp.mapping import (
     AiohttpQueryMapping,
 )
 from maxo.webhook.adapters.base_adapter import BoundRequest, WebAdapter
+from maxo.webhook.adapters.base_mapping import MappingABC
 
 
 class AiohttpBoundRequest(BoundRequest[Request]):
@@ -35,11 +36,11 @@ class AiohttpBoundRequest(BoundRequest[Request]):
         return None
 
     @property
-    def headers(self) -> AiohttpHeadersMapping:
+    def headers(self) -> MappingABC[Mapping[str, Any]]:
         return self._headers
 
     @property
-    def query_params(self) -> AiohttpQueryMapping:
+    def query_params(self) -> MappingABC[Mapping[str, Any]]:
         return self._query_params
 
     @property
