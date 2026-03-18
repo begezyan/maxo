@@ -23,14 +23,15 @@
 
 <p align="center">
     <b>
-        Асинхронный фреймворк для разработки <a href="https://dev.max.ru/docs">ботов</a> из <a href="https://max.ru">max.ru</a>
+        Асинхронный фреймворк для разработки <a href="https://dev.max.ru/docs">ботов</a> в <a href="https://max.ru">max.ru</a>
     </b>
 </p>
 
 <p align="center">
-    <a href="https://maxo.readthedocs.io">Документация</a><br><br>
+    <a href="https://maxo.readthedocs.io"><b>Документация</b></a><br><br>
     <a href="https://github.com/IvanKirpichnikov/maxo">Оригинальный репозиторий</a><br>
-    <a href="./src/maxo/dialogs">maxo/dialogs</a> переделаны из <a href="https://github.com/Tishka17/aiogram_dialog">aiogram_dialog</a>
+    <a href="./src/maxo/dialogs">maxo/dialogs</a> сделано из <a href="https://github.com/Tishka17/aiogram_dialog">aiogram_dialog</a><br>
+    <a href="./src/maxo/transport/webhook">maxo/transport/webhook</a> сделано из <a href="https://github.com/m-xim/aiogram-webhook">aiogram-webhook</a><br>
 </p>
 
 ## Установка
@@ -48,6 +49,16 @@ dependencies = [
 ]
 ```
 
+## Особенности
+
+- Асинхронность на базе `aiohttp` и [`unihttp`](https://github.com/goduni/unihttp) ([asyncio](https://docs.python.org/3/library/asyncio.html), [PEP 492](https://peps.python.org/pep-0492/))
+- 100% покрытие типами, [`adaptix`](https://github.com/reagento/adaptix) для валидации данных
+- Роутеры, фильтры, милдвари
+- Встроенная машина состояний (FSM) и диалоги поверх них
+- Поддержка лонг-поллинга и вебхуков через `aiohttp` и `fastapi`
+- Интеграции с `dishka` и `magic_filter`
+- Автогенерация методов, типов и апдейтов по [официальной документации](https://dev.max.ru/docs-api)
+
 ## Быстрый старт
 
 Больше примеров в [примерах](./examples)
@@ -55,15 +66,12 @@ dependencies = [
 ### Эхо-бот
 
 ```python
-import logging
-import os
-
 from maxo import Bot, Dispatcher
-from maxo.routing.updates.message_created import MessageCreated
-from maxo.utils.facades.updates.message_created import MessageCreatedFacade
-from maxo.utils.long_polling import LongPolling
+from maxo.routing.updates import MessageCreated
+from maxo.transport.long_polling import LongPolling
+from maxo.utils.facades import MessageCreatedFacade
 
-bot = Bot(os.environ["TOKEN"])
+bot = Bot("TOKEN")
 dispatcher = Dispatcher()
 
 @dispatcher.message_created()
@@ -71,96 +79,131 @@ async def echo_handler(update: MessageCreated, facade: MessageCreatedFacade) -> 
     text = update.message.body.text or "Текста нет"
     await facade.answer_text(text)
 
-logging.basicConfig(level=logging.INFO)
 LongPolling(dispatcher).run(bot)
 ```
 
 ### Команды
 
 ```python
-import logging
-import os
-
-from maxo import Bot, Dispatcher, Router
-from maxo.routing.filters import CommandStart
-from maxo.routing.updates.message_created import MessageCreated
+from maxo import Bot, Dispatcher
+from maxo.routing.filters import Command, CommandObject, CommandStart
+from maxo.routing.updates import MessageCreated
+from maxo.transport.long_polling import LongPolling
 from maxo.utils.facades import MessageCreatedFacade
-from maxo.utils.long_polling import LongPolling
 
-bot = Bot(os.environ["TOKEN"])
-router = Router()
+bot = Bot("TOKEN")
+dispatcher = Dispatcher()
 
-@router.message_created(CommandStart())
-# или @router.message_created(Command("start"))
-async def start_handler(update: MessageCreated, facade: MessageCreatedFacade) -> None:
-    await facade.answer_text("Привет! Я бот")
+@dispatcher.message_created(CommandStart())
+# или @dispatcher.message_created(Command("start"))
+async def start_handler(
+    message: MessageCreated,
+    command: CommandObject,
+    facade: MessageCreatedFacade,
+) -> None:
+    await facade.answer_text(f"Привет! Я бот. Диплинк: {command.args}")
 
-def main():
-    logging.basicConfig(level=logging.INFO)
-    dispatcher = Dispatcher()
-    dispatcher.include(router)
-    LongPolling(dispatcher).run(bot)
-
-if __name__ == "__main__":
-    main()
+LongPolling(dispatcher).run(bot)
 ```
 
-### Клавиатура
+### Клавиатуры
+
+```python
+from magic_filter import F
+
+from maxo import Bot, Dispatcher
+from maxo.integrations.magic_filter import MagicFilter
+from maxo.routing.filters import CommandStart
+from maxo.routing.updates import MessageCallback, MessageCreated
+from maxo.transport.long_polling import LongPolling
+from maxo.utils.builders import KeyboardBuilder
+from maxo.utils.facades import MessageCallbackFacade, MessageCreatedFacade
+
+bot = Bot("TOKEN")
+dispatcher = Dispatcher()
+
+@dispatcher.message_created(CommandStart())
+async def start_handler(message: MessageCreated, facade: MessageCreatedFacade) -> None:
+    keyboard = (
+        KeyboardBuilder()
+        .add_callback(
+            text="Колбэк кнопка",
+            payload="callback_payload",
+        )
+        .add_message(text="Текстовая кнопка")
+        .add_link(
+            text="Maxo",
+            url="https://github.com/K1rL3s/maxo",
+        )
+        .adjust(1, repeat=True)
+        .build()
+    )
+    await facade.answer_text("Кнопочки:", keyboard=keyboard)
+
+@dispatcher.message_callback(MagicFilter(F.payload == "callback_payload"))
+async def button_handler(
+    callback: MessageCallback,
+    facade: MessageCallbackFacade,
+) -> None:
+    await facade.callback_answer("Вы нажали на кнопку!")
+
+LongPolling(dispatcher).run(bot)
+```
+
+### Вебхук
 
 ```python
 import logging
 import os
 
-from magic_filter import F
+from aiohttp import web
 
 from maxo import Bot, Dispatcher, Router
-from maxo.integrations.magic_filter import MagicFilter
-from maxo.routing.filters import CommandStart
-from maxo.routing.updates import MessageCreated, MessageCallback
-from maxo.utils.builders import KeyboardBuilder
-from maxo.utils.facades import MessageCallbackFacade, MessageCreatedFacade
-from maxo.utils.long_polling import LongPolling
+from maxo.enums import TextFormat
+from maxo.routing.updates import BotStarted, MessageCreated
+from maxo.routing.utils import collect_used_updates
+from maxo.transport.webhook.adapters.aiohttp import AiohttpWebAdapter
+from maxo.transport.webhook.engines import SimpleEngine, WebhookEngine
+from maxo.transport.webhook.routing import StaticRouting
+from maxo.transport.webhook.security import Security, StaticSecretToken
+from maxo.utils.facades import BotStartedFacade, MessageCreatedFacade
 
 bot = Bot(os.environ["TOKEN"])
 router = Router()
 
-@router.message_created(CommandStart())
-async def start_handler(
-    update: MessageCreated,
-    facade: MessageCreatedFacade,
-) -> None:
-    keyboard = (
-        KeyboardBuilder()
-        .add_callback(
-            text="Нажми меня",
-            payload="my_callback",
-        )
-        .build()
-    )
+@router.bot_started()
+async def start_handler(bot_started: BotStarted, facade: BotStartedFacade) -> None:
+    await facade.send_message(text=f"Привет из вебхука, {bot_started.user.first_name}!")
+
+@router.message_created()
+async def echo_handler(message: MessageCreated, facade: MessageCreatedFacade) -> None:
     await facade.answer_text(
-        "Это сообщение с клавиатурой:",
-        keyboard=keyboard,
+        text=message.message.body.html_text,
+        format=TextFormat.HTML,
     )
 
-@router.message_callback(MagicFilter(F.payload == "my_callback"))
-async def button_handler(
-    update: MessageCallback,
-    facade: MessageCallbackFacade,
-    bot: Bot,
-) -> None:
-    await facade.callback_answer("Вы нажали на кнопку!")
-    await bot.send_message(
-        user_id=update.user.user_id,
-        text="Вы нажали на кнопку!",
-    )
+@router.after_startup()
+async def on_startup(dispatcher: Dispatcher, webhook_engine: WebhookEngine) -> None:
+    await webhook_engine.set_webhook(update_types=collect_used_updates(dispatcher))
 
-def main():
-    logging.basicConfig(level=logging.INFO)
+def main() -> None:
     dispatcher = Dispatcher()
     dispatcher.include(router)
-    LongPolling(dispatcher).run(bot)
+
+    engine = SimpleEngine(
+        dispatcher,
+        bot,
+        web_adapter=AiohttpWebAdapter(),
+        routing=StaticRouting(url="https://example.com/webhook"),
+        security=Security(secret_token=StaticSecretToken("pepa_pig")),
+    )
+    app = web.Application()
+    engine.register(app)
+
+    web.run_app(app, host="127.0.0.1", port=8080)
 
 if __name__ == "__main__":
+    logging.basicConfig(level=logging.DEBUG)
     main()
 ```
 

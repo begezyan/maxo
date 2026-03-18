@@ -69,7 +69,7 @@
     from maxo import Bot, Dispatcher, Router
     from maxo.fsm.key_builder import DefaultKeyBuilder
     from maxo.dialogs import setup_dialogs
-    from maxo.utils.long_polling import LongPolling
+    from maxo.transport.long_polling import LongPolling
 
     def main():
         key_builder = DefaultKeyBuilder(with_destiny=True)

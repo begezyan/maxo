@@ -50,10 +50,10 @@ Webhooks
             from maxo.routing.updates import MessageCreated
             from maxo.routing.utils import collect_used_updates
             from maxo.utils.facades import MessageCreatedFacade
-            from maxo.webhook.adapters.aiohttp.adapter import AiohttpWebAdapter
-            from maxo.webhook.engines import SimpleEngine, WebhookEngine
-            from maxo.webhook.routing import StaticRouting
-            from maxo.webhook.security import Security, StaticSecretToken
+            from maxo.transport.webhook.adapters.aiohttp.adapter import AiohttpWebAdapter
+            from maxo.transport.webhook.engines import SimpleEngine, WebhookEngine
+            from maxo.transport.webhook.routing import StaticRouting
+            from maxo.transport.webhook.security import Security, StaticSecretToken
 
             dp = Dispatcher()
             bot = Bot(os.environ["TOKEN"])
@@ -107,10 +107,10 @@ Webhooks
             from maxo.routing.updates import MessageCreated
             from maxo.routing.utils import collect_used_updates
             from maxo.utils.facades import MessageCreatedFacade
-            from maxo.webhook.adapters.fastapi.adapter import FastApiWebAdapter
-            from maxo.webhook.engines import SimpleEngine, WebhookEngine
-            from maxo.webhook.routing import StaticRouting
-            from maxo.webhook.security import Security, StaticSecretToken
+            from maxo.transport.webhook.adapters.fastapi.adapter import FastApiWebAdapter
+            from maxo.transport.webhook.engines import SimpleEngine, WebhookEngine
+            from maxo.transport.webhook.routing import StaticRouting
+            from maxo.transport.webhook.security import Security, StaticSecretToken
 
             dp = Dispatcher()
             bot = Bot(os.environ["TOKEN"])
@@ -179,7 +179,7 @@ Webhooks
 
 .. code-block:: python
 
-    from maxo.webhook.security import Security, StaticSecretToken
+    from maxo.transport.webhook.security import Security, StaticSecretToken
 
     security = Security(secret_token=StaticSecretToken("your-super-secret-token"))
 

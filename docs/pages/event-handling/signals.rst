@@ -59,7 +59,7 @@
 .. code-block:: python
 
     from maxo import Bot, Dispatcher
-    from maxo.utils.long_polling import LongPolling
+    from maxo.transport.long_polling import LongPolling
 
     dispatcher = Dispatcher()
 
@@ -96,7 +96,7 @@
 .. code-block:: python
 
     from maxo import Bot, Dispatcher, Router
-    from maxo.utils.long_polling import LongPolling
+    from maxo.transport.long_polling import LongPolling
 
     router = Router()
 
