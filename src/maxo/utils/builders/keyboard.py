@@ -12,6 +12,7 @@ from maxo.omit import Omittable, Omitted
 from maxo.types.buttons import InlineButtons
 from maxo.types.callback_button import CallbackButton
 from maxo.types.link_button import LinkButton
+from maxo.types.message_button import MessageButton
 from maxo.types.request_contact_button import RequestContactButton
 from maxo.types.request_geo_location_button import RequestGeoLocationButton
 
@@ -91,17 +92,11 @@ class KeyboardBuilder:
         return self
 
     def add_link(self, text: str, url: str) -> Self:
-        self.add(
-            LinkButton(text=text, url=url),
-        )
+        self.add(LinkButton(text=text, url=url))
         return self
 
     def add_request_contact(self, text: str) -> Self:
-        self.add(
-            RequestContactButton(
-                text=text,
-            ),
-        )
+        self.add(RequestContactButton(text=text))
         return self
 
     def add_request_geo_location(
@@ -109,9 +104,11 @@ class KeyboardBuilder:
         text: str,
         quick: Omittable[bool] = Omitted(),
     ) -> Self:
-        self.add(
-            RequestGeoLocationButton(text=text, quick=quick),
-        )
+        self.add(RequestGeoLocationButton(text=text, quick=quick))
+        return self
+
+    def add_message(self, text: str) -> Self:
+        self.add(MessageButton(text=text))
         return self
 
     @property
