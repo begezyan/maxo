@@ -43,7 +43,7 @@
 
 .. rst-class:: lead
 
-   Асинхронный фреймворк для разработки `ботов <https://dev.max.ru/docs>`_ из `max.ru <https://max.ru>`_
+   Асинхронный фреймворк для разработки `ботов <https://dev.max.ru/docs>`_ в `max.ru <https://max.ru>`_
 
 .. container:: buttons
 
