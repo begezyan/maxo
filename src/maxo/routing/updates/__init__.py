@@ -9,7 +9,7 @@ from .dialog_muted import DialogMuted
 from .dialog_removed import DialogRemoved
 from .dialog_unmuted import DialogUnmuted
 from .error import ErrorEvent
-from .message_callback import MessageCallback
+from .message_callback import CallbackQuery, MessageCallback
 from .message_created import MessageCreated
 from .message_edited import MessageEdited
 from .message_removed import MessageRemoved
@@ -23,6 +23,7 @@ __all__ = (
     "BotRemovedFromChat",
     "BotStarted",
     "BotStopped",
+    "CallbackQuery",
     "ChatTitleChanged",
     "DialogCleared",
     "DialogMuted",

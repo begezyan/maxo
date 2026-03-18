@@ -129,7 +129,9 @@ Contributors
    pages/event-handling/fsm
    pages/event-handling/facades
    pages/event-handling/errors
+   pages/event-handling/signals
    pages/event-handling/long-polling
+   pages/event-handling/webhooks
 
 .. toctree::
    :maxdepth: 2
@@ -150,3 +152,10 @@ Contributors
    :hidden:
 
    pages/botapi/index
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Полезные заметки
+   :hidden:
+
+   pages/useful_notes

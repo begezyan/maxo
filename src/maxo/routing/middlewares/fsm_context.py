@@ -9,8 +9,9 @@ from maxo.routing.middlewares.update_context import UPDATE_CONTEXT_KEY
 from maxo.routing.signals.update import MaxoUpdate
 from maxo.types.update_context import UpdateContext
 
-FSM_STORAGE_KEY = "fsm_storage"  # and "storage" too
+FSM_STORAGE_KEY = "fsm_storage"
 FSM_CONTEXT_KEY = "fsm_context"
+FSM_CONTEXT_STATE_KEY = "state"  # same as "fsm_context", Подражаение aiogram
 RAW_STATE_KEY = "raw_state"
 
 
@@ -41,11 +42,9 @@ class FSMContextMiddleware(BaseMiddleware[MaxoUpdate[Any]]):
             return await next(ctx)
 
         async with self._events_isolation.lock(key=storage_key):
-            fsm_context = FSMContext(
-                key=storage_key,
-                storage=self._storage,
-            )
+            fsm_context = FSMContext(key=storage_key, storage=self._storage)
             ctx[FSM_CONTEXT_KEY] = fsm_context
+            ctx[FSM_CONTEXT_STATE_KEY] = fsm_context
             ctx[RAW_STATE_KEY] = await fsm_context.get_state()
 
             return await next(ctx)

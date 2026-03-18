@@ -10,9 +10,9 @@ from maxo.routing.ctx import Ctx
 from maxo.routing.middlewares.error import ErrorMiddleware
 from maxo.routing.middlewares.fsm_context import FSMContextMiddleware
 from maxo.routing.middlewares.update_context import UpdateContextMiddleware
-from maxo.routing.observers.signal import SignalObserver
+from maxo.routing.observers import UpdateObserver
 from maxo.routing.routers.simple import Router
-from maxo.routing.sentinels import UNHANDLED
+from maxo.routing.sentinels import UNHANDLED, SkipHandler
 from maxo.routing.signals.base import BaseSignal
 from maxo.routing.signals.update import MaxoUpdate
 from maxo.routing.updates.base import BaseUpdate
@@ -22,7 +22,7 @@ from maxo.utils.facades.middleware import FacadeMiddleware
 
 
 class Dispatcher(Router):
-    update: SignalObserver[MaxoUpdate[Any]]
+    update: UpdateObserver[MaxoUpdate[Any]]
 
     def __init__(
         self,
@@ -32,30 +32,38 @@ class Dispatcher(Router):
         storage: BaseStorage | None = None,
         events_isolation: BaseEventIsolation | None = None,
         key_builder: BaseKeyBuilder | None = None,
+        disable_fsm: bool = False,
     ) -> None:
         super().__init__(self.__class__.__name__)
 
         self.workflow_data = workflow_data or {}
         self.workflow_data["dispatcher"] = self
         self.workflow_data["router"] = self
+        self.workflow_data["dp"] = self
 
-        self.update = self._observers[MaxoUpdate] = SignalObserver[MaxoUpdate]()
+        self.update = self._observers[MaxoUpdate] = UpdateObserver[MaxoUpdate[Any]]()
         self.update.middleware.outer(ErrorMiddleware(self))
         self.update.middleware.outer(UpdateContextMiddleware())
 
         self.update.handler(self._feed_update_handler)
 
         # State system settings
-        if key_builder is None:
-            key_builder = DefaultKeyBuilder()
+        if not disable_fsm:
+            if key_builder is None:
+                key_builder = DefaultKeyBuilder()
 
-        if storage is None:
-            storage = MemoryStorage(key_builder=key_builder)
+            if storage is None:
+                storage = MemoryStorage(key_builder=key_builder)
 
-        if events_isolation is None:
-            events_isolation = SimpleEventIsolation(key_builder=key_builder)
+            if events_isolation is None:
+                events_isolation = SimpleEventIsolation(key_builder=key_builder)
 
-        self.update.middleware.outer(FSMContextMiddleware(storage, events_isolation))
+            # Note that when FSM middleware is disabled,
+            # the event isolation is also disabled
+            # Because the isolation mechanism is a part of the FS
+            self.update.middleware.outer(
+                FSMContextMiddleware(storage, events_isolation),
+            )
 
         # Facade settings
         self.update.middleware.outer(FacadeMiddleware())
@@ -100,9 +108,16 @@ class Dispatcher(Router):
         ctx["ctx"] = ctx
         return await self.trigger(ctx)
 
-    async def _feed_update_handler(self, ctx: Ctx) -> Any:
-        ctx["update"] = ctx["update"].update
-        return await self.trigger(ctx)
+    async def _feed_update_handler(self, update: MaxoUpdate[Any], ctx: Ctx) -> Any:
+        ctx_copy = Ctx(dict(ctx))
+        ctx_copy["ctx"] = ctx_copy
+        ctx_copy["update"] = update.update
+
+        result = await self.trigger(ctx_copy)
+        if result is UNHANDLED:
+            raise SkipHandler
+
+        return result
 
     async def _emit_before_startup_handler(self) -> None:
         validate_router_graph(self)

@@ -1,10 +1,18 @@
 from maxo.errors import AttributeIsEmptyError
 from maxo.omit import Omittable, Omitted, is_defined
 from maxo.types.attachments import Attachments
+from maxo.types.audio_attachment import AudioAttachment
 from maxo.types.base import MaxoType
+from maxo.types.contact_attachment import ContactAttachment
+from maxo.types.file_attachment import FileAttachment
 from maxo.types.inline_keyboard_attachment import InlineKeyboardAttachment
 from maxo.types.keyboard import Keyboard
+from maxo.types.location_attachment import LocationAttachment
 from maxo.types.markup_elements import MarkupElements
+from maxo.types.photo_attachment import PhotoAttachment
+from maxo.types.share_attachment import ShareAttachment
+from maxo.types.sticker_attachment import StickerAttachment
+from maxo.types.video_attachment import VideoAttachment
 from maxo.utils.text_decorations import (
     TextDecoration,
     html_decoration,
@@ -43,9 +51,7 @@ class MessageBody(MaxoType):
 
     @property
     def keyboard(self) -> Keyboard | None:
-        if not self.attachments:
-            return None
-        for attachment in self.attachments:
+        for attachment in self.attachments or []:
             if isinstance(attachment, InlineKeyboardAttachment):
                 return attachment.payload
         return None
@@ -53,6 +59,64 @@ class MessageBody(MaxoType):
     @property
     def reply_markup(self) -> Keyboard | None:
         return self.keyboard
+
+    @property
+    def photo(self) -> list[PhotoAttachment]:
+        return [
+            attachment
+            for attachment in self.attachments or []
+            if isinstance(attachment, PhotoAttachment)
+        ]
+
+    @property
+    def video(self) -> list[VideoAttachment]:
+        return [
+            attachment
+            for attachment in self.attachments or []
+            if isinstance(attachment, VideoAttachment)
+        ]
+
+    @property
+    def audio(self) -> AudioAttachment | None:
+        for attachment in self.attachments or []:
+            if isinstance(attachment, AudioAttachment):
+                return attachment
+        return None
+
+    @property
+    def file(self) -> FileAttachment | None:
+        for attachment in self.attachments or []:
+            if isinstance(attachment, FileAttachment):
+                return attachment
+        return None
+
+    @property
+    def sticker(self) -> StickerAttachment | None:
+        for attachment in self.attachments or []:
+            if isinstance(attachment, StickerAttachment):
+                return attachment
+        return None
+
+    @property
+    def contact(self) -> ContactAttachment | None:
+        for attachment in self.attachments or []:
+            if isinstance(attachment, ContactAttachment):
+                return attachment
+        return None
+
+    @property
+    def share(self) -> ShareAttachment | None:
+        for attachment in self.attachments or []:
+            if isinstance(attachment, ShareAttachment):
+                return attachment
+        return None
+
+    @property
+    def location(self) -> LocationAttachment | None:
+        for attachment in self.attachments or []:
+            if isinstance(attachment, LocationAttachment):
+                return attachment
+        return None
 
     def _unparse_entities(self, text_decoration: TextDecoration) -> str:
         text = self.text or ""

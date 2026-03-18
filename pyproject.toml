@@ -45,6 +45,7 @@ dependencies = [
 magic_filter = ["magic_filter>=1.0.0,<2.0.0"]
 dishka = ["dishka>=1.0.0,<2.0.0"]
 redis = ["redis[hiredis]>=5.0.1,<8.0.0"]
+fastapi = ["fastapi>=0.128.0,<1.0.0"]
 
 [dependency-groups]
 docs = [
@@ -69,6 +70,8 @@ tests = [
     "pytest-repeat==0.9.4",
     "nox==2026.2.9",
     "nox-uv==0.7.1",
+    "pytest-aiohttp==1.0.5",
+    "httpx==0.27.0",
 ]
 lint = [
     "mypy==1.19.0",
@@ -82,7 +85,7 @@ dev = [
     { include-group = "lint" },
     { include-group = "tests" },
     { include-group = "docs" },
-    "maxo[magic_filter,dishka,redis]"
+    "maxo[magic_filter,dishka,redis,fastapi]"
 ]
 
 [project.urls]
@@ -176,6 +179,8 @@ ignore = [
     "PLR1704", # https://docs.astral.sh/ruff/rules/redefined-argument-from-local/
     "PLW2901", # https://docs.astral.sh/ruff/rules/redefined-loop-name/
     "ERA001", # https://docs.astral.sh/ruff/rules/commented-out-code/  # Удалить после починки всего
+    "UP040", # https://docs.astral.sh/ruff/rules/non-pep695-type-alias/  # Адаптикс с ним не работает
+    "TC003", # https://docs.astral.sh/ruff/rules/typing-only-standard-library-import/
 ]
 
 [tool.ruff.lint.per-file-ignores]
@@ -189,12 +194,13 @@ ignore = [
     "FBT003",
     "SLF001",
 ]
-"examples/**/*.py" = ["T201", "D"]
+"examples/**/*.py" = ["T201", "D", "TID252"]
 "src/maxo/types/*.py" = ["E501", "D", "W291", "W293"]
 "src/maxo/enums/*.py" = ["E501", "D", "W291", "W293"]
 "src/maxo/bot/methods/*.py" = ["E501", "D", "W291", "W293"]
 "src/maxo/routing/updates/*.py" = ["E501", "D"]
 "src/maxo/dialogs/test_tools/**/*.py" = ["S101"]
+"src/maxo/serialization.py" = ["PLW0603"]
 
 [tool.ruff.lint.isort]
 case-sensitive = true
@@ -211,6 +217,7 @@ line-length = 88
 target-version = ["py312"]
 include = 'src/.*\.py$|tests/.*\.py$|examples/.*\.py$'
 
-[tool.pytest]
+[tool.pytest.ini_options]
 log_cli = true
 log_cli_level = "DEBUG"
+asyncio_mode = "strict"
