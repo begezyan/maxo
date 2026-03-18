@@ -14,7 +14,7 @@
     from maxo.routing.updates.message_created import MessageCreated
     from maxo.routing.ctx import Ctx
     from maxo.utils.facades import MessageCreatedFacade
-    from maxo.utils.long_polling import LongPolling
+    from maxo.transport.long_polling import LongPolling
 
     bot = Bot(token="ВАШ_ТОКЕН")
     dispatcher = Dispatcher()
