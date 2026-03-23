@@ -3,7 +3,7 @@ from collections.abc import Callable
 
 
 def encode_payload(
-    payload: str,
+    payload: object,
     encoder: Callable[[bytes], bytes] | None = None,
 ) -> str:
     if not isinstance(payload, str):

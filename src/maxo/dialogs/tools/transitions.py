@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import os.path
 from collections.abc import Iterable, Sequence
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, cast
 
 from maxo.dialogs.setup import collect_dialogs
 from maxo.dialogs.widgets.kbd import Back, Cancel, Group, Next, Start, SwitchTo
@@ -12,15 +12,14 @@ from maxo.routing.interfaces import BaseRouter
 if TYPE_CHECKING:
     from diagrams import Node
 
-    from maxo.dialogs.api.internal.window import WindowProtocol
-    from maxo.dialogs.api.protocols.dialog import DialogProtocol
+    from maxo.dialogs.dialog import Dialog
 
 ICON_PATH = os.path.join(os.path.dirname(__file__), "icon.png")
 
 
 def _widget_edges(
     nodes: dict[State, Node],
-    dialog: DialogProtocol,
+    dialog: Dialog,
     starts: list[tuple[State, State]],
     current_state: State,
     kbd: object,
@@ -46,7 +45,7 @@ def _widget_edges(
 
 def _walk_keyboard(
     nodes: dict[State, Node],
-    dialog: DialogProtocol,
+    dialog: Dialog,
     starts: list[tuple[State, State]],
     current_state: State,
     keyboards: Sequence[object],
@@ -82,9 +81,10 @@ def render_transitions(
     from diagrams import Cluster, Diagram
     from diagrams.custom import Custom
 
+    from maxo.dialogs.dialog import Dialog
     from maxo.dialogs.window import Window
 
-    dialogs = list(collect_dialogs(router))
+    dialogs = [cast(Dialog, dialog) for dialog in collect_dialogs(router)]
     with Diagram(title, filename=filename, outformat=format, show=False):
         nodes: dict[State, Node] = {}
         for dialog in dialogs:
