@@ -92,8 +92,9 @@ VK Max и без подключения к сети. Тесты выполняю
     msg = message_manager.last_message()
     assert "Главное меню" in msg.body.text
 
-    # Проверка кнопок
-    buttons = [btn.text for row in msg.body.keyboard.buttons for btn in row]
+    # Проверка кнопок (фильтруем только CallbackButton)
+    from maxo.types import CallbackButton
+    buttons = [btn.text for row in msg.body.keyboard.buttons for btn in row if isinstance(btn, CallbackButton)]
     assert "Подробнее" in buttons
 
 Используйте ``reset_history()`` чтобы очистить историю между шагами теста —

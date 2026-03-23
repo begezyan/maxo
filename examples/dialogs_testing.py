@@ -9,6 +9,7 @@ import asyncio
 from typing import Any
 
 from maxo import Dispatcher
+from maxo.types import CallbackButton
 from maxo.dialogs import Dialog, DialogManager, StartMode, Window, setup_dialogs
 from maxo.dialogs.test_tools import BotClient, MockMessageManager
 from maxo.dialogs.test_tools.keyboard import InlineButtonTextLocator
@@ -97,7 +98,7 @@ async def demo_render_window() -> None:
         raise AssertionError(f"Unexpected text: {msg.body.text!r}")
     if msg.body.keyboard is None:
         raise AssertionError("Keyboard is missing")
-    buttons = [btn.text for row in msg.body.keyboard.buttons for btn in row]
+    buttons = [btn.text for row in msg.body.keyboard.buttons for btn in row if isinstance(btn, CallbackButton)]
     if "Подробнее" not in buttons:
         raise AssertionError(f"Button not found, got: {buttons}")
     print("demo_render_window: OK")
