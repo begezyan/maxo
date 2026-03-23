@@ -1,9 +1,11 @@
 from __future__ import annotations
 
-import os.path
+import importlib
 from collections.abc import Iterable, Sequence
-from typing import TYPE_CHECKING, cast
+from pathlib import Path
+from typing import TYPE_CHECKING
 
+from maxo.dialogs.dialog import Dialog
 from maxo.dialogs.setup import collect_dialogs
 from maxo.dialogs.widgets.kbd import Back, Cancel, Group, Next, Start, SwitchTo
 from maxo.fsm import State
@@ -12,9 +14,7 @@ from maxo.routing.interfaces import BaseRouter
 if TYPE_CHECKING:
     from diagrams import Node
 
-    from maxo.dialogs.dialog import Dialog
-
-ICON_PATH = os.path.join(os.path.dirname(__file__), "icon.png")
+ICON_PATH = (Path(__file__).parent / "icon.png").as_posix()
 
 
 def _widget_edges(
@@ -24,15 +24,25 @@ def _widget_edges(
     current_state: State,
     kbd: object,
 ) -> None:
-    from diagrams import Edge
+    diagrams_module = importlib.import_module("diagrams")
+    edge_factory = diagrams_module.Edge
 
-    def _safe_connect(color: str, to_state: State | None, *, style: str | None = None) -> None:
+    def _safe_connect(
+        color: str,
+        to_state: State | None,
+        *,
+        style: str | None = None,
+    ) -> None:
         if to_state is None:
             return
         to_node = nodes.get(to_state)
         if to_node is None:
             return
-        edge = Edge(color=color, style=style) if style is not None else Edge(color=color)
+        edge = (
+            edge_factory(color=color, style=style)
+            if style is not None
+            else edge_factory(color=color)
+        )
         nodes[current_state] >> edge >> to_node
 
     states = list(dialog.windows.keys())
@@ -85,39 +95,44 @@ def render_transitions(
     filename: str = "maxo_dialog",
     format: str = "png",
 ) -> None:
-    """Render a PNG state-transition diagram for all dialogs in the router.
+    """
+    Render a PNG state-transition diagram for all dialogs in the router.
 
     Requires: pip install maxo[preview] and system graphviz (brew install graphviz).
     """
-    from diagrams import Cluster, Diagram
-    from diagrams.custom import Custom
+    diagrams_module = importlib.import_module("diagrams")
+    diagrams_custom_module = importlib.import_module("diagrams.custom")
+    window_module = importlib.import_module("maxo.dialogs.window")
+    cluster_factory = diagrams_module.Cluster
+    diagram_factory = diagrams_module.Diagram
+    custom_factory = diagrams_custom_module.Custom
+    window_class = window_module.Window
 
-    from maxo.dialogs.dialog import Dialog
-    from maxo.dialogs.window import Window
-
-    dialogs = [cast(Dialog, dialog) for dialog in collect_dialogs(router)]
-    with Diagram(title, filename=filename, outformat=format, show=False):
+    dialogs = [
+        dialog for dialog in collect_dialogs(router) if isinstance(dialog, Dialog)
+    ]
+    with diagram_factory(title, filename=filename, outformat=format, show=False):
         nodes: dict[State, Node] = {}
         for dialog in dialogs:
-            with Cluster(dialog.states_group_name()):
-                for state, window in dialog.windows.items():
-                    nodes[state] = Custom(
-                        label=state._state or "",
+            with cluster_factory(dialog.states_group_name()):
+                for state in dialog.windows:
+                    nodes[state] = custom_factory(
+                        label=state.state or "",
                         icon_path=ICON_PATH,
                     )
 
         starts: list[tuple[State, State]] = []
         for dialog in dialogs:
             for state, window in dialog.windows.items():
-                if isinstance(window, Window):
+                if isinstance(window, window_class):
                     starts.extend(_find_starts(state, [window.keyboard]))
 
         for dialog in dialogs:
             for state, window in dialog.windows.items():
-                if not isinstance(window, Window):
+                if not isinstance(window, window_class):
                     continue
                 _walk_keyboard(nodes, dialog, starts, state, [window.keyboard])
                 if window.preview_add_transitions:
                     _walk_keyboard(
-                        nodes, dialog, starts, state, window.preview_add_transitions
+                        nodes, dialog, starts, state, window.preview_add_transitions,
                     )

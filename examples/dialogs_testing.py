@@ -93,10 +93,13 @@ async def demo_render_window() -> None:
     await client.send("/start")
 
     msg = mm.last_message()
-    assert msg.body.text == "Главное меню", f"Unexpected text: {msg.body.text!r}"
-    assert msg.body.keyboard is not None
+    if msg.body.text != "Главное меню":
+        raise AssertionError(f"Unexpected text: {msg.body.text!r}")
+    if msg.body.keyboard is None:
+        raise AssertionError("Keyboard is missing")
     buttons = [btn.text for row in msg.body.keyboard.buttons for btn in row]
-    assert "Подробнее" in buttons, f"Button not found, got: {buttons}"
+    if "Подробнее" not in buttons:
+        raise AssertionError(f"Button not found, got: {buttons}")
     print("demo_render_window: OK")
 
 
@@ -112,9 +115,8 @@ async def demo_render_transition() -> None:
     mm.assert_answered(callback_id)
 
     detail_msg = mm.last_message()
-    assert detail_msg.body.text == "Детальная страница", (
-        f"Unexpected text: {detail_msg.body.text!r}"
-    )
+    if detail_msg.body.text != "Детальная страница":
+        raise AssertionError(f"Unexpected text: {detail_msg.body.text!r}")
     print("demo_render_transition: OK")
 
 
