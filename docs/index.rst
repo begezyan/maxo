@@ -159,3 +159,10 @@ Contributors
    :hidden:
 
    pages/useful_notes
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Форматирование текста
+   :hidden:
+
+   pages/text_formatting
