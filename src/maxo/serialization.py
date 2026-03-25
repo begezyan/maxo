@@ -2,7 +2,6 @@ import typing
 from datetime import UTC, datetime
 
 from adaptix import Chain, P, Retort, dumper, loader
-from mypyc.ir.ops import TypeVar
 from unihttp.markers import QueryMarker
 from unihttp.serializers.adaptix import DEFAULT_RETORT, for_marker
 
@@ -146,7 +145,7 @@ def create_retort(
         if hasattr(method, "format") and is_omitted(method.format):
             method.format = defaults.text_format
         if hasattr(method, "disable_link_preview") and is_omitted(
-            method.disable_link_preview
+            method.disable_link_preview,
         ):
             method.disable_link_preview = defaults.disable_link_preview
         return method

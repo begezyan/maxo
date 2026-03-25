@@ -39,7 +39,7 @@ def test_bot_default_text_format(default: Omittable[TextFormat | None]) -> None:
     "default",
     [True, False, Omitted()],
 )
-def test_bot_default_disable_link_preview(default: Omittable[bool]):
+def test_bot_default_disable_link_preview(default: Omittable[bool]) -> None:
     defaults = BotDefaults(disable_link_preview=default)
     retort = create_retort(defaults=defaults, warming_up=False)
 
