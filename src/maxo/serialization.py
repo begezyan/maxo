@@ -140,22 +140,16 @@ def create_retort(
     if defaults is None:
         defaults = BotDefaults()
 
-    types_text_format = SendMessage | EditMessage | NewMessageBody
-    T = TypeVar("T", bound=types_text_format)
+    types_with_defaults = SendMessage | EditMessage | NewMessageBody
 
-    def _set_text_format_default(method: T) -> T:
-        if is_omitted(method.format):
+    def _set_method_defaults(method: types_with_defaults) -> types_with_defaults:
+        if hasattr(method, "format") and is_omitted(method.format):
             method.format = defaults.text_format
-        return method
-
-    types_disable_link_preview = SendMessage
-    T = TypeVar("T", bound=types_text_format)
-
-    def _set_disable_link_preview_default(method: T) -> T:
-        if is_omitted(method.disable_link_preview):
+        if hasattr(method, "disable_link_preview") and is_omitted(
+            method.disable_link_preview
+        ):
             method.disable_link_preview = defaults.disable_link_preview
         return method
-
 
     retort = DEFAULT_RETORT.extend(
         recipe=[
@@ -173,13 +167,8 @@ def create_retort(
                 lambda seq: ",".join(str(el) for el in seq),
             ),
             dumper(
-                P[*typing.get_args(types_text_format)],
-                _set_text_format_default,
-                chain=Chain.FIRST,
-            ),
-            dumper(
-                P[types_disable_link_preview],
-                _set_disable_link_preview_default,
+                P[*typing.get_args(types_with_defaults)],
+                _set_method_defaults,
                 chain=Chain.FIRST,
             ),
             dumper(
