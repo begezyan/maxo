@@ -1,9 +1,9 @@
 """Regression tests for BgManager in 1:1 dialog chats.
 
 Covers three related bugs:
-- chat_type hardcoded to CHAT in BgManager (#81)
-- KeyError 'event_from_user' on DialogUpdateEvent (#78)
-- chat_id=None in UpdateContext for DialogUpdateEvent (#79)
+- chat_type hardcoded to CHAT in BgManager (https://github.com/K1rL3s/maxo/pull/81)
+- KeyError 'event_from_user' on DialogUpdateEvent (https://github.com/K1rL3s/maxo/issues/78)
+- chat_id=None in UpdateContext for DialogUpdateEvent (https://github.com/K1rL3s/maxo/issues/79)
 """
 
 import asyncio
@@ -72,7 +72,7 @@ def _fake_user(user_id: int = 100) -> User:
 
 
 # ---------------------------------------------------------------------------
-# Unit tests: chat_type propagation in BgManager (#81)
+# Unit tests: chat_type propagation in BgManager (https://github.com/K1rL3s/maxo/pull/81)
 # ---------------------------------------------------------------------------
 
 
@@ -136,7 +136,8 @@ class TestBgManagerChatTypePropagation:
 
 
 # ---------------------------------------------------------------------------
-# Unit test: UpdateContextMiddleware handles DialogUpdateEvent (#78 + #79)
+# Unit test: UpdateContextMiddleware handles DialogUpdateEvent
+# (https://github.com/K1rL3s/maxo/issues/78 + https://github.com/K1rL3s/maxo/issues/79)
 # ---------------------------------------------------------------------------
 
 
@@ -145,7 +146,7 @@ class TestUpdateContextMiddlewareDialogEvent:
 
     @pytest.mark.asyncio
     async def test_sets_event_from_user(self) -> None:
-        """#78: EVENT_FROM_USER_KEY must be set for DialogUpdateEvent."""
+        """https://github.com/K1rL3s/maxo/issues/78: EVENT_FROM_USER_KEY must be set."""
         middleware = UpdateContextMiddleware()
         user = _fake_user(100)
         event = DialogStartEvent(
@@ -174,7 +175,7 @@ class TestUpdateContextMiddlewareDialogEvent:
 
     @pytest.mark.asyncio
     async def test_sets_update_context_with_chat_id(self) -> None:
-        """#79: UPDATE_CONTEXT_KEY.chat_id must not be None for DialogUpdateEvent."""
+        """https://github.com/K1rL3s/maxo/issues/79: chat_id must not be None."""
         middleware = UpdateContextMiddleware()
         user = _fake_user(100)
         event = DialogStartEvent(
@@ -198,10 +199,10 @@ class TestUpdateContextMiddlewareDialogEvent:
         ctx: Ctx = {}
         await middleware(MaxoUpdate(update=event), ctx, next_handler)
 
-        uc = captured_ctx[UPDATE_CONTEXT_KEY]
-        assert uc.chat_id == 999
-        assert uc.user_id == 100
-        assert uc.type == ChatType.DIALOG
+        update_context = captured_ctx[UPDATE_CONTEXT_KEY]
+        assert update_context.chat_id == 999
+        assert update_context.user_id == 100
+        assert update_context.type == ChatType.DIALOG
 
 
 # ---------------------------------------------------------------------------
@@ -259,9 +260,7 @@ async def test_bg_start_dialog_then_message_handled(
     await bg.start(ChatSG.active, mode=StartMode.RESET_STACK)
 
     # bg.start() dispatches via call_soon + create_task — yield to event loop
-    await asyncio.sleep(0)
-    await asyncio.sleep(0)
-    await asyncio.sleep(0)
+    await asyncio.sleep(0.1)
 
     assert len(message_manager.sent_messages) >= 1
     assert message_manager.sent_messages[0].body.text == "chat active"
@@ -290,9 +289,7 @@ async def test_bg_start_wrong_chat_type_message_unhandled(
     bg = bg_factory.bg(client.bot, user_id, chat_id)
     await bg.start(ChatSG.active, mode=StartMode.RESET_STACK)
 
-    await asyncio.sleep(0)
-    await asyncio.sleep(0)
-    await asyncio.sleep(0)
+    await asyncio.sleep(0.1)
 
     message_manager.reset_history()
     await client.send("hello from user")
