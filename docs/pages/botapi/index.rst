@@ -22,3 +22,4 @@ Bot API
    omitted
    enums
    updates
+   text_formatting
