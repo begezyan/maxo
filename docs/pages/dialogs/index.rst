@@ -34,16 +34,3 @@
 * :doc:`background_manager` – фоновый менеджер для обновления диалогов из фоновых задач.
 * :doc:`testing` – тестирование диалогов в памяти без внешнего API.
 * :doc:`preview` – HTML-превью и диаграмма переходов диалогов.
-
-.. toctree::
-   :maxdepth: 1
-   :hidden:
-
-   quickstart
-   windows_and_dialogs
-   widgets
-   transitions
-   data_and_context
-   background_manager
-   testing
-   preview
