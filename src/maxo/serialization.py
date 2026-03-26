@@ -1,3 +1,4 @@
+import dataclasses
 import typing
 from datetime import UTC, datetime
 
@@ -143,11 +144,14 @@ def create_retort(
 
     def _set_method_defaults(method: types_with_defaults) -> types_with_defaults:
         if hasattr(method, "format") and is_omitted(method.format):
-            method.format = defaults.text_format
+            method = dataclasses.replace(method, format=defaults.text_format)
         if hasattr(method, "disable_link_preview") and is_omitted(
             method.disable_link_preview,
         ):
-            method.disable_link_preview = defaults.disable_link_preview
+            method = dataclasses.replace(
+                method,
+                disable_link_preview=defaults.disable_link_preview,
+            )
         return method
 
     retort = DEFAULT_RETORT.extend(
