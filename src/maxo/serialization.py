@@ -161,8 +161,10 @@ def create_retort(
     def _load_datetime(time: int) -> datetime:
         try:
             return datetime.fromtimestamp(time / 1000, tz=UTC)
-        except ValueError:
-            return datetime.max.replace(tzinfo=UTC)
+        except (OSError, OverflowError, ValueError):
+            if time > 0:
+                return datetime.max.replace(tzinfo=UTC)
+            return datetime.min.replace(tzinfo=UTC)
 
     retort = DEFAULT_RETORT.extend(
         recipe=[

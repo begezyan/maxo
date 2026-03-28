@@ -190,7 +190,7 @@ class HtmlDecoration(TextDecoration):
 
 
 class MarkdownDecoration(TextDecoration):
-    MARKDOWN_QUOTE_PATTERN: Pattern[str] = re.compile(r"([_*\[\]()~`>#+\-=|{}.!\\])")
+    MARKDOWN_QUOTE_PATTERN: Pattern[str] = re.compile(r"([_*\[\]()~`>#+\-=|{}.!\\^])")
 
     def blockquote(self, value: str) -> str:
         return "\n".join(f"> {line}" for line in value.splitlines())

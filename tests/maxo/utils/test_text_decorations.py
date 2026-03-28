@@ -117,6 +117,7 @@ class TestTextDecoration:
             (markdown_decoration, "test ` test", "test \\` test"),
             (markdown_decoration, "test * test", "test \\* test"),
             (markdown_decoration, "test _ test", "test \\_ test"),
+            (markdown_decoration, "x^2 + y^2", "x\\^2 \\+ y\\^2"),
         ],
     )
     def test_quote(self, decorator: TextDecoration, before: str, after: str) -> None:
