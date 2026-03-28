@@ -20,7 +20,7 @@ from maxo.utils.text_decorations import (
     remove_surrogates,
 )
 
-_MARKUP_MAP: dict[str, type] = {
+_MARKUP_MAP: dict[MarkupElementType, type[MarkupElements]] = {
     MarkupElementType.STRONG: StrongMarkup,
     MarkupElementType.EMPHASIZED: EmphasizedMarkup,
     MarkupElementType.UNDERLINE: UnderlineMarkup,
@@ -38,7 +38,7 @@ def sizeof(value: str) -> int:
 
 
 class Text(Iterable[NodeType]):
-    type: ClassVar[str | None] = None
+    type: ClassVar[MarkupElementType | None] = None
 
     __slots__ = ("_body", "_params")
 
@@ -275,13 +275,14 @@ class Highlighted(Text):
     type = MarkupElementType.HIGHLIGHTED
 
 
-NODE_TYPES: dict[str | None, type[Text]] = {
+NODE_TYPES: dict[MarkupElementType | None, type[Text]] = {
     Text.type: Text,
     BlockQuote.type: BlockQuote,
     Bold.type: Bold,
     Italic.type: Italic,
     Underline.type: Underline,
     Strikethrough.type: Strikethrough,
+    Monospaced.type: Monospaced,
     Link.type: Link,
     Mention.type: Mention,
     Heading.type: Heading,

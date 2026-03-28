@@ -51,12 +51,12 @@ class TextDecoration(ABC):
         if entity.type == MarkupElementType.USER_MENTION:
             # Когда у юзеров появятся юзернеймы, поддерживать их
             # Сейчас есть только user_id
-            entity: UserMentionMarkup
-            return self.link(value=text, link=f"max://user/{entity.user_id}")
+            mention_entity = cast(UserMentionMarkup, entity)
+            return self.link(value=text, link=f"max://user/{mention_entity.user_id}")
 
         if entity.type == MarkupElementType.LINK:
-            entity: LinkMarkup
-            return self.link(value=text, link=cast(str, entity.url))
+            link_entity = cast(LinkMarkup, entity)
+            return self.link(value=text, link=cast(str, link_entity.url))
 
         # This case is not possible because of `if` above,
         # but if any new entity is added to API it will be here too
