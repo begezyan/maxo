@@ -305,7 +305,9 @@ async def create_button(
     manager.set_state(state)
     try:
         await dialog._callback_handler(
-            message_callback, ctx=manager.middleware_data, dialog_manager=manager,
+            message_callback,
+            ctx=manager.middleware_data,
+            dialog_manager=manager,
         )
     except Exception:
         logger.debug("Click %s", callback)
