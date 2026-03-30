@@ -40,6 +40,7 @@ from maxo.routing.middlewares.update_context import (
     EVENT_FROM_USER_KEY,
     UPDATE_CONTEXT_KEY,
 )
+from maxo.routing.updates.message_callback import MessageCallback
 from maxo.types import Callback, CallbackButton, UpdateContext, User
 from maxo.types.message import Message
 from maxo.types.message_body import MessageBody
@@ -286,20 +287,26 @@ async def create_button(
 ) -> RenderButton:
     if not simulate_events:
         return RenderButton(title=title, state=state.state)
-    callback = Callback(
-        callback_id="1",
-        user=User(
-            user_id=1,
-            is_bot=False,
-            first_name="",
-            last_activity_time=datetime(2024, 1, 1, tzinfo=UTC),
-        ),
+    fake_user = User(
+        user_id=1,
+        is_bot=False,
+        first_name="",
+        last_activity_time=datetime(2024, 1, 1, tzinfo=UTC),
+    )
+    message_callback = MessageCallback(
         timestamp=datetime(2024, 1, 1, tzinfo=UTC),
-        payload=callback,
+        callback=Callback(
+            callback_id="1",
+            user=fake_user,
+            timestamp=datetime(2024, 1, 1, tzinfo=UTC),
+            payload=callback,
+        ),
     )
     manager.set_state(state)
     try:
-        await dialog._callback_handler(callback, dialog_manager=manager)
+        await dialog._callback_handler(
+            message_callback, ctx=manager.middleware_data, dialog_manager=manager,
+        )
     except Exception:
         logger.debug("Click %s", callback)
     state = manager.current_context().state
