@@ -108,8 +108,8 @@ async def test_parent_and_child_included_router_filters_allow_handler(ctx: Ctx) 
     ]
 
 
-@pytest.mark.asyncio
-async def test_child_included_router_filter_false_stops_after_parent_filter(ctx: Ctx) -> None:
+`@pytest.mark.asyncio`
+async def test_child_filter_false_stops_after_parent_filter(ctx: Ctx) -> None:
     dp = Dispatcher()
     parent_router = Router("parent")
     child_router = Router("child")
