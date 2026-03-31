@@ -52,18 +52,18 @@ async def test_build_media_only_input_files(facade: DummyFacade) -> None:
     with (
         patch.object(
             facade,
-            "_upload_files",
+            "build_media_attachments",
             new_callable=AsyncMock,
-        ) as upload_files_mock,
+        ) as build_media_attachments_mock,
         patch(
             "asyncio.sleep",
             new_callable=AsyncMock,
         ) as sleep_mock,
     ):
-        upload_files_mock.return_value = uploaded_attachments
+        build_media_attachments_mock.return_value = uploaded_attachments
         result = await facade._build_media(input_files)
 
-        upload_files_mock.assert_called_once_with(input_files)
+        build_media_attachments_mock.assert_called_once_with(input_files)
         sleep_mock.assert_awaited_once_with(0.5)
 
     assert result == uploaded_attachments
@@ -79,9 +79,9 @@ async def test_build_media_only_requests(facade: DummyFacade) -> None:
     with (
         patch.object(
             facade,
-            "_upload_files",
+            "build_media_attachments",
             new_callable=AsyncMock,
-        ) as upload_files_mock,
+        ) as build_media_attachments_mock,
         patch(
             "asyncio.sleep",
             new_callable=AsyncMock,
@@ -89,7 +89,7 @@ async def test_build_media_only_requests(facade: DummyFacade) -> None:
     ):
         result = await facade._build_media(requests)
 
-        upload_files_mock.assert_not_called()
+        build_media_attachments_mock.assert_not_called()
         sleep_mock.assert_not_awaited()
 
     assert result == requests
@@ -119,7 +119,7 @@ async def test_build_media_mixed_order(facade: DummyFacade) -> None:
     with (
         patch.object(
             facade,
-            "_upload_files",
+            "build_media_attachments",
             new_callable=AsyncMock,
         ) as upload_files_mock,
         patch(
