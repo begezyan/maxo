@@ -17,4 +17,4 @@ class ChatAdminPermission(StrEnum):
     WRITE = "write"
     DELETE = "delete"  # Нет в доке, но приходит
     EDIT = "edit"  # Нет в доке, но приходит
-    VIEW__STATS = "view_stats"  # Нет в доке, приходит
+    VIEW_STATS = "view_stats"  # Нет в доке, приходит
