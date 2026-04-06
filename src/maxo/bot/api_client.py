@@ -4,7 +4,7 @@ import pathlib
 from collections.abc import AsyncGenerator, Callable
 from typing import Any, BinaryIO, Never
 
-from aiohttp import ClientSession
+from aiohttp import ClientSession, ClientTimeout
 from anyio import open_file
 from unihttp.clients.aiohttp import AiohttpAsyncClient
 from unihttp.http import HTTPResponse
@@ -24,6 +24,7 @@ from maxo.errors import (
     MaxBotTooManyRequestsError,
     MaxBotUnauthorizedError,
     MaxBotUnknownServerError,
+    MaxBotUnsupportedMediaTypeError,
 )
 from maxo.types import AttachmentPayload
 
@@ -62,9 +63,15 @@ class MaxApiClient(AiohttpAsyncClient):
 
     def handle_error(self, response: HTTPResponse, method: BaseMethod[Any]) -> Never:
         # ruff: noqa: PLR2004
-        code: str = response.data.get("code") or response.data.get("error_code", "")
-        error: str = response.data.get("error") or response.data.get("error_data", "")
-        message: str = response.data.get("message", "")
+        data = response.data
+        if isinstance(data, dict):
+            code: str = data.get("code") or data.get("error_code", "")
+            error: str = data.get("error") or data.get("error_data", "")
+            message: str = data.get("message", "")
+        else:
+            code = ""
+            error = ""
+            message = data
 
         if response.status_code == 400:
             raise MaxBotBadRequestError(code, error, message)
@@ -76,6 +83,8 @@ class MaxApiClient(AiohttpAsyncClient):
             raise MaxBotNotFoundError(code, error, message)
         if response.status_code == 405:
             raise MaxBotMethodNotAllowedError(code, error, message)
+        if response.status_code == 415:
+            raise MaxBotUnsupportedMediaTypeError(code, error, message)
         if response.status_code == 429:
             raise MaxBotTooManyRequestsError(code, error, message)
         if response.status_code == 500:
@@ -84,7 +93,11 @@ class MaxApiClient(AiohttpAsyncClient):
             raise MaxBotServiceUnavailableError(code, error, message)
         raise MaxBotApiError(code, error, message)
 
-    def validate_response(self, response: HTTPResponse, method: BaseMethod) -> None:
+    def validate_response(
+        self,
+        response: HTTPResponse,
+        method: BaseMethod[Any],
+    ) -> None:
         if (
             response.ok
             and isinstance(response.data, dict)
@@ -103,7 +116,7 @@ class MaxApiClient(AiohttpAsyncClient):
         self,
         url: str | AttachmentPayload,
         destination: BinaryIO | pathlib.Path | str | None = None,
-        timeout: int = 30,
+        timeout: float | ClientTimeout = 30,
         chunk_size: int = 65536,
         seek: bool = True,
     ) -> BinaryIO | None:
@@ -122,7 +135,7 @@ class MaxApiClient(AiohttpAsyncClient):
         self,
         url: str,
         destination: BinaryIO | pathlib.Path | str | None,
-        timeout: int,
+        timeout: float | ClientTimeout,
         chunk_size: int,
         seek: bool,
     ) -> BinaryIO | None:
@@ -149,10 +162,13 @@ class MaxApiClient(AiohttpAsyncClient):
         self,
         url: str,
         headers: dict[str, Any] | None = None,
-        timeout: int = 30,
+        timeout: float | ClientTimeout = 30,
         chunk_size: int = 65536,
         raise_for_status: bool = True,
     ) -> AsyncGenerator[bytes, None]:
+        if not isinstance(timeout, ClientTimeout):
+            timeout = ClientTimeout(total=timeout)
+
         async with self._session.get(
             url,
             timeout=timeout,

@@ -1,5 +1,6 @@
 from datetime import datetime
 
+from maxo.omit import Omittable
 from maxo.routing.updates.dialog_muted import DialogMuted
 from maxo.types.user import User
 from maxo.utils.facades.methods.chat import ChatMethodsFacade
@@ -20,5 +21,5 @@ class DialogMutedFacade(BaseUpdateFacade[DialogMuted], ChatMethodsFacade):
         return self._update.muted_until
 
     @property
-    def user_locale(self) -> str:
+    def user_locale(self) -> Omittable[str]:
         return self._update.user_locale

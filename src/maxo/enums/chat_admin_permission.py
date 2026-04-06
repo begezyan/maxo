@@ -15,3 +15,6 @@ class ChatAdminPermission(StrEnum):
     POST_EDIT_DELETE_MESSAGE = "post_edit_delete_message"
     READ_ALL_MESSAGES = "read_all_messages"
     WRITE = "write"
+    DELETE = "delete"  # Нет в доке, но приходит
+    EDIT = "edit"  # Нет в доке, но приходит
+    VIEW_STATS = "view_stats"  # Нет в доке, приходит

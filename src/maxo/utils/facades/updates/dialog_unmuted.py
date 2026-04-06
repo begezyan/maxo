@@ -1,3 +1,4 @@
+from maxo.omit import Omittable
 from maxo.routing.updates.dialog_unmuted import DialogUnmuted
 from maxo.types.user import User
 from maxo.utils.facades.methods.chat import ChatMethodsFacade
@@ -14,5 +15,5 @@ class DialogUnmutedFacade(BaseUpdateFacade[DialogUnmuted], ChatMethodsFacade):
         return self._update.user
 
     @property
-    def user_locale(self) -> str:
+    def user_locale(self) -> Omittable[str]:
         return self._update.user_locale
