@@ -11,6 +11,15 @@ from maxo.types import NewMessageBody
 from maxo.types.base import MaxoType
 
 
+class Sub(MaxoType):
+    b: int
+
+
+class MyType(MaxoType):
+    a: str
+    sub: Sub
+
+
 @pytest.mark.parametrize(
     "default",
     [TextFormat.HTML, TextFormat.MARKDOWN, None, Omitted()],
@@ -57,14 +66,10 @@ def test_retort_with_bot_load_bot() -> None:
     bot = Bot(token="", warming_up=False)
     retort = bot.retort
 
-    class MyType(MaxoType):
-        a: str
-        b: int
-
-    data = {"a": "aaa", "b": 123}
+    data = {"a": "a", "sub": {"b": 1}}
 
     my = retort.load(data, MyType)
-    assert my.bot == bot
+    assert bot == my.bot == my.sub.bot
 
     dump = retort.dump(my, MyType)
     assert dump == data
@@ -73,16 +78,15 @@ def test_retort_with_bot_load_bot() -> None:
 def test_retort_without_bot_no_load_bot() -> None:
     retort = create_retort(warming_up=False, bot=None)
 
-    class MyType(MaxoType):
-        a: str
-        b: int
-
-    data = {"a": "aaa", "b": 123}
+    data = {"a": "a", "sub": {"b": 1}}
 
     my = retort.load(data, MyType)
 
     with pytest.raises(AttributeIsEmptyError):
         my.bot  # noqa: B018
+
+    with pytest.raises(AttributeIsEmptyError):
+        my.sub.bot  # noqa: B018
 
     dump = retort.dump(my, MyType)
     assert dump == data
