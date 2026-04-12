@@ -2,13 +2,13 @@ from abc import abstractmethod
 from typing import TYPE_CHECKING
 
 from maxo.enums.attachment_type import AttachmentType
-from maxo.types.base import BotMixin
+from maxo.types.base import MaxoType
 
 if TYPE_CHECKING:
     from maxo.types.attachments import AttachmentsRequests
 
 
-class Attachment(BotMixin):
+class Attachment(MaxoType):
     """
     Общая схема, представляющая вложение сообщения
 

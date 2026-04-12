@@ -2,10 +2,10 @@ from datetime import datetime
 
 from maxo.errors import AttributeIsEmptyError
 from maxo.omit import Omittable, Omitted, is_defined
-from maxo.types.base import BotMixin
+from maxo.types.base import MaxoType
 
 
-class User(BotMixin):
+class User(MaxoType):
     """
     Объект, описывающий один из вариантов наследования:
 

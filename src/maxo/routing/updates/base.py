@@ -3,13 +3,13 @@ from datetime import datetime
 from typing import TYPE_CHECKING, ClassVar
 
 from maxo.enums import UpdateType
-from maxo.types.base import BotMixin
+from maxo.types.base import MaxoType
 
 if TYPE_CHECKING:
     from maxo.utils.facades import BaseUpdateFacade
 
 
-class BaseUpdate(BotMixin):
+class BaseUpdate(MaxoType):
     pass
 
 

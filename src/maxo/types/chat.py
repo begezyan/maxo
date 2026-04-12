@@ -5,13 +5,13 @@ from maxo.enums.chat_status import ChatStatus
 from maxo.enums.chat_type import ChatType
 from maxo.errors import AttributeIsEmptyError
 from maxo.omit import Omittable, Omitted, is_defined
-from maxo.types.base import BotMixin
+from maxo.types.base import MaxoType
 from maxo.types.image import Image
 from maxo.types.message import Message
 from maxo.types.user_with_photo import UserWithPhoto
 
 
-class Chat(BotMixin):
+class Chat(MaxoType):
     """
     Args:
         chat_id: ID чата

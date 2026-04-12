@@ -1,8 +1,8 @@
-from maxo.types.base import BotMixin
+from maxo.types.base import MaxoType
 from maxo.types.message import Message
 
 
-class SendMessageResult(BotMixin):
+class SendMessageResult(MaxoType):
     """
     Args:
         message:

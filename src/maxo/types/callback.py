@@ -2,11 +2,11 @@ from datetime import datetime
 
 from maxo.errors import AttributeIsEmptyError
 from maxo.omit import Omittable, Omitted, is_defined
-from maxo.types.base import BotMixin
+from maxo.types.base import MaxoType
 from maxo.types.user import User
 
 
-class Callback(BotMixin):
+class Callback(MaxoType):
     """
     Объект, отправленный боту, когда пользователь нажимает кнопку
 

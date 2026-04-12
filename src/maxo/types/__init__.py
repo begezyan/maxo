@@ -9,7 +9,7 @@ from .attachments import (
 )
 from .audio_attachment import AudioAttachment
 from .audio_attachment_request import AudioAttachmentRequest
-from .base import MaxoType
+from .base import BaseMaxoType, BotMixin, MaxoType
 from .bot_command import BotCommand
 from .bot_info import BotInfo
 from .button import Button
@@ -104,8 +104,10 @@ __all__ = (
     "AttachmentsRequests",
     "AudioAttachment",
     "AudioAttachmentRequest",
+    "BaseMaxoType",
     "BotCommand",
     "BotInfo",
+    "BotMixin",
     "Button",
     "Callback",
     "CallbackButton",

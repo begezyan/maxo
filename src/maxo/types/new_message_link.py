@@ -1,8 +1,8 @@
 from maxo.enums.message_link_type import MessageLinkType
-from maxo.types.base import BotMixin
+from maxo.types.base import MaxoType
 
 
-class NewMessageLink(BotMixin):
+class NewMessageLink(MaxoType):
     """
     Args:
         mid: ID сообщения исходного сообщения

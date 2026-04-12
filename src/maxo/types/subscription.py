@@ -2,10 +2,10 @@ from datetime import datetime
 
 from maxo.errors import AttributeIsEmptyError
 from maxo.omit import is_defined
-from maxo.types.base import BotMixin
+from maxo.types.base import MaxoType
 
 
-class Subscription(BotMixin):
+class Subscription(MaxoType):
     """
     Схема для описания подписки на WebHook
 

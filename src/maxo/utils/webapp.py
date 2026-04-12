@@ -6,7 +6,7 @@ from operator import itemgetter
 from typing import Any
 from urllib.parse import parse_qsl
 
-from maxo.types.base import MaxoType
+from maxo.types import MaxoType
 
 
 class WebAppChat(MaxoType):

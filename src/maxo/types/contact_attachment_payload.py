@@ -1,10 +1,10 @@
 from maxo.errors import AttributeIsEmptyError
 from maxo.omit import Omittable, Omitted, is_defined
-from maxo.types.base import BotMixin
+from maxo.types.base import MaxoType
 from maxo.types.user import User
 
 
-class ContactAttachmentPayload(BotMixin):
+class ContactAttachmentPayload(MaxoType):
     """
     Args:
         max_info: Информация о пользователе

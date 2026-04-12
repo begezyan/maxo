@@ -1,9 +1,9 @@
 from maxo.errors import AttributeIsEmptyError
 from maxo.omit import Omittable, Omitted, is_defined
-from maxo.types.base import BotMixin
+from maxo.types.base import MaxoType
 
 
-class ShareAttachmentPayload(BotMixin):
+class ShareAttachmentPayload(MaxoType):
     """
     Полезная нагрузка запроса ShareAttachmentRequest
 

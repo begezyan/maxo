@@ -1,8 +1,8 @@
-from dataclasses import dataclass, field
-from typing import TYPE_CHECKING, Any, Optional, Self, dataclass_transform
+from dataclasses import dataclass
+from typing import TYPE_CHECKING, Any, ClassVar, Optional, Self, dataclass_transform
 
 from maxo.errors import AttributeIsEmptyError
-from maxo.omit import is_defined
+from maxo.omit import Omittable, Omitted, is_defined
 
 if TYPE_CHECKING:
     from maxo import Bot
@@ -32,18 +32,12 @@ class _MaxoTypeMetaClass(type):
         )(class_)
 
 
-class MaxoType(metaclass=_MaxoTypeMetaClass):
+class BaseMaxoType(metaclass=_MaxoTypeMetaClass):
     pass
 
 
-class BotMixin(MaxoType):
-    _bot: Optional["Bot"] = field(
-        default=None,
-        init=False,
-        repr=False,
-        hash=False,
-        compare=False,
-    )
+class BotMixin:
+    _bot: ClassVar[Omittable["Bot"]] = Omitted()
 
     @property
     def bot(self) -> "Bot":
@@ -56,9 +50,13 @@ class BotMixin(MaxoType):
         )
 
     @bot.setter
-    def bot(self, bot: Optional["Bot"]) -> None:
+    def bot(self, bot: "Bot") -> None:
         self._bot = bot
 
     def as_(self, bot: Optional["Bot"]) -> Self:
         self.bot = bot
         return self
+
+
+class MaxoType(BaseMaxoType, BotMixin):
+    pass

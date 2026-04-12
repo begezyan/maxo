@@ -8,7 +8,7 @@ from maxo.errors import AttributeIsEmptyError
 from maxo.omit import Omittable, Omitted, is_omitted
 from maxo.serialization import create_retort
 from maxo.types import NewMessageBody
-from maxo.types.base import BotMixin
+from maxo.types.base import MaxoType
 
 
 @pytest.mark.parametrize(
@@ -57,7 +57,7 @@ def test_retort_with_bot_load_bot() -> None:
     bot = Bot(token="", warming_up=False)
     retort = bot.retort
 
-    class MyType(BotMixin):
+    class MyType(MaxoType):
         a: str
         b: int
 
@@ -73,7 +73,7 @@ def test_retort_with_bot_load_bot() -> None:
 def test_retort_without_bot_no_load_bot() -> None:
     retort = create_retort(warming_up=False, bot=None)
 
-    class MyType(BotMixin):
+    class MyType(MaxoType):
         a: str
         b: int
 

@@ -3,9 +3,9 @@ import typing
 from datetime import UTC, datetime
 from typing import TYPE_CHECKING
 
-from adaptix import Chain, P, Retort, dumper, loader, name_mapping
+from adaptix import Chain, P, Retort, dumper, loader
 from adaptix._internal.provider.loc_stack_filtering import OriginSubclassLSC
-from adaptix.type_tools import exec_type_checking
+from adaptix._internal.type_tools import exec_type_checking
 from unihttp.markers import QueryMarker
 from unihttp.serializers.adaptix import DEFAULT_RETORT, for_marker
 
@@ -177,7 +177,7 @@ def create_retort(
                 return datetime.max.replace(tzinfo=UTC)
             return datetime.min.replace(tzinfo=UTC)
 
-    def _load_bot[T: base.BotMixin](x: T) -> T:
+    def _load_bot[T: base.MaxoType](x: T) -> T:
         return x.as_(bot)
 
     exec_type_checking(base)
@@ -185,11 +185,6 @@ def create_retort(
     retort = DEFAULT_RETORT.extend(
         recipe=[
             TAG_PROVIDERS,
-            name_mapping(OriginSubclassLSC(base.BotMixin), skip=["_bot"]),
-            dumper(
-                P[OriginSubclassLSC(base.BotMixin)]._bot,  # noqa: SLF001
-                lambda _: None,
-            ),
             dumper(
                 for_marker(QueryMarker, P[None]),
                 lambda _: "null",
@@ -217,7 +212,7 @@ def create_retort(
     )
     if bot is not None:
         retort = retort.extend(
-            recipe=[loader(OriginSubclassLSC(base.BotMixin), _load_bot, Chain.LAST)],
+            recipe=[loader(OriginSubclassLSC(base.MaxoType), _load_bot, Chain.LAST)],
         )
 
     if warming_up:

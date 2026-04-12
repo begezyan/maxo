@@ -1,7 +1,7 @@
-from maxo.types.base import BotMixin
+from maxo.types.base import MaxoType
 
 
-class MessageStat(BotMixin):
+class MessageStat(MaxoType):
     """
     Статистика сообщения. Возвращается только для постов в каналах
 

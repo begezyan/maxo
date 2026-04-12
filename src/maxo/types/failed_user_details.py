@@ -1,7 +1,7 @@
-from maxo.types.base import BotMixin
+from maxo.types.base import MaxoType
 
 
-class FailedUserDetails(BotMixin):
+class FailedUserDetails(MaxoType):
     """
     Подробное описание, почему пользователь не был добавлен в чат
 

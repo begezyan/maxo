@@ -2,7 +2,7 @@ from maxo.errors import AttributeIsEmptyError
 from maxo.omit import Omittable, Omitted, is_defined
 from maxo.types.attachments import Attachments
 from maxo.types.audio_attachment import AudioAttachment
-from maxo.types.base import BotMixin
+from maxo.types.base import MaxoType
 from maxo.types.contact_attachment import ContactAttachment
 from maxo.types.file_attachment import FileAttachment
 from maxo.types.inline_keyboard_attachment import InlineKeyboardAttachment
@@ -20,7 +20,7 @@ from maxo.utils.text_decorations import (
 )
 
 
-class MessageBody(BotMixin):
+class MessageBody(MaxoType):
     """
     Схема, представляющая тело сообщения
 

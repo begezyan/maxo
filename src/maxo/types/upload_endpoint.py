@@ -1,9 +1,9 @@
 from maxo.errors import AttributeIsEmptyError
 from maxo.omit import Omittable, Omitted, is_defined
-from maxo.types.base import BotMixin
+from maxo.types.base import MaxoType
 
 
-class UploadEndpoint(BotMixin):
+class UploadEndpoint(MaxoType):
     """
     Точка доступа, куда следует загружать ваши бинарные файлы
 
