@@ -61,8 +61,13 @@ def test_retort_with_bot_load_bot() -> None:
         a: str
         b: int
 
-    my = retort.load({"a": "aaa", "b": 123}, MyType)
+    data = {"a": "aaa", "b": 123}
+
+    my = retort.load(data, MyType)
     assert my.bot == bot
+
+    dump = retort.dump(my, MyType)
+    assert dump == data
 
 
 def test_retort_without_bot_no_load_bot() -> None:
@@ -72,7 +77,12 @@ def test_retort_without_bot_no_load_bot() -> None:
         a: str
         b: int
 
-    my = retort.load({"a": "aaa", "b": 123}, MyType)
+    data = {"a": "aaa", "b": 123}
+
+    my = retort.load(data, MyType)
 
     with pytest.raises(AttributeIsEmptyError):
         my.bot
+
+    dump = retort.dump(my, MyType)
+    assert dump == data

@@ -37,7 +37,13 @@ class MaxoType(metaclass=_MaxoTypeMetaClass):
 
 
 class BotMixin(MaxoType):
-    _bot: Optional["Bot"] = field(default=None, init=False)
+    _bot: Optional["Bot"] = field(
+        default=None,
+        init=False,
+        repr=False,
+        hash=False,
+        compare=False,
+    )
 
     @property
     def bot(self) -> "Bot":
