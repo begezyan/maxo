@@ -16,7 +16,7 @@ if TYPE_CHECKING:
     from maxo.utils.facades import DialogRemovedFacade
 
 
-class DialogRemoved(MaxUpdate["DialogRemovedFacade"]):
+class DialogRemoved(MaxUpdate):
     """
     Вы получите этот update, когда пользователь удаляет чат
 

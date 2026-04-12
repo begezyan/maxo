@@ -16,7 +16,7 @@ if TYPE_CHECKING:
     from maxo.utils.facades import BotStartedFacade
 
 
-class BotStarted(MaxUpdate["BotStartedFacade"]):
+class BotStarted(MaxUpdate):
     """
     Бот получает этот тип обновления, как только пользователь нажал кнопку `Start`
 

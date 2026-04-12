@@ -16,7 +16,7 @@ if TYPE_CHECKING:
     from maxo.utils.facades import DialogClearedFacade
 
 
-class DialogCleared(MaxUpdate["DialogClearedFacade"]):
+class DialogCleared(MaxUpdate):
     """
     Бот получает этот тип обновления сразу после очистки истории диалога.
 

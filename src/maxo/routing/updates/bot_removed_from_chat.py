@@ -14,7 +14,7 @@ if TYPE_CHECKING:
     from maxo.utils.facades import BotRemovedFromChatFacade
 
 
-class BotRemovedFromChat(MaxUpdate["BotRemovedFromChatFacade"]):
+class BotRemovedFromChat(MaxUpdate):
     """
     Вы получите этот update, как только бот будет удалён из чата
 

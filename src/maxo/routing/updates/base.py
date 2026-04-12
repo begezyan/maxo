@@ -1,6 +1,6 @@
 from abc import abstractmethod
 from datetime import datetime
-from typing import TYPE_CHECKING, Any, ClassVar, Generic, TypeVar
+from typing import TYPE_CHECKING, ClassVar
 
 from maxo.enums import UpdateType
 from maxo.types.base import MaxoType
@@ -9,14 +9,11 @@ if TYPE_CHECKING:
     from maxo.utils.facades import BaseUpdateFacade
 
 
-_FacadeT = TypeVar("_FacadeT", bound="BaseUpdateFacade[Any]")
-
-
 class BaseUpdate(MaxoType):
     pass
 
 
-class MaxUpdate(BaseUpdate, Generic[_FacadeT]):
+class MaxUpdate(BaseUpdate):
     """
     Базовый класс для всех апдейтов из Макса.
 
@@ -34,5 +31,5 @@ class MaxUpdate(BaseUpdate, Generic[_FacadeT]):
 
     @property
     @abstractmethod
-    def facade(self) -> _FacadeT:
+    def facade(self) -> "BaseUpdateFacade[MaxUpdate]":
         pass

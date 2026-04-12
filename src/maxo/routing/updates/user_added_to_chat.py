@@ -16,7 +16,7 @@ if TYPE_CHECKING:
     from maxo.utils.facades import UserAddedToChatFacade
 
 
-class UserAddedToChat(MaxUpdate["UserAddedToChatFacade"]):
+class UserAddedToChat(MaxUpdate):
     """
     Вы получите это обновление, когда пользователь будет добавлен в чат, где бот является администратором
 

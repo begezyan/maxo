@@ -14,7 +14,7 @@ if TYPE_CHECKING:
     from maxo.utils.facades import BotAddedToChatFacade
 
 
-class BotAddedToChat(MaxUpdate["BotAddedToChatFacade"]):
+class BotAddedToChat(MaxUpdate):
     """
     Вы получите этот update, как только бот будет добавлен в чат
 

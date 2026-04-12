@@ -12,7 +12,7 @@ if TYPE_CHECKING:
     from maxo.utils.facades import MessageEditedFacade
 
 
-class MessageEdited(MaxUpdate["MessageEditedFacade"]):
+class MessageEdited(MaxUpdate):
     """
     Вы получите этот `update`, как только сообщение будет отредактировано
 

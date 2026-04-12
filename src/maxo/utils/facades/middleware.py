@@ -17,7 +17,7 @@ class FacadeMiddleware(BaseMiddleware[MaxoUpdate[Any]]):
         ctx: Ctx,
         next: NextMiddleware[MaxoUpdate[Any]],
     ) -> Any:
-        with contextlib.suppress(AttributeIsEmptyError):
+        with contextlib.suppress(AttributeError):
             update.update.bot = update.bot
             ctx[FACADE_KEY] = update.update.facade
 

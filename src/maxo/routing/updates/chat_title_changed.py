@@ -14,7 +14,7 @@ if TYPE_CHECKING:
     from maxo.utils.facades import ChatTitleChangedFacade
 
 
-class ChatTitleChanged(MaxUpdate["ChatTitleChangedFacade"]):
+class ChatTitleChanged(MaxUpdate):
     """
     BБот получит это обновление, когда будет изменено название чата
 

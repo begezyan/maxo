@@ -16,7 +16,7 @@ if TYPE_CHECKING:
     from maxo.utils.facades import MessageCallbackFacade
 
 
-class MessageCallback(MaxUpdate["MessageCallbackFacade"]):
+class MessageCallback(MaxUpdate):
     """
     Вы получите этот `update` как только пользователь нажмёт кнопку
 

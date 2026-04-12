@@ -16,7 +16,7 @@ if TYPE_CHECKING:
     from maxo.utils.facades import DialogUnmutedFacade
 
 
-class DialogUnmuted(MaxUpdate["DialogUnmutedFacade"]):
+class DialogUnmuted(MaxUpdate):
     """
     Вы получите этот update, когда пользователь включит уведомления в диалоге с ботом
 
