@@ -106,12 +106,19 @@ class Dispatcher(Router):
     async def feed_update(self, update: BaseUpdate, bot: Bot | None = None) -> Any:
         ctx = Ctx({**self.workflow_data, "bot": bot, "update": update})
         ctx["ctx"] = ctx
+
+        # TODO: Костыль для фасадов и подобного. Можно ли иначе?
+        update.bot = bot
+
         return await self.trigger(ctx)
 
     async def _feed_update_handler(self, update: MaxoUpdate[Any], ctx: Ctx) -> Any:
         ctx_copy = Ctx(dict(ctx))
         ctx_copy["ctx"] = ctx_copy
         ctx_copy["update"] = update.update
+
+        # TODO: Костыль для фасадов и подобного. Можно ли иначе?
+        update.update.bot = update.bot = ctx["bot"]
 
         result = await self.trigger(ctx_copy)
         if result is UNHANDLED:

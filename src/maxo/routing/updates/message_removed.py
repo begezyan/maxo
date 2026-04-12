@@ -1,5 +1,10 @@
+from typing import TYPE_CHECKING
+
 from maxo.enums.update_type import UpdateType
 from maxo.routing.updates.base import MaxUpdate
+
+if TYPE_CHECKING:
+    from maxo.utils.facades import MessageRemovedFacade
 
 
 class MessageRemoved(MaxUpdate):
@@ -21,3 +26,9 @@ class MessageRemoved(MaxUpdate):
     """ID удаленного сообщения"""
     user_id: int
     """Пользователь, удаливший сообщение"""
+
+    @property
+    def facade(self) -> "MessageRemovedFacade":
+        from maxo.utils.facades import MessageRemovedFacade
+
+        return MessageRemovedFacade(self.bot, self)

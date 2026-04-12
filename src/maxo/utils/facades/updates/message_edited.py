@@ -8,3 +8,7 @@ class MessageEditedFacade(BaseUpdateFacade[MessageEdited], MessageMethodsFacade)
     @property
     def message(self) -> Message:
         return self._update.message
+
+    @property
+    def text(self) -> str | None:
+        return self._update.text

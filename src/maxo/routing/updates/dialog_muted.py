@@ -1,10 +1,14 @@
 from datetime import datetime
+from typing import TYPE_CHECKING
 
 from maxo.enums.update_type import UpdateType
 from maxo.errors import AttributeIsEmptyError
 from maxo.omit import Omittable, Omitted, is_defined
 from maxo.routing.updates.base import MaxUpdate
 from maxo.types.user import User
+
+if TYPE_CHECKING:
+    from maxo.utils.facades import DialogMutedFacade
 
 
 class DialogMuted(MaxUpdate):
@@ -40,3 +44,9 @@ class DialogMuted(MaxUpdate):
             obj=self,
             attr="user_locale",
         )
+
+    @property
+    def facade(self) -> "DialogMutedFacade":
+        from maxo.utils.facades import DialogMutedFacade
+
+        return DialogMutedFacade(self.bot, self)

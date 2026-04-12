@@ -1,68 +1,11 @@
-from collections.abc import Mapping
+import contextlib
 from typing import Any, final
 
 from maxo.routing.ctx import Ctx
 from maxo.routing.interfaces.middleware import BaseMiddleware, NextMiddleware
 from maxo.routing.signals.update import MaxoUpdate
-from maxo.routing.updates import (
-    BaseUpdate,
-    BotAddedToChat,
-    BotRemovedFromChat,
-    BotStarted,
-    BotStopped,
-    ChatTitleChanged,
-    DialogCleared,
-    DialogMuted,
-    DialogRemoved,
-    DialogUnmuted,
-    ErrorEvent,
-    MessageCallback,
-    MessageCreated,
-    MessageEdited,
-    MessageRemoved,
-    UserAddedToChat,
-    UserRemovedFromChat,
-)
-from maxo.utils.facades import (
-    BaseUpdateFacade,
-    BotAddedToChatFacade,
-    BotRemovedFromChatFacade,
-    BotStartedFacade,
-    BotStoppedFacade,
-    ChatTitleChangedFacade,
-    DialogClearedFacade,
-    DialogMutedFacade,
-    DialogRemovedFacade,
-    DialogUnmutedFacade,
-    ErrorEventFacade,
-    MessageCallbackFacade,
-    MessageCreatedFacade,
-    MessageEditedFacade,
-    MessageRemovedFacade,
-    UserAddedToChatFacade,
-    UserRemovedFromChatFacade,
-)
 
 FACADE_KEY = "facade"
-
-_FACADES_MAP: Mapping[type[Any], type[BaseUpdateFacade[Any]]] = {
-    MessageCreated: MessageCreatedFacade,
-    MessageCallback: MessageCallbackFacade,
-    BotAddedToChat: BotAddedToChatFacade,
-    BotRemovedFromChat: BotRemovedFromChatFacade,
-    BotStarted: BotStartedFacade,
-    BotStopped: BotStoppedFacade,
-    ChatTitleChanged: ChatTitleChangedFacade,
-    DialogCleared: DialogClearedFacade,
-    DialogMuted: DialogMutedFacade,
-    DialogRemoved: DialogRemovedFacade,
-    DialogUnmuted: DialogUnmutedFacade,
-    ErrorEvent: ErrorEventFacade,
-    MessageEdited: MessageEditedFacade,
-    MessageRemoved: MessageRemovedFacade,
-    UserAddedToChat: UserAddedToChatFacade,
-    UserRemovedFromChat: UserRemovedFromChatFacade,
-}
 
 
 class FacadeMiddleware(BaseMiddleware[MaxoUpdate[Any]]):
@@ -73,14 +16,8 @@ class FacadeMiddleware(BaseMiddleware[MaxoUpdate[Any]]):
         ctx: Ctx,
         next: NextMiddleware[MaxoUpdate[Any]],
     ) -> Any:
-        facade = self._facade_cls_factory(type(update.update))
-        if facade:
-            ctx[FACADE_KEY] = facade(ctx["bot"], update.update)
+        with contextlib.suppress(KeyError, AttributeError):
+            update.update.bot = update.bot
+            ctx[FACADE_KEY] = update.update.facade
 
         return await next(ctx)
-
-    def _facade_cls_factory(
-        self,
-        update_tp: type[BaseUpdate],
-    ) -> type[BaseUpdateFacade[Any]] | None:
-        return _FACADES_MAP.get(update_tp)

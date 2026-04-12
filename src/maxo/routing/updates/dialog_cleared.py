@@ -1,8 +1,13 @@
+from typing import TYPE_CHECKING
+
 from maxo.enums.update_type import UpdateType
 from maxo.errors import AttributeIsEmptyError
 from maxo.omit import Omittable, Omitted, is_defined
 from maxo.routing.updates.base import MaxUpdate
 from maxo.types.user import User
+
+if TYPE_CHECKING:
+    from maxo.utils.facades import DialogClearedFacade
 
 
 class DialogCleared(MaxUpdate):
@@ -35,3 +40,9 @@ class DialogCleared(MaxUpdate):
             obj=self,
             attr="user_locale",
         )
+
+    @property
+    def facade(self) -> "DialogClearedFacade":
+        from maxo.utils.facades import DialogClearedFacade
+
+        return DialogClearedFacade(self.bot, self)

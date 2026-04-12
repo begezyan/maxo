@@ -1,6 +1,8 @@
+from maxo.omit import Omittable
 from maxo.routing.updates.message_callback import MessageCallback
 from maxo.types.callback import Callback
 from maxo.types.message import Message
+from maxo.types.user import User
 from maxo.utils.facades.methods.callback import CallbackMethodsFacade
 from maxo.utils.facades.methods.message import MessageMethodsFacade
 from maxo.utils.facades.updates.base import BaseUpdateFacade
@@ -18,3 +20,19 @@ class MessageCallbackFacade(
     @property
     def callback(self) -> Callback:
         return self._update.callback
+
+    @property
+    def user_locale(self) -> Omittable[str | None]:
+        return self._update.user_locale
+
+    @property
+    def callback_id(self) -> str:
+        return self._update.callback_id
+
+    @property
+    def payload(self) -> str | None:
+        return self._update.payload
+
+    @property
+    def user(self) -> User:
+        return self._update.user

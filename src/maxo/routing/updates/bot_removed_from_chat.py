@@ -1,6 +1,11 @@
+from typing import TYPE_CHECKING
+
 from maxo.enums.update_type import UpdateType
 from maxo.routing.updates.base import MaxUpdate
 from maxo.types.user import User
+
+if TYPE_CHECKING:
+    from maxo.utils.facades import BotRemovedFromChatFacade
 
 
 class BotRemovedFromChat(MaxUpdate):
@@ -22,3 +27,9 @@ class BotRemovedFromChat(MaxUpdate):
     """Указывает, был ли бот удалён из канала или нет"""
     user: User
     """Пользователь, удаливший бота из чата"""
+
+    @property
+    def facade(self) -> "BotRemovedFromChatFacade":
+        from maxo.utils.facades import BotRemovedFromChatFacade
+
+        return BotRemovedFromChatFacade(self.bot, self)
