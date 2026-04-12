@@ -82,7 +82,7 @@ def test_retort_without_bot_no_load_bot() -> None:
     my = retort.load(data, MyType)
 
     with pytest.raises(AttributeIsEmptyError):
-        my.bot
+        my.bot  # noqa: B018
 
     dump = retort.dump(my, MyType)
     assert dump == data

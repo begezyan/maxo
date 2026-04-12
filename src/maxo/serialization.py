@@ -3,7 +3,7 @@ import typing
 from datetime import UTC, datetime
 from typing import TYPE_CHECKING
 
-from adaptix import Chain, P, Retort, dumper, loader
+from adaptix import Chain, P, Retort, dumper, loader, name_mapping
 from adaptix._internal.provider.loc_stack_filtering import OriginSubclassLSC
 from adaptix.type_tools import exec_type_checking
 from unihttp.markers import QueryMarker
@@ -186,6 +186,11 @@ def create_retort(
     retort = DEFAULT_RETORT.extend(
         recipe=[
             TAG_PROVIDERS,
+            name_mapping(OriginSubclassLSC(base.BotMixin), skip=["_bot"]),
+            dumper(
+                P[OriginSubclassLSC(base.BotMixin)]._bot,  # noqa: SLF001
+                lambda _: None,
+            ),
             dumper(
                 for_marker(QueryMarker, P[None]),
                 lambda _: "null",
