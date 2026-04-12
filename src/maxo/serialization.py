@@ -178,8 +178,7 @@ def create_retort(
             return datetime.min.replace(tzinfo=UTC)
 
     def _load_bot[T: base.BotMixin](x: T) -> T:
-        x.bot = bot
-        return x
+        return x.as_(bot)
 
     exec_type_checking(base)
 

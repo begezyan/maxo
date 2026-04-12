@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import TYPE_CHECKING, Any, Optional, dataclass_transform
+from typing import TYPE_CHECKING, Any, Optional, Self, dataclass_transform
 
 from maxo.errors import AttributeIsEmptyError
 from maxo.omit import is_defined
@@ -56,5 +56,9 @@ class BotMixin(MaxoType):
         )
 
     @bot.setter
-    def bot(self, bot: "Bot") -> None:
+    def bot(self, bot: Optional["Bot"]) -> None:
         self._bot = bot
+
+    def as_(self, bot: Optional["Bot"]) -> Self:
+        self.bot = bot
+        return self
