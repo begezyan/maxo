@@ -1,8 +1,8 @@
-from maxo.types.base import MaxoType
+from maxo.types.base import BotMixin
 from maxo.types.buttons import InlineButtons
 
 
-class InlineKeyboardAttachmentRequestPayload(MaxoType):
+class InlineKeyboardAttachmentRequestPayload(BotMixin):
     """
     Args:
         buttons: Двумерный массив кнопок

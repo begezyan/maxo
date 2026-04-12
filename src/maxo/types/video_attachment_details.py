@@ -1,11 +1,11 @@
 from maxo.errors import AttributeIsEmptyError
 from maxo.omit import Omittable, Omitted, is_defined
-from maxo.types.base import MaxoType
+from maxo.types.base import BotMixin
 from maxo.types.photo_attachment_payload import PhotoAttachmentPayload
 from maxo.types.video_urls import VideoUrls
 
 
-class VideoAttachmentDetails(MaxoType):
+class VideoAttachmentDetails(BotMixin):
     """
     Args:
         duration: Длина видео в секундах

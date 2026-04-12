@@ -1,8 +1,8 @@
-from maxo.types.base import MaxoType
+from maxo.types.base import BotMixin
 from maxo.types.buttons import InlineButtons
 
 
-class Keyboard(MaxoType):
+class Keyboard(BotMixin):
     """
     Клавиатура - это двумерный массив кнопок
 

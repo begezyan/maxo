@@ -1,8 +1,8 @@
 from maxo.enums.button_type import ButtonType
-from maxo.types.base import MaxoType
+from maxo.types.base import BotMixin
 
 
-class Button(MaxoType):
+class Button(BotMixin):
     """
     Args:
         text: Видимый текст кнопки. Чтобы он отображался полностью, рекомендуем не превышать заданное количество символов в зависимости от размещения текста: `20` символов — при 1 кнопке в ряду, `10` — при 2, `5` — при 3, `3` — при 4

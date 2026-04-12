@@ -1,10 +1,10 @@
 from maxo.enums.chat_type import ChatType
 from maxo.errors import AttributeIsEmptyError
 from maxo.omit import is_defined
-from maxo.types.base import MaxoType
+from maxo.types.base import BotMixin
 
 
-class Recipient(MaxoType):
+class Recipient(BotMixin):
     """
     Новый получатель сообщения. Может быть пользователем или чатом
 

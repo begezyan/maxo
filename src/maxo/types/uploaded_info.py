@@ -1,9 +1,9 @@
 from maxo.errors import AttributeIsEmptyError
 from maxo.omit import Omittable, Omitted, is_defined
-from maxo.types.base import MaxoType
+from maxo.types.base import BotMixin
 
 
-class UploadedInfo(MaxoType):
+class UploadedInfo(BotMixin):
     """
     Это информация, которую вы получите, как только аудио/видео будет загружено
 

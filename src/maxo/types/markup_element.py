@@ -1,8 +1,8 @@
-from maxo.enums import MarkupElementType
-from maxo.types.base import MaxoType
+from maxo.enums.markup_element_type import MarkupElementType
+from maxo.types.base import BotMixin
 
 
-class MarkupElement(MaxoType):
+class MarkupElement(BotMixin):
     """
     Args:
         from_: Индекс начала элемента разметки в тексте. Нумерация с нуля

@@ -1,7 +1,7 @@
-from maxo.types.base import MaxoType
+from maxo.types.base import BotMixin
 
 
-class PhotoToken(MaxoType):
+class PhotoToken(BotMixin):
     """
     Args:
         token: Закодированная информация загруженного изображения

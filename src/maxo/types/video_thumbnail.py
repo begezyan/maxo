@@ -1,7 +1,7 @@
-from maxo.types.base import MaxoType
+from maxo.types.base import BotMixin
 
 
-class VideoThumbnail(MaxoType):
+class VideoThumbnail(BotMixin):
     """
     Args:
         url: URL изображения

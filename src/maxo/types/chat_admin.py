@@ -1,10 +1,10 @@
 from maxo.enums.chat_admin_permission import ChatAdminPermission
 from maxo.errors import AttributeIsEmptyError
 from maxo.omit import Omittable, Omitted, is_defined
-from maxo.types.base import MaxoType
+from maxo.types.base import BotMixin
 
 
-class ChatAdmin(MaxoType):
+class ChatAdmin(BotMixin):
     """
     Args:
         alias: Заголовок, который будет показан на клиенте

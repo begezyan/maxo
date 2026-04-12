@@ -1,10 +1,10 @@
 from maxo.errors import AttributeIsEmptyError
 from maxo.omit import Omittable, Omitted, is_defined
-from maxo.types.base import MaxoType
+from maxo.types.base import BotMixin
 from maxo.types.chat_member import ChatMember
 
 
-class ChatMembersList(MaxoType):
+class ChatMembersList(BotMixin):
     """
     Args:
         marker: Указатель на следующую страницу данных

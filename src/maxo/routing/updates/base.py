@@ -2,10 +2,10 @@ from datetime import datetime
 from typing import ClassVar
 
 from maxo.enums import UpdateType
-from maxo.types.base import MaxoType
+from maxo.types.base import BotMixin
 
 
-class BaseUpdate(MaxoType):
+class BaseUpdate(BotMixin):
     pass
 
 

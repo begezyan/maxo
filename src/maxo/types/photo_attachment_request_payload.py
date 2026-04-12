@@ -1,10 +1,10 @@
 from maxo.errors import AttributeIsEmptyError
 from maxo.omit import Omittable, Omitted, is_defined
-from maxo.types.base import MaxoType
+from maxo.types.base import BotMixin
 from maxo.types.photo_token import PhotoToken
 
 
-class PhotoAttachmentRequestPayload(MaxoType):
+class PhotoAttachmentRequestPayload(BotMixin):
     """
     Запрос на прикрепление изображения (все поля являются взаимоисключающими)
 

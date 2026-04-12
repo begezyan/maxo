@@ -1,7 +1,7 @@
-from maxo.types.base import MaxoType
+from maxo.types.base import BotMixin
 
 
-class Image(MaxoType):
+class Image(BotMixin):
     """
     Общая схема, описывающая объект изображения
 

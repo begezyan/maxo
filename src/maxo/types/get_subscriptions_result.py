@@ -1,8 +1,8 @@
-from maxo.types.base import MaxoType
+from maxo.types.base import BotMixin
 from maxo.types.subscription import Subscription
 
 
-class GetSubscriptionsResult(MaxoType):
+class GetSubscriptionsResult(BotMixin):
     """
     Список всех WebHook подписок
 

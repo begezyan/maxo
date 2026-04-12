@@ -295,7 +295,7 @@ def _apply_entity(entity: MarkupElements, *nodes: NodeType) -> NodeType:
     node_type = NODE_TYPES.get(entity.type, Text)
 
     entity_dict = dataclasses.asdict(entity)
-    for key in ("type", "from_", "length"):
+    for key in ("type", "from_", "length", "_bot"):
         entity_dict.pop(key, None)
 
     return node_type(

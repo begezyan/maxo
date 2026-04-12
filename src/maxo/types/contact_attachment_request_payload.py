@@ -1,9 +1,9 @@
 from maxo.errors import AttributeIsEmptyError
 from maxo.omit import Omittable, Omitted, is_defined
-from maxo.types.base import MaxoType
+from maxo.types.base import BotMixin
 
 
-class ContactAttachmentRequestPayload(MaxoType):
+class ContactAttachmentRequestPayload(BotMixin):
     """
     Args:
         contact_id: ID контакта, если он зарегистирован в MAX

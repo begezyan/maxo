@@ -2,11 +2,11 @@ from maxo.enums.text_format import TextFormat
 from maxo.errors import AttributeIsEmptyError
 from maxo.omit import Omittable, Omitted, is_defined
 from maxo.types.attachments import Attachments, AttachmentsRequests
-from maxo.types.base import MaxoType
+from maxo.types.base import BotMixin
 from maxo.types.new_message_link import NewMessageLink
 
 
-class NewMessageBody(MaxoType):
+class NewMessageBody(BotMixin):
     """
     Args:
         attachments: Вложения сообщения. Если пусто, все вложения будут удалены

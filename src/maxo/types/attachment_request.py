@@ -1,8 +1,8 @@
 from maxo.enums.attachment_request_type import AttachmentRequestType
-from maxo.types.base import MaxoType
+from maxo.types.base import BotMixin
 
 
-class AttachmentRequest(MaxoType):
+class AttachmentRequest(BotMixin):
     """
     Запрос на прикрепление данных к сообщению
 

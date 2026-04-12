@@ -2,7 +2,7 @@ from datetime import datetime
 
 from maxo.errors import AttributeIsEmptyError
 from maxo.omit import Omittable, Omitted, is_defined
-from maxo.types.base import MaxoType
+from maxo.types.base import BotMixin
 from maxo.types.linked_message import LinkedMessage
 from maxo.types.message_body import MessageBody
 from maxo.types.message_stat import MessageStat
@@ -11,7 +11,7 @@ from maxo.types.user import User
 from maxo.utils.link import id_to_message_url
 
 
-class Message(MaxoType):
+class Message(BotMixin):
     """
     Сообщение в чате
 

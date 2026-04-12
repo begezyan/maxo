@@ -1,10 +1,10 @@
 from maxo.errors import AttributeIsEmptyError
 from maxo.omit import is_defined
 from maxo.routing.updates import Updates
-from maxo.types.base import MaxoType
+from maxo.types.base import BotMixin
 
 
-class UpdateList(MaxoType):
+class UpdateList(BotMixin):
     """
     Список всех обновлений в чатах, в которых ваш бот участвовал
 

@@ -1,7 +1,7 @@
-from maxo.types.base import MaxoType
+from maxo.types.base import BotMixin
 
 
-class PhotoAttachmentPayload(MaxoType):
+class PhotoAttachmentPayload(BotMixin):
     """
     Args:
         photo_id: Уникальный ID этого изображения

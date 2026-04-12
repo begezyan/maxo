@@ -1,7 +1,7 @@
-from maxo.types.base import MaxoType
+from maxo.types.base import BotMixin
 
 
-class AttachmentPayload(MaxoType):
+class AttachmentPayload(BotMixin):
     """
     Args:
         url: URL медиа-вложения. Этот URL будет получен в объекте [Update](https://dev.max.ru/docs-api/objects/Update) после отправки сообщения в чат.

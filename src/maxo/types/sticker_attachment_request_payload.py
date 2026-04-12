@@ -1,7 +1,7 @@
-from maxo.types.base import MaxoType
+from maxo.types.base import BotMixin
 
 
-class StickerAttachmentRequestPayload(MaxoType):
+class StickerAttachmentRequestPayload(BotMixin):
     """
     Args:
         code: Код стикера

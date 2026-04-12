@@ -2,10 +2,10 @@ from datetime import datetime
 
 from maxo.errors import AttributeIsEmptyError
 from maxo.omit import Omittable, Omitted, is_defined
-from maxo.types.base import MaxoType
+from maxo.types.base import BotMixin
 
 
-class User(MaxoType):
+class User(BotMixin):
     """
     Объект, описывающий один из вариантов наследования:
 
@@ -46,12 +46,10 @@ class User(MaxoType):
         return self.user_id
 
     @property
-    def fullname(self) -> str | None:
+    def fullname(self) -> str:
         if self.first_name and self.last_name:
             return f"{self.first_name} {self.last_name}"
-        if self.first_name:
-            return self.first_name
-        return None
+        return self.first_name
 
     @property
     def unsafe_last_name(self) -> str:
