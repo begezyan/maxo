@@ -64,6 +64,28 @@ class MessageMethodsFacade(AttachmentsFacade, ABC):
         )
         return result.message
 
+    answer = send_message
+
+    async def reply(
+        self,
+        text: str | None = None,
+        notify: Omittable[bool] = True,
+        format: Omittable[TextFormat | None] = Omitted(),
+        disable_link_preview: Omittable[bool] = Omitted(),
+        keyboard: Sequence[Sequence[InlineButtons]] | None = None,
+        media: Sequence[MediaInput] | None = None,
+    ) -> Message:
+        link = self._make_new_message_link(type=MessageLinkType.REPLY)
+        return await self.send_message(
+            text=text,
+            link=link,
+            notify=notify,
+            format=format,
+            disable_link_preview=disable_link_preview,
+            keyboard=keyboard,
+            media=media,
+        )
+
     async def answer_text(
         self,
         text: str,
