@@ -12,7 +12,7 @@ if TYPE_CHECKING:
     from maxo.utils.facades import MessageEditedFacade
 
 
-class MessageEdited(MaxUpdate):
+class MessageEdited(MaxUpdate["MessageEditedFacade"]):
     """
     Вы получите этот `update`, как только сообщение будет отредактировано
 
@@ -46,11 +46,11 @@ class MessageEdited(MaxUpdate):
 
     @property
     def answer(self) -> Callable[..., Awaitable[Message]]:
-        return self.facade.answer_text
+        return self.facade.answer
 
     @property
     def reply(self) -> Callable[..., Awaitable[Message]]:
-        return self.facade.reply_text
+        return self.facade.reply
 
     @property
     def send_media(self) -> Callable[..., Awaitable[Message]]:

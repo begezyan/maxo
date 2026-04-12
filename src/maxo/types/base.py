@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from typing import TYPE_CHECKING, Any, Optional, Self, dataclass_transform
 
 from maxo.errors import AttributeIsEmptyError
-from maxo.omit import Omittable, Omitted, is_defined
+from maxo.omit import is_defined
 
 if TYPE_CHECKING:
     from maxo import Bot
@@ -37,7 +37,7 @@ class BaseMaxoType(metaclass=_MaxoTypeMetaClass):
 
 
 class BotMixin:
-    _bot: Omittable["Bot"] = Omitted()
+    _bot: Optional["Bot"] = None
 
     @property
     def bot(self) -> "Bot":

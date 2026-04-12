@@ -14,7 +14,7 @@ if TYPE_CHECKING:
     from maxo.utils.facades import MessageCreatedFacade
 
 
-class MessageCreated(MaxUpdate):
+class MessageCreated(MaxUpdate["MessageCreatedFacade"]):
     """
     ы получите этот `update`, как только сообщение будет создано
 

@@ -16,7 +16,7 @@ if TYPE_CHECKING:
     from maxo.utils.facades import MessageCallbackFacade
 
 
-class MessageCallback(MaxUpdate):
+class MessageCallback(MaxUpdate["MessageCallbackFacade"]):
     """
     Вы получите этот `update` как только пользователь нажмёт кнопку
 
@@ -85,11 +85,11 @@ class MessageCallback(MaxUpdate):
 
     @property
     def answer(self) -> Callable[..., Awaitable[Message]]:
-        return self.facade.answer_text
+        return self.facade.answer
 
     @property
     def reply(self) -> Callable[..., Awaitable[Message]]:
-        return self.facade.reply_text
+        return self.facade.reply
 
     @property
     def send_media(self) -> Callable[..., Awaitable[Message]]:

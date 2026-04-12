@@ -17,7 +17,7 @@ if TYPE_CHECKING:
     from maxo.utils.facades import DialogMutedFacade
 
 
-class DialogMuted(MaxUpdate):
+class DialogMuted(MaxUpdate["DialogMutedFacade"]):
     """
     Вы получите этот update, когда пользователь заглушит диалог с ботом
 

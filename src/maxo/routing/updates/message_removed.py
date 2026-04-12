@@ -14,7 +14,7 @@ if TYPE_CHECKING:
     from maxo.utils.facades import MessageRemovedFacade
 
 
-class MessageRemoved(MaxUpdate):
+class MessageRemoved(MaxUpdate["MessageRemovedFacade"]):
     """
     Вы получите этот `update`, как только сообщение будет удалено
 

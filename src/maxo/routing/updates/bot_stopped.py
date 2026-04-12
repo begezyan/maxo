@@ -16,7 +16,7 @@ if TYPE_CHECKING:
     from maxo.utils.facades import BotStoppedFacade
 
 
-class BotStopped(MaxUpdate):
+class BotStopped(MaxUpdate["BotStoppedFacade"]):
     """
     Бот получает этот тип обновления, как только пользователь останавливает бота
 

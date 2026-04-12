@@ -16,7 +16,7 @@ if TYPE_CHECKING:
     from maxo.utils.facades import UserRemovedFromChatFacade
 
 
-class UserRemovedFromChat(MaxUpdate):
+class UserRemovedFromChat(MaxUpdate["UserRemovedFromChatFacade"]):
     """
     Вы получите это обновление, когда пользователь будет удалён из чата, где бот является администратором
 

@@ -69,7 +69,7 @@ def test_retort_with_bot_load_bot() -> None:
     data = {"a": "a", "sub": {"b": 1}}
 
     my = retort.load(data, MyType)
-    assert bot == my.bot == my.sub.bot
+    assert bot is my.bot is my.sub.bot
 
     dump = retort.dump(my, MyType)
     assert dump == data
