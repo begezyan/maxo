@@ -90,7 +90,11 @@ class Bot:
         self._json_dumps = json_dumps
         self._json_loads = json_loads
 
-        self._retort = create_retort(defaults=self._defaults, warming_up=warming_up)
+        self._retort = create_retort(
+            defaults=self._defaults,
+            warming_up=warming_up,
+            bot=self,
+        )
 
         self._state = EmptyBotState()
 

@@ -1,11 +1,14 @@
 import pytest
 
+from maxo import Bot
 from maxo.bot.defaults import BotDefaults
 from maxo.bot.methods import EditMessage, SendMessage
 from maxo.enums import TextFormat
+from maxo.errors import AttributeIsEmptyError
 from maxo.omit import Omittable, Omitted, is_omitted
 from maxo.serialization import create_retort
 from maxo.types import NewMessageBody
+from maxo.types.base import BotMixin
 
 
 @pytest.mark.parametrize(
@@ -48,3 +51,28 @@ def test_bot_default_disable_link_preview(default: Omittable[bool]) -> None:
         assert "disable_link_preview" not in data["query"]
     else:
         assert data["query"]["disable_link_preview"] == default
+
+
+def test_retort_with_bot_load_bot() -> None:
+    bot = Bot(token="", warming_up=False)
+    retort = bot.retort
+
+    class MyType(BotMixin):
+        a: str
+        b: int
+
+    my = retort.load({"a": "aaa", "b": 123}, MyType)
+    assert my.bot == bot
+
+
+def test_retort_without_bot_no_load_bot() -> None:
+    retort = create_retort(warming_up=False, bot=None)
+
+    class MyType(BotMixin):
+        a: str
+        b: int
+
+    my = retort.load({"a": "aaa", "b": 123}, MyType)
+
+    with pytest.raises(AttributeIsEmptyError):
+        my.bot

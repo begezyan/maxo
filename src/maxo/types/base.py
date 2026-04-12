@@ -1,5 +1,11 @@
-from dataclasses import dataclass
-from typing import Any, dataclass_transform
+from dataclasses import dataclass, field
+from typing import TYPE_CHECKING, Any, Optional, dataclass_transform
+
+from maxo.errors import AttributeIsEmptyError
+from maxo.omit import is_defined
+
+if TYPE_CHECKING:
+    from maxo import Bot
 
 
 @dataclass_transform(
@@ -28,3 +34,21 @@ class _MaxoTypeMetaClass(type):
 
 class MaxoType(metaclass=_MaxoTypeMetaClass):
     pass
+
+
+class BotMixin(MaxoType):
+    _bot: Optional["Bot"] = field(default=None, init=False)
+
+    @property
+    def bot(self) -> "Bot":
+        if is_defined(self._bot):
+            return self._bot
+
+        raise AttributeIsEmptyError(
+            obj=self,
+            attr="_bot",
+        )
+
+    @bot.setter
+    def bot(self, bot: "Bot") -> None:
+        self._bot = bot

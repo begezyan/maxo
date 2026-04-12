@@ -1,8 +1,11 @@
 import dataclasses
 import typing
 from datetime import UTC, datetime
+from typing import TYPE_CHECKING
 
 from adaptix import Chain, P, Retort, dumper, loader
+from adaptix._internal.provider.loc_stack_filtering import OriginSubclassLSC
+from adaptix.type_tools import exec_type_checking
 from unihttp.markers import QueryMarker
 from unihttp.serializers.adaptix import DEFAULT_RETORT, for_marker
 
@@ -74,7 +77,12 @@ from maxo.types import (
     UserMentionMarkup,
     VideoAttachment,
     VideoAttachmentRequest,
+    base,
 )
+
+if TYPE_CHECKING:
+    from maxo import Bot
+
 
 TAG_PROVIDERS = concat_provider(
     # ---> UpdateType <---
@@ -142,6 +150,7 @@ def create_retort(
     *,
     defaults: BotDefaults | None = None,
     warming_up: bool = True,
+    bot: typing.Optional["Bot"] = None,
 ) -> Retort:
     if defaults is None:
         defaults = BotDefaults()
@@ -167,6 +176,12 @@ def create_retort(
             if time > 0:
                 return datetime.max.replace(tzinfo=UTC)
             return datetime.min.replace(tzinfo=UTC)
+
+    def _load_bot[T: base.BotMixin](x: T) -> T:
+        x.bot = bot
+        return x
+
+    exec_type_checking(base)
 
     retort = DEFAULT_RETORT.extend(
         recipe=[
@@ -196,6 +211,11 @@ def create_retort(
             loader(P[datetime], _load_datetime),
         ],
     )
+    if bot is not None:
+        retort = retort.extend(
+            recipe=[loader(OriginSubclassLSC(base.BotMixin), _load_bot, Chain.LAST)],
+        )
+
     if warming_up:
         retort = warming_up_retort(retort, warming_up=WarmingUpType.TYPES)
         retort = warming_up_retort(retort, warming_up=WarmingUpType.METHOD)
