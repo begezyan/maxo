@@ -69,6 +69,8 @@ class MessageCallback(MaxUpdate):
     def user(self) -> User:
         return self.callback.user
 
+    from_user = user  # Подражание aiogram
+
     @property
     def facade(self) -> "MessageCallbackFacade":
         from maxo.utils.facades import MessageCallbackFacade
