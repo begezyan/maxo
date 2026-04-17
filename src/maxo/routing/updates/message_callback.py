@@ -1,4 +1,3 @@
-from collections.abc import Awaitable, Callable
 from typing import TYPE_CHECKING, TypeAlias
 
 from maxo.enums.update_type import UpdateType
@@ -6,10 +5,7 @@ from maxo.errors import AttributeIsEmptyError
 from maxo.omit import Omittable, Omitted, is_defined
 from maxo.routing.updates.base import MaxUpdate
 from maxo.types.callback import Callback
-from maxo.types.chat import Chat
-from maxo.types.chat_members_list import ChatMembersList
 from maxo.types.message import Message
-from maxo.types.simple_query_result import SimpleQueryResult
 from maxo.types.user import User
 
 if TYPE_CHECKING:
@@ -74,50 +70,64 @@ class MessageCallback(MaxUpdate):
         from maxo.utils.facades import MessageCallbackFacade
 
         return MessageCallbackFacade(self.bot, self)
+    if TYPE_CHECKING:
+        from maxo.utils.type_promote import promote
+        send_message = promote(MessageCallbackFacade.send_message)
+        answer = promote(MessageCallbackFacade.answer)
+        reply = promote(MessageCallbackFacade.reply)
+        send_media = promote(MessageCallbackFacade.send_media)
+        edit_message = promote(MessageCallbackFacade.edit_message)
+        delete_message = promote(MessageCallbackFacade.delete_message)
+        get_chat = promote(MessageCallbackFacade.get_chat)
+        get_members = promote(MessageCallbackFacade.get_members)
+        leave_chat = promote(MessageCallbackFacade.leave_chat)
+        get_message_by_id = promote(MessageCallbackFacade.get_message_by_id)
+        callback_answer = promote(MessageCallbackFacade.callback_answer)
+    else:
 
-    @property
-    def delete_message(self) -> Callable[..., Awaitable[SimpleQueryResult]]:
-        return self.facade.delete_message
+        @property
+        def delete_message(self):
+            return self.facade.delete_message
 
-    @property
-    def send_message(self) -> Callable[..., Awaitable[Message]]:
-        return self.facade.send_message
+        @property
+        def send_message(self):
+            return self.facade.send_message
 
-    @property
-    def answer(self) -> Callable[..., Awaitable[Message]]:
-        return self.facade.answer
+        @property
+        def answer(self):
+            return self.facade.answer
 
-    @property
-    def reply(self) -> Callable[..., Awaitable[Message]]:
-        return self.facade.reply
+        @property
+        def reply(self):
+            return self.facade.reply
 
-    @property
-    def send_media(self) -> Callable[..., Awaitable[Message]]:
-        return self.facade.send_media
+        @property
+        def send_media(self):
+            return self.facade.send_media
 
-    @property
-    def edit_message(self) -> Callable[..., Awaitable[Message]]:
-        return self.facade.edit_message
+        @property
+        def edit_message(self):
+            return self.facade.edit_message
 
-    @property
-    def get_chat(self) -> Callable[..., Awaitable[Chat]]:
-        return self.facade.get_chat
+        @property
+        def get_chat(self):
+            return self.facade.get_chat
 
-    @property
-    def get_members(self) -> Callable[..., Awaitable[ChatMembersList]]:
-        return self.facade.get_members
+        @property
+        def get_members(self):
+            return self.facade.get_members
 
-    @property
-    def leave_chat(self) -> Callable[..., Awaitable[SimpleQueryResult]]:
-        return self.facade.leave_chat
+        @property
+        def leave_chat(self):
+            return self.facade.leave_chat
 
-    @property
-    def get_message_by_id(self) -> Callable[..., Awaitable[Message]]:
-        return self.facade.get_message_by_id
+        @property
+        def get_message_by_id(self):
+            return self.facade.get_message_by_id
 
-    @property
-    def callback_answer(self) -> Callable[..., Awaitable[SimpleQueryResult]]:
-        return self.facade.callback_answer
+        @property
+        def callback_answer(self):
+            return self.facade.callback_answer
 
 
 CallbackQuery: TypeAlias = MessageCallback  # Подражание aiogram

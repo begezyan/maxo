@@ -1,7 +1,6 @@
 import contextlib
 from typing import Any, final
 
-from maxo.errors import AttributeIsEmptyError
 from maxo.routing.ctx import Ctx
 from maxo.routing.interfaces.middleware import BaseMiddleware, NextMiddleware
 from maxo.routing.signals.update import MaxoUpdate
