@@ -1,6 +1,6 @@
 # maxo
 
-> Асинхронный Python-фреймворк для разработки ботов мессенджера MAX (max.ru, бывш. ТамТам, мессенджер от VK) с поддержкой long-polling, вебхуков, FSM, диалогов, фильтров и Dependency Injection. Интерфейс намеренно близок к aiogram.
+> Асинхронный Python-фреймворк для разработки ботов мессенджера MAX (max.ru) с поддержкой long-polling, вебхуков, FSM, диалогов, фильтров и Dependency Injection. Интерфейс намеренно близок к aiogram.
 
 `maxo` распространяется через PyPI (`pip install maxo`), требует Python 3.12-3.14, использует `aiohttp`/`unihttp` для сети и `adaptix` для валидации данных. Поддерживает интеграции с `dishka` (DI), `magic_filter` (фильтры) и `redis` (FSM-хранилище). Диалоги (`maxo.dialogs`) - порт `aiogram_dialog`, вебхуки (`maxo.transport.webhook`) - порт `aiogram-webhook`.
 

@@ -23,7 +23,7 @@
 
 <p align="center">
     <b>
-        Асинхронный Python-фреймворк для разработки <a href="https://dev.max.ru/docs">ботов</a> в <a href="https://max.ru">MAX</a> - мессенджере от VK (max.ru).
+        Асинхронный Python-фреймворк для разработки <a href="https://dev.max.ru/docs">ботов</a> в <a href="https://max.ru">MAX</a>
     </b>
 </p>
 
@@ -211,11 +211,11 @@ if __name__ == "__main__":
 
 ### Что такое MAX?
 
-[MAX](https://max.ru) - российский мессенджер от VK (домен `max.ru`), наследник проекта ТамТам. У него есть открытое [Bot API](https://dev.max.ru/docs-api), для работы с которым и создан `maxo`.
+[MAX](https://max.ru) - российский мессенджер. У него есть открытое [Bot API](https://dev.max.ru/docs-api), для работы с которым и создан `maxo`.
 
 ### Чем maxo отличается от aiogram?
 
-`maxo` - отдельный фреймворк именно для ботов MAX (max.ru), но интерфейс намеренно близок к [aiogram](https://github.com/aiogram/aiogram), чтобы переход был максимально безболезненным. Диалоги (`maxo.dialogs`) портированы из [aiogram_dialog](https://github.com/Tishka17/aiogram_dialog), вебхуки (`maxo.transport.webhook`) - из [aiogram-webhook](https://github.com/m-xim/aiogram-webhook).
+`maxo` - отдельный фреймворк именно для ботов [MAX](https://max.ru), но интерфейс намеренно близок к [aiogram](https://github.com/aiogram/aiogram), чтобы переход был максимально безболезненным. Диалоги (`maxo.dialogs`) портированы из [aiogram_dialog](https://github.com/Tishka17/aiogram_dialog), вебхуки (`maxo.transport.webhook`) - из [aiogram-webhook](https://github.com/m-xim/aiogram-webhook).
 
 ### Поддерживает ли maxo вебхуки?
 
