@@ -1,3 +1,30 @@
+"""
+https://github.com/aiogram/aiogram/blob/dev-3.x/aiogram/client/bot.py.
+
+Original code licensed under MIT by aiogram contributors
+
+The MIT License (MIT)
+
+Copyright (c) 2017 - present Alex Root Junior
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this
+software and associated documentation files (the "Software"), to deal in the Software
+without restriction, including without limitation the rights to use, copy, modify,
+merge, publish, distribute, sublicense, and/or sell copies of the Software,
+and to permit persons to whom the Software is furnished to do so, subject to the
+following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies
+or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
+BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
+OR OTHER DEALINGS IN THE SOFTWARE.
+"""
+
 import io
 import json
 import pathlib
@@ -14,6 +41,7 @@ from unihttp.serialize import RequestDumper, ResponseLoader
 
 from maxo import loggers
 from maxo.__meta__ import __version__
+from maxo.bot.methods import AddMembers
 from maxo.errors import (
     MaxBotApiError,
     MaxBotBadRequestError,
@@ -106,6 +134,11 @@ class MaxApiClient(AiohttpAsyncClient):
                 or response.data.get("success", None) is False
             )
         ):
+            if isinstance(method, AddMembers):
+                # При ошибке добавления юзера апи возвращает success=false и статус 200,
+                # и даёт подробную инфу в ModifyMembersResult.
+                # Из-за этого для нормальной работы метода нужно не патчить его статус
+                return
             loggers.bot_session.warning(
                 "Patch the status code from %d to 400 due to an error on the MAX API",
                 response.status_code,
