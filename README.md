@@ -4,7 +4,7 @@
   </a>
 </p>
 <h1 align="center">
-  maxo - асинхронный Python-фреймворк для ботов MAX.ru
+  maxo - асинхронный Python-фреймворк для ботов MAX (max.ru)
 </h1>
 
 <div align="center">
