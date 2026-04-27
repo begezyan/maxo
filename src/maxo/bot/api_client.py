@@ -41,6 +41,7 @@ from unihttp.serialize import RequestDumper, ResponseLoader
 
 from maxo import loggers
 from maxo.__meta__ import __version__
+from maxo.bot.methods import AddMembers
 from maxo.errors import (
     MaxBotApiError,
     MaxBotBadRequestError,
@@ -133,6 +134,11 @@ class MaxApiClient(AiohttpAsyncClient):
                 or response.data.get("success", None) is False
             )
         ):
+            if isinstance(method, AddMembers):
+                # При ошибке добавления юзера апи возвращает success=false и статус 200,
+                # и даёт подробную инфу в ModifyMembersResult.
+                # Из-за этого для нормальной работы метода нужно не патчить его статус
+                return
             loggers.bot_session.warning(
                 "Patch the status code from %d to 400 due to an error on the MAX API",
                 response.status_code,
