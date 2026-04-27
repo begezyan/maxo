@@ -31,8 +31,10 @@ class MessageEdited(MaxUpdate):
         from maxo.utils.facades import MessageEditedFacade
 
         return MessageEditedFacade(self.bot, self)
+
     if TYPE_CHECKING:
         from maxo.utils.type_promote import promote
+
         send_message = promote(MessageEditedFacade.send_message)
         answer = promote(MessageEditedFacade.answer)
         reply = promote(MessageEditedFacade.reply)
@@ -44,6 +46,7 @@ class MessageEdited(MaxUpdate):
         leave_chat = promote(MessageEditedFacade.leave_chat)
         get_message_by_id = promote(MessageEditedFacade.get_message_by_id)
     else:
+
         @property
         def delete_message(self):
             return self.facade.delete_message

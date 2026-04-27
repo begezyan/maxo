@@ -72,8 +72,10 @@ class MessageCallback(MaxUpdate):
         from maxo.utils.facades import MessageCallbackFacade
 
         return MessageCallbackFacade(self.bot, self)
+
     if TYPE_CHECKING:
         from maxo.utils.type_promote import promote
+
         send_message = promote(MessageCallbackFacade.send_message)
         answer = promote(MessageCallbackFacade.answer)
         reply = promote(MessageCallbackFacade.reply)

@@ -46,14 +46,17 @@ class DialogCleared(MaxUpdate):
         from maxo.utils.facades import DialogClearedFacade
 
         return DialogClearedFacade(self.bot, self)
+
     if TYPE_CHECKING:
         from maxo.utils.type_promote import promote
+
         send_message = promote(DialogClearedFacade.send_message)
         get_chat = promote(DialogClearedFacade.get_chat)
         get_members = promote(DialogClearedFacade.get_members)
         leave_chat = promote(DialogClearedFacade.leave_chat)
         get_messages = promote(DialogClearedFacade.get_messages)
     else:
+
         @property
         def send_message(self):
             return self.facade.send_message

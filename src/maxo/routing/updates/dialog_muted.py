@@ -50,14 +50,17 @@ class DialogMuted(MaxUpdate):
         from maxo.utils.facades import DialogMutedFacade
 
         return DialogMutedFacade(self.bot, self)
+
     if TYPE_CHECKING:
         from maxo.utils.type_promote import promote
+
         send_message = promote(DialogMutedFacade.send_message)
         get_chat = promote(DialogMutedFacade.get_chat)
         get_members = promote(DialogMutedFacade.get_members)
         leave_chat = promote(DialogMutedFacade.leave_chat)
         get_messages = promote(DialogMutedFacade.get_messages)
     else:
+
         @property
         def send_message(self):
             return self.facade.send_message

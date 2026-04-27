@@ -49,14 +49,17 @@ class UserAddedToChat(MaxUpdate):
         from maxo.utils.facades import UserAddedToChatFacade
 
         return UserAddedToChatFacade(self.bot, self)
+
     if TYPE_CHECKING:
         from maxo.utils.type_promote import promote
+
         send_message = promote(UserAddedToChatFacade.send_message)
         get_chat = promote(UserAddedToChatFacade.get_chat)
         get_members = promote(UserAddedToChatFacade.get_members)
         leave_chat = promote(UserAddedToChatFacade.leave_chat)
         get_messages = promote(UserAddedToChatFacade.get_messages)
     else:
+
         @property
         def send_message(self):
             return self.facade.send_message

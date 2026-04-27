@@ -12,11 +12,14 @@ def promote(
     method: Callable[Concatenate[FacadeT, P], RT],
 ) -> Callable[Concatenate[UpdateT, P], RT]: ...
 
+
 @overload
 def promote(method: Callable[[FacadeT], RT]) -> Callable[[UpdateT], RT]: ...
 
+
 @overload
 def promote(method: Callable[..., RT]) -> Callable[..., RT]: ...
+
 
 def promote(method: Any) -> Any:
     raise RuntimeError("This function should only be used for type checking")

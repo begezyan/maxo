@@ -62,12 +62,14 @@ class BotStarted(MaxUpdate):
 
     if TYPE_CHECKING:
         from maxo.utils.type_promote import promote
+
         send_message = promote(BotStartedFacade.send_message)
         get_chat = promote(BotStartedFacade.get_chat)
         get_members = promote(BotStartedFacade.get_members)
         leave_chat = promote(BotStartedFacade.leave_chat)
         get_messages = promote(BotStartedFacade.get_messages)
     else:
+
         @property
         def send_message(self):
             return self.facade.send_message

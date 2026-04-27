@@ -36,12 +36,14 @@ class BotRemovedFromChat(MaxUpdate):
 
     if TYPE_CHECKING:
         from maxo.utils.type_promote import promote
+
         send_message = promote(BotRemovedFromChatFacade.send_message)
         get_chat = promote(BotRemovedFromChatFacade.get_chat)
         get_members = promote(BotRemovedFromChatFacade.get_members)
         leave_chat = promote(BotRemovedFromChatFacade.leave_chat)
         get_messages = promote(BotRemovedFromChatFacade.get_messages)
     else:
+
         @property
         def send_message(self):
             return self.facade.send_message

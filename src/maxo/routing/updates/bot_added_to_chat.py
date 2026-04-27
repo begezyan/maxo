@@ -36,12 +36,14 @@ class BotAddedToChat(MaxUpdate):
 
     if TYPE_CHECKING:
         from maxo.utils.type_promote import promote
+
         send_message = promote(BotAddedToChatFacade.send_message)
         get_chat = promote(BotAddedToChatFacade.get_chat)
         get_members = promote(BotAddedToChatFacade.get_members)
         leave_chat = promote(BotAddedToChatFacade.leave_chat)
         get_messages = promote(BotAddedToChatFacade.get_messages)
     else:
+
         @property
         def send_message(self):
             return self.facade.send_message

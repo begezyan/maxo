@@ -33,14 +33,17 @@ class ChatTitleChanged(MaxUpdate):
         from maxo.utils.facades import ChatTitleChangedFacade
 
         return ChatTitleChangedFacade(self.bot, self)
+
     if TYPE_CHECKING:
         from maxo.utils.type_promote import promote
+
         send_message = promote(ChatTitleChangedFacade.send_message)
         get_chat = promote(ChatTitleChangedFacade.get_chat)
         get_members = promote(ChatTitleChangedFacade.get_members)
         leave_chat = promote(ChatTitleChangedFacade.leave_chat)
         get_messages = promote(ChatTitleChangedFacade.get_messages)
     else:
+
         @property
         def send_message(self):
             return self.facade.send_message

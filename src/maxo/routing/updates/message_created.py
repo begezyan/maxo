@@ -10,7 +10,6 @@ if TYPE_CHECKING:
     from maxo.utils.facades import MessageCreatedFacade
 
 
-
 class MessageCreated(MaxUpdate):
     """
     Вы получите этот `update`, как только сообщение будет создано
@@ -48,8 +47,10 @@ class MessageCreated(MaxUpdate):
         from maxo.utils.facades import MessageCreatedFacade
 
         return MessageCreatedFacade(self.bot, self)
+
     if TYPE_CHECKING:
         from maxo.utils.type_promote import promote
+
         send_message = promote(MessageCreatedFacade.send_message)
         answer = promote(MessageCreatedFacade.answer)
         reply = promote(MessageCreatedFacade.reply)
@@ -61,6 +62,7 @@ class MessageCreated(MaxUpdate):
         leave_chat = promote(MessageCreatedFacade.leave_chat)
         get_message_by_id = promote(MessageCreatedFacade.get_message_by_id)
     else:
+
         @property
         def send_message(self):
             return self.facade.send_message
