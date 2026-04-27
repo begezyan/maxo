@@ -188,7 +188,7 @@
 
 ## [0.4.0](https://github.com/K1rL3s/maxo/releases/tag/v0.4.0) - 2026-02-25
 
-## What's Changed
+### What's Changed
 
 - Уведомления в тг-чат через `reagento/relator` by @K1rL3s in https://github.com/K1rL3s/maxo/pull/43
   - Воркфлоу депендабота

@@ -259,16 +259,15 @@ def _refresh_changelog_from_github(app=None) -> None:
     Вызывается из Sphinx-события ``builder-inited`` один раз за билд
     (RTD, локальный ``sphinx-build``). При сетевой ошибке / rate limit
     оставляет уже закоммиченный файл как фолбэк. Авторизация подхватывается
-    из ``GITHUB_TOKEN`` или ``READTHEDOCS_TOKEN``, если они заданы.
+    из ``GITHUB_TOKEN``, если он задан в окружении (на RTD задаётся вручную
+    через Admin > Environment Variables).
     """
     target = Path(__file__).parent / "pages" / "changelog.md"
     api_url = (
         "https://api.github.com/repos/K1rL3s/maxo/releases?per_page=100"
     )
     headers = {"Accept": "application/vnd.github+json"}
-    token = os.environ.get("GITHUB_TOKEN") or os.environ.get(
-        "READTHEDOCS_TOKEN",
-    )
+    token = os.environ.get("GITHUB_TOKEN")
     if token:
         headers["Authorization"] = f"Bearer {token}"
 
@@ -295,16 +294,34 @@ def _refresh_changelog_from_github(app=None) -> None:
         return
 
     def _shift(text: str) -> str:
-        return re.sub(
-            r"(?m)^(#{1,5})(\s)",
-            lambda m: "#" + m.group(1) + m.group(2),
-            text,
-        )
+        # Сдвигаем уровень markdown-заголовков на единицу, но НЕ внутри
+        # fenced-code-блоков, иначе `# install` в bash-сниппете релиза
+        # превратится в `## install`.
+        out: list[str] = []
+        in_fence = False
+        for line in text.splitlines():
+            stripped = line.lstrip()
+            if stripped.startswith("```") or stripped.startswith("~~~"):
+                in_fence = not in_fence
+                out.append(line)
+                continue
+            if not in_fence:
+                line = re.sub(r"^(#{1,5})(\s)", r"#\1\2", line)
+            out.append(line)
+        return "\n".join(out)
 
-    # Гайдлайн репо: только ASCII `-`.
-    # Em dash (U+2014) и en dash (U+2013) запрещены даже в исходниках,
-    # поэтому literals задаём через unicode escapes.
-    _DASH_TRANSLATE = {0x2014: "-", 0x2013: "-"}
+    # Гайдлайн репо: только ASCII `-`. Покрываем все «нестандартные» тире.
+    # Literals задаём через unicode escapes, чтобы и в исходниках conf.py
+    # не было ни одного запрещённого символа.
+    _DASH_TRANSLATE = {
+        0x2010: "-",  # hyphen
+        0x2011: "-",  # non-breaking hyphen
+        0x2012: "-",  # figure dash
+        0x2013: "-",  # en dash
+        0x2014: "-",  # em dash
+        0x2015: "-",  # horizontal bar
+        0x2212: "-",  # minus sign
+    }
 
     def _normalize_dashes(text: str) -> str:
         return text.translate(_DASH_TRANSLATE)
@@ -316,7 +333,7 @@ def _refresh_changelog_from_github(app=None) -> None:
         "при каждой сборке документации.\n",
     ]
     for r in releases:
-        if r.get("draft"):
+        if not isinstance(r, dict) or r.get("draft"):
             continue
         tag = r.get("tag_name", "")
         name = r.get("name") or tag
@@ -325,7 +342,8 @@ def _refresh_changelog_from_github(app=None) -> None:
         body = (r.get("body") or "").strip()
         body = _normalize_dashes(_shift(body)) if body else "_(нет описания)_"
         title = _normalize_dashes(name if name and name != tag else tag)
-        parts.append(f"\n## [{title}]({html_url}) - {published}\n")
+        suffix = f" - {published}" if published else ""
+        parts.append(f"\n## [{title}]({html_url}){suffix}\n")
         parts.append(body)
         parts.append("")
     target.write_text("\n".join(parts), encoding="utf-8")

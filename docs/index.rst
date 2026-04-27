@@ -45,7 +45,7 @@ maxo - асинхронный Python-фреймворк для ботов MAX (m
 
 .. rst-class:: lead
 
-   Асинхронный Python-фреймворк для разработки `ботов <https://dev.max.ru/docs>`_ в `MAX <https://max.ru>`
+   Асинхронный Python-фреймворк для разработки `ботов <https://dev.max.ru/docs>`_ в `MAX <https://max.ru>`_
 
 .. container:: buttons
 
