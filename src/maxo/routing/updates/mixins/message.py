@@ -20,7 +20,7 @@ class MessageMethodsFacade(AttachmentsFacade):
         raise NotImplementedError
 
     @property
-    def chat_id(self) -> int:
+    def chat_id(self) -> int | None:
         return self.message.recipient.chat_id
 
     async def delete_message(self) -> SimpleQueryResult:
