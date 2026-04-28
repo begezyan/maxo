@@ -1,17 +1,21 @@
-from maxo.bot.bot import Bot
+from typing import TYPE_CHECKING
+
 from maxo.omit import Omittable, Omitted
+from maxo.routing.updates.mixins.base import BaseMethodsFacade
 from maxo.types.bot_command import BotCommand
 from maxo.types.bot_info import BotInfo
 from maxo.types.photo_attachment_request_payload import PhotoAttachmentRequestPayload
-from maxo.utils.facades.methods.base import BaseMethodsFacade
+
+if TYPE_CHECKING:
+    from maxo import Bot
 
 
 class BotMethodsFacade(BaseMethodsFacade):
-    def __init__(self, bot: Bot) -> None:
+    def __init__(self, bot: "Bot") -> None:
         self._bot = bot
 
     @property
-    def bot(self) -> Bot:
+    def bot(self) -> "Bot":
         return self._bot
 
     async def get_my_info(self) -> BotInfo:

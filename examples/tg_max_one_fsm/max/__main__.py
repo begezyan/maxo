@@ -11,11 +11,11 @@ from maxo.fsm.key_builder import DefaultKeyBuilder
 from maxo.fsm.state import State, StatesGroup
 from maxo.fsm.storages.redis import RedisStorage
 from maxo.integrations.magic_filter import MagicFilter
+from maxo.routing.facades import MessageCallbackFacade, MessageCreatedFacade
 from maxo.routing.filters import Command, CommandObject, CommandStart
 from maxo.routing.updates import MessageCallback, MessageCreated
 from maxo.transport.long_polling import LongPolling
 from maxo.types import CallbackButton
-from maxo.utils.facades import MessageCallbackFacade, MessageCreatedFacade
 
 from ..ids import SharedId
 from ..user_repo import DbUser, UserRepo

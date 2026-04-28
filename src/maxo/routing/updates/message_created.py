@@ -1,22 +1,19 @@
-from collections.abc import Awaitable, Callable
 from typing import TYPE_CHECKING
 
 from maxo.enums.update_type import UpdateType
 from maxo.errors import AttributeIsEmptyError
 from maxo.omit import Omittable, Omitted, is_defined
 from maxo.routing.updates.base import MaxUpdate
-from maxo.types.chat import Chat
-from maxo.types.chat_members_list import ChatMembersList
+from maxo.routing.updates.mixins.message import MessageMethodsFacade
 from maxo.types.message import Message
-from maxo.types.simple_query_result import SimpleQueryResult
 
 if TYPE_CHECKING:
-    from maxo.utils.facades import MessageCreatedFacade
+    from maxo.routing.facades import MessageCreatedFacade
 
 
-class MessageCreated(MaxUpdate):
+class MessageCreated(MaxUpdate, MessageMethodsFacade):
     """
-    ы получите этот `update`, как только сообщение будет создано
+    Вы получите этот `update`, как только сообщение будет создано
 
     Args:
         message: Новое созданное сообщение
@@ -48,46 +45,6 @@ class MessageCreated(MaxUpdate):
 
     @property
     def facade(self) -> "MessageCreatedFacade":
-        from maxo.utils.facades import MessageCreatedFacade
+        from maxo.routing.facades import MessageCreatedFacade
 
         return MessageCreatedFacade(self.bot, self)
-
-    @property
-    def send_message(self) -> Callable[..., Awaitable[Message]]:
-        return self.facade.send_message
-
-    @property
-    def answer(self) -> Callable[..., Awaitable[Message]]:
-        return self.facade.answer
-
-    @property
-    def reply(self) -> Callable[..., Awaitable[Message]]:
-        return self.facade.reply
-
-    @property
-    def send_media(self) -> Callable[..., Awaitable[Message]]:
-        return self.facade.send_media
-
-    @property
-    def edit_message(self) -> Callable[..., Awaitable[Message]]:
-        return self.facade.edit_message
-
-    @property
-    def delete_message(self) -> Callable[..., Awaitable["SimpleQueryResult"]]:
-        return self.facade.delete_message
-
-    @property
-    def get_chat(self) -> Callable[..., Awaitable["Chat"]]:
-        return self.facade.get_chat
-
-    @property
-    def get_members(self) -> Callable[..., Awaitable["ChatMembersList"]]:
-        return self.facade.get_members
-
-    @property
-    def leave_chat(self) -> Callable[..., Awaitable["SimpleQueryResult"]]:
-        return self.facade.leave_chat
-
-    @property
-    def get_message_by_id(self) -> Callable[..., Awaitable[Message]]:
-        return self.facade.get_message_by_id

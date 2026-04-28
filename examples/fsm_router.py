@@ -7,10 +7,10 @@ from maxo import Bot, Dispatcher, Router
 from maxo.enums import TextFormat
 from maxo.fsm import FSMContext, State, StateFilter, StatesGroup
 from maxo.integrations.magic_filter import MagicFilter
+from maxo.routing.facades import MessageCreatedFacade
 from maxo.routing.filters import CommandStart
 from maxo.routing.updates import MessageCreated
 from maxo.transport.long_polling import LongPolling
-from maxo.utils.facades import MessageCreatedFacade
 
 router = Router(__name__)
 

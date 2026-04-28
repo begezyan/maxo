@@ -3,8 +3,8 @@ from typing import Any, cast
 from maxo.dialogs import Dialog, DialogManager, Window
 from maxo.dialogs.widgets.kbd import Counter, ManagedCounter
 from maxo.dialogs.widgets.text import Const, Progress
+from maxo.routing.facades import MessageCallbackFacade
 from maxo.routing.updates import MessageCallback
-from maxo.utils.facades import MessageCallbackFacade
 
 from . import states
 from .common import MAIN_MENU_BUTTON

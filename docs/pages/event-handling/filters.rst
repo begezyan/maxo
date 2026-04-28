@@ -9,7 +9,7 @@
     from maxo.routing.filters import Command
     from maxo.routing.updates.message_created import MessageCreated
     from maxo.routing.ctx import Ctx
-    from maxo.utils.facades import MessageCreatedFacade
+    from maxo.routing.facades import MessageCreatedFacade
 
     @dispatcher.message_created(Command("start"))
     async def start(update: MessageCreated, ctx: Ctx, facade: MessageCreatedFacade):
@@ -36,7 +36,7 @@
     from maxo.routing.filters import Command
     from maxo.routing.updates.message_created import MessageCreated
     from maxo.routing.ctx import Ctx
-    from maxo.utils.facades import MessageCreatedFacade
+    from maxo.routing.facades import MessageCreatedFacade
     from maxo.integrations.magic_filter import MagicFilter
 
     # Обработка команды /admin ИЛИ сообщения с текстом "secret"
@@ -55,7 +55,7 @@ Magic Filter
 
     from maxo.routing.updates.message_created import MessageCreated
     from maxo.routing.ctx import Ctx
-    from maxo.utils.facades import MessageCreatedFacade
+    from maxo.routing.facades import MessageCreatedFacade
     from maxo.integrations.magic_filter import MagicFilter
 
     # Сработает, если текст сообщения равен "hello"

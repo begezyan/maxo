@@ -13,7 +13,7 @@
     from maxo import Dispatcher, Bot
     from maxo.routing.updates.message_created import MessageCreated
     from maxo.routing.ctx import Ctx
-    from maxo.utils.facades import MessageCreatedFacade
+    from maxo.routing.facades import MessageCreatedFacade
     from maxo.transport.long_polling import LongPolling
 
     bot = Bot(token="ВАШ_ТОКЕН")
@@ -81,7 +81,7 @@
     from maxo.routing.filters import BaseFilter
     from maxo.routing.updates.message_created import MessageCreated
     from maxo.routing.ctx import Ctx
-    from maxo.utils.facades import MessageCreatedFacade
+    from maxo.routing.facades import MessageCreatedFacade
 
     class IsGroupChat(BaseFilter[MessageCreated]):
         """Пропускает только сообщения из групповых чатов."""
@@ -127,7 +127,7 @@
     from maxo.routing.filters import Command
     from maxo.routing.updates.message_created import MessageCreated
     from maxo.routing.ctx import Ctx
-    from maxo.utils.facades import MessageCreatedFacade
+    from maxo.routing.facades import MessageCreatedFacade
 
     dispatcher = Dispatcher()
     admin_router = Router(name="admin")

@@ -1,6 +1,6 @@
 from maxo import Router
+from maxo.routing.facades import MessageCreatedFacade
 from maxo.routing.updates import MessageCreated
-from maxo.utils.facades import MessageCreatedFacade
 
 echo_router = Router(__name__)
 

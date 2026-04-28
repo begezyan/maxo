@@ -1,4 +1,4 @@
-from logging import getLogger
+import logging
 from typing import Any
 
 from maxo.dialogs.api.entities import (
@@ -18,10 +18,13 @@ from maxo.dialogs.api.exceptions import (
 )
 from maxo.dialogs.api.internal import CONTEXT_KEY, STACK_KEY, STORAGE_KEY
 from maxo.dialogs.api.protocols import DialogRegistryProtocol, StackAccessValidator
+from maxo.dialogs.context.storage import StorageProxy
 from maxo.dialogs.utils import remove_intent_id
 from maxo.enums import ChatType
 from maxo.fsm.storages.base import BaseEventIsolation, BaseStorage
 from maxo.routing.ctx import Ctx
+from maxo.routing.facades import MessageCallbackFacade
+from maxo.routing.facades.middleware import FACADE_KEY
 from maxo.routing.interfaces import BaseMiddleware, NextMiddleware
 from maxo.routing.middlewares.fsm_context import FSM_STORAGE_KEY
 from maxo.routing.middlewares.update_context import (
@@ -41,12 +44,8 @@ from maxo.routing.updates import (
     UserAddedToChat,
     UserRemovedFromChat,
 )
-from maxo.utils.facades import MessageCallbackFacade
-from maxo.utils.facades.middleware import FACADE_KEY
 
-from .storage import StorageProxy
-
-logger = getLogger(__name__)
+logger = logging.getLogger(__name__)
 
 FORBIDDEN_STACK_KEY = "aiogd_stack_forbidden"
 

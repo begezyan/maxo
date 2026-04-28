@@ -1,7 +1,7 @@
 from maxo import Router
+from maxo.routing.facades import MessageCreatedFacade
 from maxo.routing.filters import CommandStart
 from maxo.routing.updates import MessageCreated
-from maxo.utils.facades import MessageCreatedFacade
 
 start_router = Router(__name__)
 
