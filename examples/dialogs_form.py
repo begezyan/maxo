@@ -18,10 +18,10 @@ from maxo.dialogs.widgets.media import StaticMedia
 from maxo.dialogs.widgets.text import Const, Format, Multi
 from maxo.fsm import State, StatesGroup
 from maxo.fsm.key_builder import DefaultKeyBuilder
+from maxo.routing.facades import MessageCallbackFacade, MessageCreatedFacade
 from maxo.routing.filters import CommandStart
 from maxo.routing.updates import MessageCallback, MessageCreated
 from maxo.transport.long_polling import LongPolling
-from maxo.utils.facades import MessageCallbackFacade, MessageCreatedFacade
 
 BASE_DIR = Path(__file__).resolve().parent
 

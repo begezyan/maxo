@@ -1,9 +1,10 @@
-from abc import ABC, abstractmethod
+from abc import abstractmethod
 from collections.abc import Sequence
 from datetime import datetime
 
 from maxo.enums import TextFormat
 from maxo.omit import Omittable, Omitted
+from maxo.routing.updates.mixins.attachments import AttachmentsFacade, MediaInput
 from maxo.types.buttons import InlineButtons
 from maxo.types.chat import Chat
 from maxo.types.chat_members_list import ChatMembersList
@@ -11,10 +12,9 @@ from maxo.types.message import Message
 from maxo.types.message_list import MessageList
 from maxo.types.new_message_link import NewMessageLink
 from maxo.types.simple_query_result import SimpleQueryResult
-from maxo.utils.facades.methods.attachments import AttachmentsFacade, MediaInput
 
 
-class ChatMethodsFacade(AttachmentsFacade, ABC):
+class ChatMethodsFacade(AttachmentsFacade):
     @property
     @abstractmethod
     def chat_id(self) -> int:

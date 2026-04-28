@@ -13,7 +13,7 @@
     from maxo.routing.filters import Command, CommandStart
     from maxo.routing.updates.message_created import MessageCreated
     from maxo.routing.ctx import Ctx
-    from maxo.utils.facades import MessageCreatedFacade
+    from maxo.routing.facades import MessageCreatedFacade
 
     # Оба варианта эквивалентны:
     @router.message_created(CommandStart())
@@ -35,7 +35,7 @@
 .. code-block:: python
 
     from maxo.routing.ctx import Ctx
-    from maxo.utils.facades import MessageCreatedFacade
+    from maxo.routing.facades import MessageCreatedFacade
     from maxo.routing.updates.message_created import MessageCreated
 
     @router.message_created()
@@ -59,7 +59,7 @@ Dependency Injection (DI)
     from maxo.routing.filters import BaseFilter
     from maxo.routing.updates.message_created import MessageCreated
     from maxo.routing.ctx import Ctx
-    from maxo.utils.facades import MessageCreatedFacade
+    from maxo.routing.facades import MessageCreatedFacade
 
     # Пример фильтра, который возвращает данные пользователя
     class UserFilter(BaseFilter[MessageCreated]):

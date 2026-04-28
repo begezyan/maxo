@@ -30,7 +30,7 @@
     from maxo.fsm import FSMContext
     from maxo.routing.filters import Command
     from maxo.routing.updates.message_created import MessageCreated
-    from maxo.utils.facades import MessageCreatedFacade
+    from maxo.routing.facades import MessageCreatedFacade
     # Импортируйте вашу группу состояний
     # from states import Registration
 

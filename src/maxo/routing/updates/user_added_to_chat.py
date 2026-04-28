@@ -4,13 +4,14 @@ from maxo.enums.update_type import UpdateType
 from maxo.errors import AttributeIsEmptyError
 from maxo.omit import Omittable, Omitted, is_defined
 from maxo.routing.updates.base import MaxUpdate
+from maxo.routing.updates.mixins import ChatMethodsFacade
 from maxo.types.user import User
 
 if TYPE_CHECKING:
-    from maxo.utils.facades import UserAddedToChatFacade
+    from maxo.routing.facades import UserAddedToChatFacade
 
 
-class UserAddedToChat(MaxUpdate):
+class UserAddedToChat(MaxUpdate, ChatMethodsFacade):
     """
     Вы получите это обновление, когда пользователь будет добавлен в чат, где бот является администратором
 
@@ -46,36 +47,6 @@ class UserAddedToChat(MaxUpdate):
 
     @property
     def facade(self) -> "UserAddedToChatFacade":
-        from maxo.utils.facades import UserAddedToChatFacade
+        from maxo.routing.facades import UserAddedToChatFacade
 
         return UserAddedToChatFacade(self.bot, self)
-
-    if TYPE_CHECKING:
-        from maxo.utils.type_promote import promote
-
-        send_message = promote(UserAddedToChatFacade.send_message)
-        get_chat = promote(UserAddedToChatFacade.get_chat)
-        get_members = promote(UserAddedToChatFacade.get_members)
-        leave_chat = promote(UserAddedToChatFacade.leave_chat)
-        get_messages = promote(UserAddedToChatFacade.get_messages)
-    else:
-
-        @property
-        def send_message(self):
-            return self.facade.send_message
-
-        @property
-        def get_chat(self):
-            return self.facade.get_chat
-
-        @property
-        def get_members(self):
-            return self.facade.get_members
-
-        @property
-        def leave_chat(self):
-            return self.facade.leave_chat
-
-        @property
-        def get_messages(self):
-            return self.facade.get_messages

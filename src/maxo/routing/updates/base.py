@@ -6,7 +6,7 @@ from maxo.enums import UpdateType
 from maxo.types.base import MaxoType
 
 if TYPE_CHECKING:
-    from maxo.utils.facades import BaseUpdateFacade
+    from maxo.routing.facades import BaseUpdateFacade
 
 
 class BaseUpdate(MaxoType):

@@ -69,7 +69,7 @@ dependencies = [
 from maxo import Bot, Dispatcher
 from maxo.routing.updates import MessageCreated
 from maxo.transport.long_polling import LongPolling
-from maxo.utils.facades import MessageCreatedFacade
+from maxo.routing.facades import MessageCreatedFacade
 
 bot = Bot("TOKEN")
 dispatcher = Dispatcher()
@@ -89,7 +89,7 @@ from maxo import Bot, Dispatcher
 from maxo.routing.filters import Command, CommandObject, CommandStart
 from maxo.routing.updates import MessageCreated
 from maxo.transport.long_polling import LongPolling
-from maxo.utils.facades import MessageCreatedFacade
+from maxo.routing.facades import MessageCreatedFacade
 
 bot = Bot("TOKEN")
 dispatcher = Dispatcher()
@@ -117,7 +117,7 @@ from maxo.routing.filters import CommandStart
 from maxo.routing.updates import MessageCallback, MessageCreated
 from maxo.transport.long_polling import LongPolling
 from maxo.utils.builders import KeyboardBuilder
-from maxo.utils.facades import MessageCallbackFacade, MessageCreatedFacade
+from maxo.routing.facades import MessageCallbackFacade, MessageCreatedFacade
 
 bot = Bot("TOKEN")
 dispatcher = Dispatcher()
@@ -166,7 +166,7 @@ from maxo.transport.webhook.adapters.aiohttp import AiohttpWebAdapter
 from maxo.transport.webhook.engines import SimpleEngine, WebhookEngine
 from maxo.transport.webhook.routing import StaticRouting
 from maxo.transport.webhook.security import Security, StaticSecretToken
-from maxo.utils.facades import BotStartedFacade, MessageCreatedFacade
+from maxo.routing.facades import BotStartedFacade, MessageCreatedFacade
 
 bot = Bot(os.environ["TOKEN"])
 router = Router()

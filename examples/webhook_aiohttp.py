@@ -5,13 +5,13 @@ from aiohttp import web
 
 from maxo import Bot, Dispatcher
 from maxo.enums import TextFormat
+from maxo.routing.facades import MessageCreatedFacade
 from maxo.routing.updates import MessageCreated
 from maxo.routing.utils import collect_used_updates
 from maxo.transport.webhook.adapters.aiohttp import AiohttpWebAdapter
 from maxo.transport.webhook.engines import SimpleEngine, WebhookEngine
 from maxo.transport.webhook.routing import StaticRouting
 from maxo.transport.webhook.security import Security, StaticSecretToken
-from maxo.utils.facades import MessageCreatedFacade
 
 dp = Dispatcher()
 bot = Bot(os.environ["TOKEN"])

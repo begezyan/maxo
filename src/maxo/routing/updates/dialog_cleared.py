@@ -4,13 +4,14 @@ from maxo.enums.update_type import UpdateType
 from maxo.errors import AttributeIsEmptyError
 from maxo.omit import Omittable, Omitted, is_defined
 from maxo.routing.updates.base import MaxUpdate
+from maxo.routing.updates.mixins import ChatMethodsFacade
 from maxo.types.user import User
 
 if TYPE_CHECKING:
-    from maxo.utils.facades import DialogClearedFacade
+    from maxo.routing.facades import DialogClearedFacade
 
 
-class DialogCleared(MaxUpdate):
+class DialogCleared(MaxUpdate, ChatMethodsFacade):
     """
     Бот получает этот тип обновления сразу после очистки истории диалога.
 
@@ -43,36 +44,6 @@ class DialogCleared(MaxUpdate):
 
     @property
     def facade(self) -> "DialogClearedFacade":
-        from maxo.utils.facades import DialogClearedFacade
+        from maxo.routing.facades import DialogClearedFacade
 
         return DialogClearedFacade(self.bot, self)
-
-    if TYPE_CHECKING:
-        from maxo.utils.type_promote import promote
-
-        send_message = promote(DialogClearedFacade.send_message)
-        get_chat = promote(DialogClearedFacade.get_chat)
-        get_members = promote(DialogClearedFacade.get_members)
-        leave_chat = promote(DialogClearedFacade.leave_chat)
-        get_messages = promote(DialogClearedFacade.get_messages)
-    else:
-
-        @property
-        def send_message(self):
-            return self.facade.send_message
-
-        @property
-        def get_chat(self):
-            return self.facade.get_chat
-
-        @property
-        def get_members(self):
-            return self.facade.get_members
-
-        @property
-        def leave_chat(self):
-            return self.facade.leave_chat
-
-        @property
-        def get_messages(self):
-            return self.facade.get_messages

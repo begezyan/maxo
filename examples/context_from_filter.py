@@ -3,11 +3,11 @@ import os
 from typing import Any
 
 from maxo import Bot, Ctx, Dispatcher
+from maxo.routing.facades import MessageCreatedFacade
 from maxo.routing.filters import BaseFilter
 from maxo.routing.updates import MessageCreated
 from maxo.transport.long_polling import LongPolling
 from maxo.types.user import User
-from maxo.utils.facades import MessageCreatedFacade
 
 dp = Dispatcher()
 

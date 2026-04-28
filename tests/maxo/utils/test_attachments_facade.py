@@ -4,12 +4,9 @@ from unittest.mock import AsyncMock, patch
 import pytest
 
 from maxo.bot.bot import Bot
-from maxo.types import (
-    PhotoAttachmentRequest,
-    VideoAttachmentRequest,
-)
-from maxo.utils.facades.methods.attachments import AttachmentsFacade, MediaInput
-from maxo.utils.facades.methods.message import MessageMethodsFacade
+from maxo.routing.updates.mixins.attachments import AttachmentsFacade, MediaInput
+from maxo.routing.updates.mixins.message import MessageMethodsFacade
+from maxo.types import PhotoAttachmentRequest, VideoAttachmentRequest
 from maxo.utils.upload_media import BufferedInputFile
 
 

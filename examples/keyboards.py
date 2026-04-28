@@ -5,11 +5,11 @@ from magic_filter import F
 
 from maxo import Bot, Ctx, Dispatcher, Router
 from maxo.integrations.magic_filter import MagicFilter
+from maxo.routing.facades import MessageCallbackFacade, MessageCreatedFacade
 from maxo.routing.filters import CommandStart
 from maxo.routing.updates import MessageCallback, MessageCreated
 from maxo.transport.long_polling import LongPolling
 from maxo.utils.builders import KeyboardBuilder
-from maxo.utils.facades import MessageCallbackFacade, MessageCreatedFacade
 
 router = Router()
 

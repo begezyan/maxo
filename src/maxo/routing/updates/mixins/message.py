@@ -1,21 +1,19 @@
-from abc import ABC, abstractmethod
+from abc import abstractmethod
 from collections.abc import Sequence
 
 from maxo.enums import MessageLinkType, TextFormat
 from maxo.omit import Omittable, Omitted
-from maxo.types import MediaAttachmentsRequests
+from maxo.routing.updates.mixins.attachments import AttachmentsFacade, MediaInput
 from maxo.types.buttons import InlineButtons
 from maxo.types.chat import Chat
 from maxo.types.chat_members_list import ChatMembersList
 from maxo.types.message import Message
 from maxo.types.new_message_link import NewMessageLink
 from maxo.types.simple_query_result import SimpleQueryResult
-from maxo.utils.facades.methods.attachments import AttachmentsFacade, MediaInput
 from maxo.utils.helpers.calculating import calculate_chat_id_and_user_id
-from maxo.utils.upload_media import InputFile
 
 
-class MessageMethodsFacade(AttachmentsFacade, ABC):
+class MessageMethodsFacade(AttachmentsFacade):
     @property
     @abstractmethod
     def message(self) -> Message:
@@ -129,7 +127,7 @@ class MessageMethodsFacade(AttachmentsFacade, ABC):
         link: NewMessageLink | None = None,
         disable_link_preview: Omittable[bool] = Omitted(),
     ) -> Message:
-        if isinstance(media, (InputFile, MediaAttachmentsRequests)):
+        if not isinstance(media, Sequence):
             media = (media,)
 
         return await self.send_message(

@@ -2,10 +2,10 @@ import logging
 import os
 
 from maxo import Bot, Dispatcher
+from maxo.routing.facades import MessageCreatedFacade
 from maxo.routing.updates import MessageCreated
 from maxo.transport.long_polling import LongPolling
 from maxo.types import UpdateContext
-from maxo.utils.facades import MessageCreatedFacade
 from maxo.utils.upload_media import FSInputFile
 
 dp = Dispatcher()

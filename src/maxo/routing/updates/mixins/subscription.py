@@ -1,8 +1,12 @@
+from typing import TYPE_CHECKING
+
 from maxo.omit import Omittable, Omitted
+from maxo.routing.updates.mixins.bot import BotMethodsFacade
 from maxo.types.get_subscriptions_result import GetSubscriptionsResult
 from maxo.types.simple_query_result import SimpleQueryResult
-from maxo.types.update_list import UpdateList
-from maxo.utils.facades.methods.bot import BotMethodsFacade
+
+if TYPE_CHECKING:
+    from maxo.types.update_list import UpdateList
 
 
 class SubscriptionMethodsFacade(BotMethodsFacade):
@@ -15,7 +19,7 @@ class SubscriptionMethodsFacade(BotMethodsFacade):
         marker: Omittable[int | None] = Omitted(),
         timeout: Omittable[int] = Omitted(),
         types: Omittable[list[str] | None] = Omitted(),
-    ) -> UpdateList:
+    ) -> "UpdateList":
         return await self.bot.get_updates(
             limit=limit,
             marker=marker,

@@ -8,20 +8,21 @@ from maxo import loggers
 from maxo.enums import UploadType
 from maxo.errors.api import RetvalReturnedServerException
 from maxo.omit import is_defined
-from maxo.types import (
-    AttachmentsRequests,
-    AudioAttachmentRequest,
-    FileAttachmentRequest,
-    InlineButtons,
+from maxo.routing.updates.mixins.bot import BotMethodsFacade
+from maxo.types.attachments import AttachmentsRequests, MediaAttachmentsRequests
+from maxo.types.audio_attachment_request import AudioAttachmentRequest
+from maxo.types.buttons import InlineButtons
+from maxo.types.file_attachment_request import FileAttachmentRequest
+from maxo.types.inline_keyboard_attachment_request import (
     InlineKeyboardAttachmentRequest,
-    InlineKeyboardAttachmentRequestPayload,
-    MediaAttachmentsRequests,
-    PhotoAttachmentRequest,
-    UploadEndpoint,
-    UploadMediaResult,
-    VideoAttachmentRequest,
 )
-from maxo.utils.facades.methods.bot import BotMethodsFacade
+from maxo.types.inline_keyboard_attachment_request_payload import (
+    InlineKeyboardAttachmentRequestPayload,
+)
+from maxo.types.photo_attachment_request import PhotoAttachmentRequest
+from maxo.types.upload_endpoint import UploadEndpoint
+from maxo.types.upload_media_result import UploadMediaResult
+from maxo.types.video_attachment_request import VideoAttachmentRequest
 from maxo.utils.upload_media import InputFile
 
 MediaInput: TypeAlias = InputFile | MediaAttachmentsRequests

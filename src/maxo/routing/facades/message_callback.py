@@ -1,11 +1,11 @@
 from maxo.omit import Omittable
+from maxo.routing.facades.base import BaseUpdateFacade
 from maxo.routing.updates.message_callback import MessageCallback
+from maxo.routing.updates.mixins.callback import CallbackMethodsFacade
+from maxo.routing.updates.mixins.message import MessageMethodsFacade
 from maxo.types.callback import Callback
 from maxo.types.message import Message
 from maxo.types.user import User
-from maxo.utils.facades.methods.callback import CallbackMethodsFacade
-from maxo.utils.facades.methods.message import MessageMethodsFacade
-from maxo.utils.facades.updates.base import BaseUpdateFacade
 
 
 class MessageCallbackFacade(

@@ -4,7 +4,7 @@ from maxo.routing.signals import MaxoUpdate
 from maxo.routing.updates.base import BaseUpdate
 
 if TYPE_CHECKING:
-    from maxo.utils.facades import ErrorEventFacade
+    from maxo.routing.facades import ErrorEventFacade
 
 _UpdateT = TypeVar("_UpdateT", bound=BaseUpdate)
 _ExceptionT = TypeVar("_ExceptionT", bound=Exception)
@@ -25,6 +25,6 @@ class ErrorEvent(BaseUpdate, Generic[_ExceptionT, _UpdateT]):
     @property
     def facade(self) -> "ErrorEventFacade[_ExceptionT, _UpdateT]":
         # TODO: Разобраться
-        from maxo.utils.facades import ErrorEventFacade
+        from maxo.routing.facades import ErrorEventFacade
 
         return ErrorEventFacade(self.bot, self)

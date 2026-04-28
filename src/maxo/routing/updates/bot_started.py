@@ -4,13 +4,14 @@ from maxo.enums.update_type import UpdateType
 from maxo.errors import AttributeIsEmptyError
 from maxo.omit import Omittable, Omitted, is_defined
 from maxo.routing.updates.base import MaxUpdate
+from maxo.routing.updates.mixins.bot import BotMethodsFacade
 from maxo.types.user import User
 
 if TYPE_CHECKING:
-    from maxo.utils.facades import BotStartedFacade
+    from maxo.routing.facades import BotStartedFacade
 
 
-class BotStarted(MaxUpdate):
+class BotStarted(MaxUpdate, BotMethodsFacade):
     """
     Бот получает этот тип обновления, как только пользователь нажал кнопку `Start`
 
@@ -56,36 +57,6 @@ class BotStarted(MaxUpdate):
 
     @property
     def facade(self) -> "BotStartedFacade":
-        from maxo.utils.facades import BotStartedFacade
+        from maxo.routing.facades import BotStartedFacade
 
         return BotStartedFacade(self.bot, self)
-
-    if TYPE_CHECKING:
-        from maxo.utils.type_promote import promote
-
-        send_message = promote(BotStartedFacade.send_message)
-        get_chat = promote(BotStartedFacade.get_chat)
-        get_members = promote(BotStartedFacade.get_members)
-        leave_chat = promote(BotStartedFacade.leave_chat)
-        get_messages = promote(BotStartedFacade.get_messages)
-    else:
-
-        @property
-        def send_message(self):
-            return self.facade.send_message
-
-        @property
-        def get_chat(self):
-            return self.facade.get_chat
-
-        @property
-        def get_members(self):
-            return self.facade.get_members
-
-        @property
-        def leave_chat(self):
-            return self.facade.leave_chat
-
-        @property
-        def get_messages(self):
-            return self.facade.get_messages

@@ -13,6 +13,7 @@ from maxo.dialogs.manager.attachment_facade import DialogAttachmentsFacade
 from maxo.enums import AttachmentType, UploadType
 from maxo.errors import MaxBotApiError, MaxBotBadRequestError
 from maxo.omit import Omitted
+from maxo.routing.updates.mixins.attachments import MediaInput
 from maxo.types import (
     AttachmentsRequests,
     AudioAttachmentRequest,
@@ -25,7 +26,6 @@ from maxo.types import (
     PhotoAttachmentRequest,
     VideoAttachmentRequest,
 )
-from maxo.utils.facades.methods.attachments import MediaInput
 from maxo.utils.upload_media import FSInputFile, InputFile
 
 logger = getLogger(__name__)

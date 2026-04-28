@@ -41,7 +41,7 @@
 
 .. code-block:: python
 
-    from maxo.utils.facades.methods.attachments import MediaInput
+    from maxo.routing.facades.methods.attachments import MediaInput
 
 Загрузка файла
 ~~~~~~~~~~~~~~

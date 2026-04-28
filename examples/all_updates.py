@@ -2,6 +2,23 @@ import logging
 import os
 
 from maxo import Bot, Dispatcher
+from maxo.routing.facades import (
+    BotAddedToChatFacade,
+    BotRemovedFromChatFacade,
+    BotStartedFacade,
+    BotStoppedFacade,
+    ChatTitleChangedFacade,
+    DialogClearedFacade,
+    DialogMutedFacade,
+    DialogRemovedFacade,
+    DialogUnmutedFacade,
+    MessageCallbackFacade,
+    MessageCreatedFacade,
+    MessageEditedFacade,
+    MessageRemovedFacade,
+    UserAddedToChatFacade,
+    UserRemovedFromChatFacade,
+)
 from maxo.routing.updates import (
     BotAddedToChat,
     BotRemovedFromChat,
@@ -20,23 +37,6 @@ from maxo.routing.updates import (
     UserRemovedFromChat,
 )
 from maxo.transport.long_polling import LongPolling
-from maxo.utils.facades import (
-    BotAddedToChatFacade,
-    BotRemovedFromChatFacade,
-    BotStartedFacade,
-    BotStoppedFacade,
-    ChatTitleChangedFacade,
-    DialogClearedFacade,
-    DialogMutedFacade,
-    DialogRemovedFacade,
-    DialogUnmutedFacade,
-    MessageCallbackFacade,
-    MessageCreatedFacade,
-    MessageEditedFacade,
-    MessageRemovedFacade,
-    UserAddedToChatFacade,
-    UserRemovedFromChatFacade,
-)
 
 logger = logging.getLogger(__name__)
 

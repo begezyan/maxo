@@ -3,10 +3,10 @@ import os
 
 from maxo import Bot, Dispatcher
 from maxo.enums import TextFormat
+from maxo.routing.facades import MessageCreatedFacade
 from maxo.routing.filters import Command
 from maxo.routing.updates import MessageCreated
 from maxo.transport.long_polling import LongPolling
-from maxo.utils.facades import MessageCreatedFacade
 from maxo.utils.formatting import (
     Bold,
     Heading,

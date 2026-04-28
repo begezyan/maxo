@@ -13,10 +13,10 @@ from dishka import AsyncContainer, Provider, Scope, make_async_container, provid
 
 from maxo import Bot, Ctx, Dispatcher
 from maxo.integrations.dishka import CONTAINER_NAME, setup_dishka
+from maxo.routing.facades import MessageCreatedFacade
 from maxo.routing.interfaces.middleware import BaseMiddleware, NextMiddleware
 from maxo.routing.updates import MessageCreated
 from maxo.transport.long_polling import LongPolling
-from maxo.utils.facades import MessageCreatedFacade
 
 
 class GreeterService:
