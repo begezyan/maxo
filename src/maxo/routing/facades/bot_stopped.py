@@ -1,7 +1,7 @@
 from maxo.omit import Omittable
 from maxo.routing.facades.base import BaseUpdateFacade
 from maxo.routing.updates.bot_stopped import BotStopped
-from maxo.routing.updates.mixins.chat import ChatMethodsFacade
+from maxo.routing.updates.mixins import ChatMethodsFacade
 from maxo.types.user import User
 
 

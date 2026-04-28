@@ -1,6 +1,6 @@
 from maxo.routing.facades.base import BaseUpdateFacade
 from maxo.routing.updates.message_removed import MessageRemoved
-from maxo.routing.updates.mixins.chat import ChatMethodsFacade
+from maxo.routing.updates.mixins import ChatMethodsFacade
 
 
 class MessageRemovedFacade(BaseUpdateFacade[MessageRemoved], ChatMethodsFacade):

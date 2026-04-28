@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING
 
 from maxo.enums.update_type import UpdateType
 from maxo.routing.updates.base import MaxUpdate
-from maxo.routing.updates.mixins.chat import ChatMethodsFacade
+from maxo.routing.updates.mixins import ChatMethodsFacade
 from maxo.types.user import User
 
 if TYPE_CHECKING:

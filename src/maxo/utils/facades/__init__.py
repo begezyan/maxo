@@ -3,8 +3,11 @@
 import warnings
 
 warnings.warn(
-    "Фасады были перенесены из `maxo.utils.facades` в `maxo.routing.facades`. "
-    "Пожалуйста, обновите импорты на 'from maxo.routing.facades import ...'",
+    "Фасады были перенесены из `maxo.utils.facades` "
+    "в `maxo.routing.facades` и `maxo.routings.updates.mixins`. "
+    "Пожалуйста, обновите импорты "
+    "на `from maxo.routing.facades import ...` "
+    "или `from maxo.routing.updates.mixins import ...`",
     DeprecationWarning,
     stacklevel=2,
 )

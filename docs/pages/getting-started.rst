@@ -56,8 +56,8 @@
           import os
 
           from maxo import Bot, Dispatcher
-          from maxo.routing.updates.message_created import MessageCreated
-          from maxo.routing.facades.updates.message_created import MessageCreatedFacade
+          from maxo.routing.updates import MessageCreated
+          from maxo.routing.facades.updates import MessageCreatedFacade
           from maxo.transport.long_polling import LongPolling
 
           bot = Bot(os.environ["TOKEN"])
@@ -81,7 +81,7 @@
 
           from maxo import Bot, Dispatcher, Router
           from maxo.routing.filters import CommandStart
-          from maxo.routing.updates.message_created import MessageCreated
+          from maxo.routing.updates import MessageCreated
           from maxo.routing.facades import MessageCreatedFacade
           from maxo.transport.long_polling import LongPolling
 

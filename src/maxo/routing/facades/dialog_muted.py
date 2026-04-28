@@ -3,7 +3,7 @@ from datetime import datetime
 from maxo.omit import Omittable
 from maxo.routing.facades.base import BaseUpdateFacade
 from maxo.routing.updates.dialog_muted import DialogMuted
-from maxo.routing.updates.mixins.chat import ChatMethodsFacade
+from maxo.routing.updates.mixins import ChatMethodsFacade
 from maxo.types.user import User
 
 
