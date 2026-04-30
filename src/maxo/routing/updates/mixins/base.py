@@ -1,22 +1,18 @@
-from abc import abstractmethod
-from typing import TYPE_CHECKING
+"""
+Класс должен наследоваться от ABC или Protocol для работы @abstractmethod,
+но так как MaxoType сделан через метакласс,
+то он конфликтует с ABC в моделях апдейтах (миксины всё такое).
+Из-за этого фасады и их наследники не наследуются от ABC.
 
-if TYPE_CHECKING:
-    from maxo import Bot
+Из-за того, что в BotMixin надо указать __slots__, и без __init__ это не сделать,
+и наследование от BaseMethodsFacade и BotMixin одновременно ломает что-то питоновское,
+и BaseMethodsFacade по сути определял только пропертю bot,
+то BaseMethodsFacade просто стал BotMixin'ом.
 
+https://github.com/K1rL3s/maxo/pull/103
+https://github.com/K1rL3s/maxo/pull/107
+"""
 
-class BaseMethodsFacade:
-    """
-    Класс должен наследоваться от `ABC` или `Protocol` для работы `@abstractmethod`,
-    но так как `MaxoType` сделан через метакласс,
-    то он конфликтует с ABC в моделях апдейтах (миксины всё такое).
-    Из-за этого фасады и их наследники не наследуются от `ABC`.
+from maxo.types import BotMixin
 
-    https://github.com/K1rL3s/maxo/pull/103
-    https://github.com/K1rL3s/maxo/pull/107
-    """
-
-    @property
-    @abstractmethod
-    def bot(self) -> "Bot":
-        raise NotImplementedError
+BaseMethodsFacade = BotMixin

@@ -1,14 +1,9 @@
-from typing import TYPE_CHECKING
-
 from maxo.enums.update_type import UpdateType
 from maxo.errors import AttributeIsEmptyError
 from maxo.omit import Omittable, Omitted, is_defined
 from maxo.routing.updates.base import MaxUpdate
 from maxo.routing.updates.mixins import ChatMethodsFacade
 from maxo.types.user import User
-
-if TYPE_CHECKING:
-    from maxo.routing.facades import UserAddedToChatFacade
 
 
 class UserAddedToChat(MaxUpdate, ChatMethodsFacade):
@@ -44,9 +39,3 @@ class UserAddedToChat(MaxUpdate, ChatMethodsFacade):
             obj=self,
             attr="inviter_id",
         )
-
-    @property
-    def facade(self) -> "UserAddedToChatFacade":
-        from maxo.routing.facades import UserAddedToChatFacade
-
-        return UserAddedToChatFacade(self.bot, self)

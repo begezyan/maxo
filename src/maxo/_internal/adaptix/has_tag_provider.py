@@ -4,7 +4,7 @@ from adaptix import Chain, Provider, dumper, loader
 from adaptix._internal.provider.loc_stack_filtering import Pred
 from adaptix.load_error import LoadError
 
-from maxo._internal._adaptix.concat_provider import concat_provider
+from maxo._internal.adaptix.concat_provider import concat_provider
 
 
 def _loader_has_tag(pred: Pred, tag: str, value: Any) -> Provider:

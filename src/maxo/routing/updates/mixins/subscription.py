@@ -10,6 +10,8 @@ if TYPE_CHECKING:
 
 
 class SubscriptionMethodsFacade(BotMethodsFacade):
+    __slots__ = ()
+
     async def get_subscriptions(self) -> GetSubscriptionsResult:
         return await self.bot.get_subscriptions()
 

@@ -1,14 +1,9 @@
-from typing import TYPE_CHECKING
-
 from maxo.enums.update_type import UpdateType
 from maxo.errors import AttributeIsEmptyError
 from maxo.omit import Omittable, Omitted, is_defined
 from maxo.routing.updates.base import MaxUpdate
 from maxo.routing.updates.mixins.message import MessageMethodsFacade
 from maxo.types.message import Message
-
-if TYPE_CHECKING:
-    from maxo.routing.facades import MessageCreatedFacade
 
 
 class MessageCreated(MaxUpdate, MessageMethodsFacade):
@@ -48,9 +43,3 @@ class MessageCreated(MaxUpdate, MessageMethodsFacade):
         if is_defined(self.message.sender):
             return self.message.sender.user_id
         return None
-
-    @property
-    def facade(self) -> "MessageCreatedFacade":
-        from maxo.routing.facades import MessageCreatedFacade
-
-        return MessageCreatedFacade(self.bot, self)

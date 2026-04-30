@@ -104,17 +104,17 @@ class StatesGroupMeta(type):
         cls = super().__new__(mcs, name, bases, namespace)
 
         states = []
-        childs = []
+        children = []
 
         for arg in namespace.values():
             if isinstance(arg, State):
                 states.append(arg)
             elif inspect.isclass(arg) and issubclass(arg, StatesGroup):
                 child = cls._prepare_child(arg)
-                childs.append(child)
+                children.append(child)
 
         cls.__parent__ = None
-        cls.__childs__ = tuple(childs)
+        cls.__childs__ = tuple(children)
         cls.__states__ = tuple(states)
         cls.__state_names__ = tuple(state.state for state in states)
 

@@ -8,6 +8,8 @@ from maxo.types.simple_query_result import SimpleQueryResult
 
 
 class CallbackMethodsFacade(BotMethodsFacade):
+    __slots__ = ()
+
     @property
     @abstractmethod
     def callback(self) -> Callback:

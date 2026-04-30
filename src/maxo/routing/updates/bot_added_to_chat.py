@@ -1,12 +1,7 @@
-from typing import TYPE_CHECKING
-
 from maxo.enums.update_type import UpdateType
 from maxo.routing.updates.base import MaxUpdate
 from maxo.routing.updates.mixins import ChatMethodsFacade
 from maxo.types.user import User
-
-if TYPE_CHECKING:
-    from maxo.routing.facades import BotAddedToChatFacade
 
 
 class BotAddedToChat(MaxUpdate, ChatMethodsFacade):
@@ -28,9 +23,3 @@ class BotAddedToChat(MaxUpdate, ChatMethodsFacade):
     """Указывает, был ли бот добавлен в канал или нет"""
     user: User
     """Пользователь, добавивший бота в чат"""
-
-    @property
-    def facade(self) -> "BotAddedToChatFacade":
-        from maxo.routing.facades import BotAddedToChatFacade
-
-        return BotAddedToChatFacade(self.bot, self)

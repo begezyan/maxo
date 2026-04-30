@@ -4,13 +4,11 @@ from datetime import UTC, datetime
 from typing import TYPE_CHECKING
 
 from adaptix import Chain, P, Retort, dumper, loader
-from adaptix._internal.provider.loc_stack_filtering import OriginSubclassLSC
-from adaptix._internal.type_tools import exec_type_checking
+from adaptix.type_tools import exec_type_checking
 from unihttp.markers import QueryMarker
 from unihttp.serializers.adaptix import DEFAULT_RETORT, for_marker
 
-from maxo._internal._adaptix.concat_provider import concat_provider
-from maxo._internal._adaptix.has_tag_provider import has_tag_provider
+from maxo._internal.adaptix import concat_provider, has_tag_provider, is_subclass
 from maxo.bot.defaults import BotDefaults
 from maxo.bot.methods import EditMessage, SendMessage
 from maxo.bot.warming_up import WarmingUpType, warming_up_retort
@@ -212,7 +210,7 @@ def create_retort(
     )
     if bot is not None:
         retort = retort.extend(
-            recipe=[loader(OriginSubclassLSC(base.MaxoType), _load_bot, Chain.LAST)],
+            recipe=[loader(is_subclass(base.MaxoType), _load_bot, Chain.LAST)],
         )
 
     if warming_up:

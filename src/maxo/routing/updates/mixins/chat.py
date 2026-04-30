@@ -15,6 +15,8 @@ from maxo.types.simple_query_result import SimpleQueryResult
 
 
 class ChatMethodsFacade(AttachmentsFacade):
+    __slots__ = ()
+
     @property
     @abstractmethod
     def chat_id(self) -> int:

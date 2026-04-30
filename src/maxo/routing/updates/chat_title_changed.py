@@ -1,12 +1,7 @@
-from typing import TYPE_CHECKING
-
 from maxo.enums.update_type import UpdateType
 from maxo.routing.updates.base import MaxUpdate
 from maxo.routing.updates.mixins import ChatMethodsFacade
 from maxo.types.user import User
-
-if TYPE_CHECKING:
-    from maxo.routing.facades import ChatTitleChangedFacade
 
 
 class ChatTitleChanged(MaxUpdate, ChatMethodsFacade):
@@ -28,9 +23,3 @@ class ChatTitleChanged(MaxUpdate, ChatMethodsFacade):
     """Новое название"""
     user: User
     """Пользователь, который изменил название"""
-
-    @property
-    def facade(self) -> "ChatTitleChangedFacade":
-        from maxo.routing.facades import ChatTitleChangedFacade
-
-        return ChatTitleChangedFacade(self.bot, self)

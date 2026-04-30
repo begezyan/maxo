@@ -13,7 +13,6 @@ from .message_callback import MessageCallbackFacade
 from .message_created import MessageCreatedFacade
 from .message_edited import MessageEditedFacade
 from .message_removed import MessageRemovedFacade
-from .middleware import FacadeMiddleware
 from .user_added_to_chat import UserAddedToChatFacade
 from .user_removed_from_chat import UserRemovedFromChatFacade
 
@@ -29,7 +28,6 @@ __all__ = (
     "DialogRemovedFacade",
     "DialogUnmutedFacade",
     "ErrorEventFacade",
-    "FacadeMiddleware",
     "MessageCallbackFacade",
     "MessageCreatedFacade",
     "MessageEditedFacade",

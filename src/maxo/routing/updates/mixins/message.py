@@ -14,6 +14,8 @@ from maxo.utils.helpers.calculating import calculate_chat_id_and_user_id
 
 
 class MessageMethodsFacade(AttachmentsFacade):
+    __slots__ = ()
+
     @property
     @abstractmethod
     def message(self) -> Message:

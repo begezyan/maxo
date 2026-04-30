@@ -29,6 +29,8 @@ MediaInput: TypeAlias = InputFile | MediaAttachmentsRequests
 
 
 class AttachmentsFacade(BotMethodsFacade):
+    __slots__ = ()
+
     async def build_attachments(
         self,
         base: Sequence[AttachmentsRequests],

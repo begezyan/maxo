@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, TypeAlias
+from typing import TypeAlias
 
 from maxo.enums.update_type import UpdateType
 from maxo.errors import AttributeIsEmptyError
@@ -9,9 +9,6 @@ from maxo.routing.updates.mixins.message import MessageMethodsFacade
 from maxo.types.callback import Callback
 from maxo.types.message import Message
 from maxo.types.user import User
-
-if TYPE_CHECKING:
-    from maxo.routing.facades import MessageCallbackFacade
 
 
 class MessageCallback(MaxUpdate, MessageMethodsFacade, CallbackMethodsFacade):
@@ -68,12 +65,6 @@ class MessageCallback(MaxUpdate, MessageMethodsFacade, CallbackMethodsFacade):
         return self.callback.user
 
     from_user = user  # Подражание aiogram
-
-    @property
-    def facade(self) -> "MessageCallbackFacade":
-        from maxo.routing.facades import MessageCallbackFacade
-
-        return MessageCallbackFacade(self.bot, self)
 
 
 CallbackQuery: TypeAlias = MessageCallback  # Подражание aiogram
