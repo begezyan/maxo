@@ -99,3 +99,16 @@ async def test_callback_show_and_answer_run_in_parallel() -> None:
 
     # Sequential = ~0.2s, parallel = ~0.1s. Порог 0.15s.
     assert elapsed < 0.15, f"expected parallel (~0.1s), got {elapsed:.3f}s"
+
+
+@pytest.mark.asyncio
+async def test_callback_show_exception_propagates() -> None:
+    """Если show() кидает - exception пробрасывается, как и в sequential варианте."""
+    dialog_manager = _make_dialog_manager(
+        show_coro=AsyncMock(side_effect=RuntimeError("show failed")),
+    )
+    dialog = _make_dialog(need_refresh=True)
+    callback = _make_callback(f"intentid{CB_SEP}payload")
+
+    with pytest.raises(RuntimeError, match="show failed"):
+        await Dialog._callback_handler(dialog, callback, ctx={}, dialog_manager=dialog_manager)
