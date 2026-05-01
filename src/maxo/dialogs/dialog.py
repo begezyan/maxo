@@ -1,3 +1,4 @@
+import asyncio
 import dataclasses
 from collections.abc import Awaitable, Callable
 from logging import getLogger
@@ -173,9 +174,10 @@ class Dialog(Router, DialogProtocol):
             )
         except CancelEventProcessing:
             processed = False
+        tasks: list[Awaitable[Any]] = [dialog_manager.answer_callback()]
         if self._need_refresh(processed, old_context, dialog_manager):
-            await dialog_manager.show()
-        await dialog_manager.answer_callback()
+            tasks.append(dialog_manager.show())
+        await asyncio.gather(*tasks)
 
     def _need_refresh(
         self,
