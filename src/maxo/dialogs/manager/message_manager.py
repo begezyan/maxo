@@ -1,5 +1,6 @@
 import warnings
 from collections.abc import Sequence
+from datetime import UTC, datetime
 from logging import getLogger
 
 from maxo import Bot
@@ -22,6 +23,7 @@ from maxo.types import (
     MediaAttachments,
     MediaAttachmentsRequests,
     Message,
+    MessageBody,
     PhotoAttachmentRequest,
     VideoAttachmentRequest,
 )
@@ -252,7 +254,21 @@ class MessageManager(MessageManagerProtocol):
             attachments=attachments,
             format=new_message.parse_mode,
         )
-        return await bot.get_message_by_id(message_id=old_message.message_id)
+        # Синтезируем Message локально вместо лишнего GET /messages/{mid}
+        # attachments в MessageBody response-типизированы; реально мы их не знаем
+        # после edit без рефетча, поэтому переиспользуем старые - downstream
+        # _combine использует их как новое состояние OldMessage. Минорная
+        # стагнация в случае смены media, но без AttributeError.
+        return Message(
+            body=MessageBody(
+                mid=old_message.message_id,
+                seq=old_message.sequence_id,
+                text=new_message.text,
+                attachments=old_message.attachments,
+            ),
+            recipient=old_message.recipient,
+            timestamp=datetime.now(UTC),
+        )
 
     async def send_message(self, bot: Bot, new_message: NewMessage) -> Message:
         if new_message.link_preview_options:
