@@ -152,11 +152,13 @@ class MessageManager(MessageManagerProtocol):
         bot: Bot,
         show_mode: ShowMode,
         old_message: OldMessage | None,
-    ) -> Message | None:
+    ) -> str | None:
         if show_mode is ShowMode.NO_UPDATE:
             return None
         if show_mode is ShowMode.DELETE_AND_SEND and old_message:
-            return await self.remove_message_safe(bot, old_message, None)
+            # удалили - msg_id больше не валиден
+            await self.remove_message_safe(bot, old_message, None)
+            return None
         return await self._remove_kbd(bot, old_message, None)
 
     async def _remove_kbd(
@@ -164,14 +166,14 @@ class MessageManager(MessageManagerProtocol):
         bot: Bot,
         old_message: OldMessage | None,
         new_message: NewMessage | None,
-    ) -> Message | None:
+    ) -> str | None:
         return await self.remove_inline_kbd(bot, old_message)
 
     async def remove_inline_kbd(
         self,
         bot: Bot,
         old_message: OldMessage | None,
-    ) -> Message | None:
+    ) -> str | None:
         if not old_message or old_message.keyboard is None:
             return None
         logger.debug("remove_inline_kbd in %s", old_message.recipient)
@@ -185,18 +187,18 @@ class MessageManager(MessageManagerProtocol):
                 message_id=old_message.message_id,
                 attachments=new_attachments,
             )
-            return await bot.get_message_by_id(message_id=old_message.message_id)
+            return old_message.message_id
         except MaxBotBadRequestError as err:
             if "message is not modified" in err.message:
-                pass  # nothing to remove
-            elif (
+                # клавиатуры уже не было, но сообщение есть
+                return old_message.message_id
+            if (
                 "message can't be edited" in err.message
                 or "message to edit not found" in err.message
                 or "MESSAGE_ID_INVALID" in err.message
             ):
-                pass
-            else:
-                raise
+                return None
+            raise
 
     async def remove_message_safe(
         self,
