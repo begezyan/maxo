@@ -64,3 +64,16 @@ async def test_callback_calls_show_and_answer_when_refresh_needed() -> None:
 
     dialog_manager.show.assert_awaited_once()
     dialog_manager.answer_callback.assert_awaited_once()
+
+
+@pytest.mark.asyncio
+async def test_callback_only_answer_when_no_refresh() -> None:
+    """Если _need_refresh=False - вызывается только answer_callback."""
+    dialog_manager = _make_dialog_manager()
+    dialog = _make_dialog(need_refresh=False)
+    callback = _make_callback(f"intentid{CB_SEP}payload")
+
+    await Dialog._callback_handler(dialog, callback, ctx={}, dialog_manager=dialog_manager)
+
+    dialog_manager.show.assert_not_called()
+    dialog_manager.answer_callback.assert_awaited_once()
