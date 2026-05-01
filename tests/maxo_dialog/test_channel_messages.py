@@ -4,12 +4,15 @@ from typing import Any
 import pytest
 
 from maxo import Dispatcher, Router
-from maxo.dialogs.api.entities import EventContext
+from maxo.dialogs import setup_dialogs
+from maxo.dialogs.api.entities import AccessSettings, EventContext, Stack
 from maxo.dialogs.api.entities.events import EVENT_CONTEXT_KEY
+from maxo.dialogs.context.access_validator import DefaultAccessValidator
 from maxo.dialogs.test_tools import BotClient, MockMessageManager
 from maxo.dialogs.test_tools.memory_storage import JsonMemoryStorage
 from maxo.enums import ChatType
 from maxo.fsm.key_builder import DefaultKeyBuilder
+from maxo.routing.middlewares.update_context import EVENT_FROM_USER_KEY
 
 
 @pytest.fixture
@@ -24,8 +27,6 @@ def message_manager() -> MockMessageManager:
 
 @pytest.fixture
 def dp(message_manager: MockMessageManager, captured_ctx: dict[str, Any]) -> Dispatcher:
-    from maxo.dialogs import setup_dialogs
-
     router = Router()
 
     @router.message_created()
@@ -91,11 +92,6 @@ async def test_event_context_user_none_visible_in_handler(
     assert ev_ctx.user is None
     assert ev_ctx.user_id is None
     assert ev_ctx.chat_id == -100
-
-
-from maxo.dialogs.api.entities import AccessSettings, Stack
-from maxo.dialogs.context.access_validator import DefaultAccessValidator
-from maxo.routing.middlewares.update_context import EVENT_FROM_USER_KEY
 
 
 @pytest.mark.asyncio
