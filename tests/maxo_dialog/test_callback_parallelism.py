@@ -1,5 +1,6 @@
 """Тесты параллельной обработки callback в Dialog._callback_handler - закрывает п.2 issue #110."""
 import asyncio
+import time
 import uuid
 from datetime import UTC, datetime
 from unittest.mock import AsyncMock, MagicMock
@@ -93,9 +94,9 @@ async def test_callback_show_and_answer_run_in_parallel() -> None:
     dialog = _make_dialog(need_refresh=True)
     callback = _make_callback(f"intentid{CB_SEP}payload")
 
-    start = asyncio.get_event_loop().time()
+    start = time.monotonic()
     await Dialog._callback_handler(dialog, callback, ctx={}, dialog_manager=dialog_manager)
-    elapsed = asyncio.get_event_loop().time() - start
+    elapsed = time.monotonic() - start
 
     # Sequential = ~0.2s, parallel = ~0.1s. Порог 0.15s.
     assert elapsed < 0.15, f"expected parallel (~0.1s), got {elapsed:.3f}s"
