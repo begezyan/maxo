@@ -3,11 +3,13 @@ from typing import Any
 
 import pytest
 
+from maxo import Dispatcher, Router
 from maxo.dialogs.api.entities import EventContext
 from maxo.dialogs.api.entities.events import EVENT_CONTEXT_KEY
 from maxo.dialogs.test_tools import BotClient, MockMessageManager
+from maxo.dialogs.test_tools.memory_storage import JsonMemoryStorage
 from maxo.enums import ChatType
-from maxo import Dispatcher, Router
+from maxo.fsm.key_builder import DefaultKeyBuilder
 
 
 @pytest.fixture
@@ -30,7 +32,10 @@ def dp(message_manager: MockMessageManager, captured_ctx: dict[str, Any]) -> Dis
     async def handler(event, ctx):
         captured_ctx["event_context"] = ctx[EVENT_CONTEXT_KEY]
 
-    dp = Dispatcher()
+    dp = Dispatcher(
+        storage=JsonMemoryStorage(),
+        key_builder=DefaultKeyBuilder(with_destiny=True),
+    )
     dp.include_router(router)
     setup_dialogs(dp, message_manager=message_manager)
     return dp
