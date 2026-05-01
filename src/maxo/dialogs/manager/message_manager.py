@@ -187,7 +187,6 @@ class MessageManager(MessageManagerProtocol):
                 message_id=old_message.message_id,
                 attachments=new_attachments,
             )
-            return old_message.message_id
         except MaxBotBadRequestError as err:
             if "message is not modified" in err.message:
                 # клавиатуры уже не было, но сообщение есть
@@ -199,6 +198,7 @@ class MessageManager(MessageManagerProtocol):
             ):
                 return None
             raise
+        return old_message.message_id
 
     async def remove_message_safe(
         self,
