@@ -26,7 +26,11 @@ class DefaultAccessValidator(StackAccessValidator):
         if not (access_settings.user_ids or access_settings.custom):
             return True
 
-        user: User = ctx[EVENT_FROM_USER_KEY]
+        user: User | None = ctx.get(EVENT_FROM_USER_KEY)
+        # Если access требует user_ids а user отсутствует (например, пост в канале)
+        # - доступ запрещён, AttributeError быть не должен
+        if user is None:
+            return False
         if user.id in access_settings.user_ids:  # noqa: SIM103
             return True
 
