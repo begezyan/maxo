@@ -76,3 +76,18 @@ async def test_storage_proxy_channel_message_removed(
 ) -> None:
     """MessageRemoved без user тоже не падает."""
     await channel_client.send_channel_message_removed(mid="42")
+
+
+@pytest.mark.asyncio
+async def test_event_context_user_none_visible_in_handler(
+    channel_client: BotClient,
+    captured_ctx: dict[str, Any],
+) -> None:
+    """Хендлер видит EventContext с user=None при channel-посте."""
+    await channel_client.send_channel_post("end-to-end")
+
+    ev_ctx: EventContext = captured_ctx["event_context"]
+    assert ev_ctx.bot is not None
+    assert ev_ctx.user is None
+    assert ev_ctx.user_id is None
+    assert ev_ctx.chat_id == -100
