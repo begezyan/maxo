@@ -59,3 +59,20 @@ async def test_storage_proxy_channel_message_created(
     assert ev_ctx.user_id is None
     assert ev_ctx.chat_id == -100
     assert ev_ctx.chat_type == ChatType.CHANNEL
+
+
+@pytest.mark.asyncio
+async def test_storage_proxy_channel_message_edited(
+    channel_client: BotClient,
+) -> None:
+    """MessageEdited без sender тоже не падает (smoke - feed_update не кидает AttributeError)."""
+    await channel_client.send_channel_message_edited("Edited", mid="42")
+
+
+@pytest.mark.asyncio
+async def test_storage_proxy_channel_message_removed(
+    channel_client: BotClient,
+    captured_ctx: dict[str, Any],
+) -> None:
+    """MessageRemoved без user тоже не падает."""
+    await channel_client.send_channel_message_removed(mid="42")
