@@ -77,3 +77,25 @@ async def test_callback_only_answer_when_no_refresh() -> None:
 
     dialog_manager.show.assert_not_called()
     dialog_manager.answer_callback.assert_awaited_once()
+
+
+@pytest.mark.asyncio
+async def test_callback_show_and_answer_run_in_parallel() -> None:
+    """show и answer_callback должны выполняться параллельно (gather), не последовательно."""
+
+    async def slow_show() -> None:
+        await asyncio.sleep(0.1)
+
+    async def slow_answer() -> None:
+        await asyncio.sleep(0.1)
+
+    dialog_manager = _make_dialog_manager(show_coro=slow_show, answer_coro=slow_answer)
+    dialog = _make_dialog(need_refresh=True)
+    callback = _make_callback(f"intentid{CB_SEP}payload")
+
+    start = asyncio.get_event_loop().time()
+    await Dialog._callback_handler(dialog, callback, ctx={}, dialog_manager=dialog_manager)
+    elapsed = asyncio.get_event_loop().time() - start
+
+    # Sequential = ~0.2s, parallel = ~0.1s. Порог 0.15s.
+    assert elapsed < 0.15, f"expected parallel (~0.1s), got {elapsed:.3f}s"
