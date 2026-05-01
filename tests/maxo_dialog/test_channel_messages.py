@@ -91,3 +91,35 @@ async def test_event_context_user_none_visible_in_handler(
     assert ev_ctx.user is None
     assert ev_ctx.user_id is None
     assert ev_ctx.chat_id == -100
+
+
+from maxo.dialogs.api.entities import AccessSettings, Stack
+from maxo.dialogs.context.access_validator import DefaultAccessValidator
+from maxo.routing.middlewares.update_context import EVENT_FROM_USER_KEY
+
+
+@pytest.mark.asyncio
+async def test_access_validator_allows_when_no_settings() -> None:
+    """Если access_settings отсутствуют - доступ разрешён даже без user."""
+    validator = DefaultAccessValidator()
+    stack = Stack(_id="default", access_settings=None)
+    ctx: dict = {EVENT_FROM_USER_KEY: None}
+
+    allowed = await validator.is_allowed(stack=stack, context=None, event=None, ctx=ctx)
+
+    assert allowed is True
+
+
+@pytest.mark.asyncio
+async def test_access_validator_denies_when_user_required_but_missing() -> None:
+    """Если access_settings требует user_ids а user=None - доступ запрещён (не AttributeError)."""
+    validator = DefaultAccessValidator()
+    stack = Stack(
+        _id="default",
+        access_settings=AccessSettings(user_ids=[1, 2, 3]),
+    )
+    ctx: dict = {EVENT_FROM_USER_KEY: None}
+
+    allowed = await validator.is_allowed(stack=stack, context=None, event=None, ctx=ctx)
+
+    assert allowed is False
