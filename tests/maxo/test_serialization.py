@@ -6,7 +6,7 @@ from maxo.bot.methods import EditMessage, SendMessage
 from maxo.enums import TextFormat
 from maxo.errors import AttributeIsEmptyError
 from maxo.omit import Omittable, Omitted, is_omitted
-from maxo.serialization import create_retort
+from maxo.serialization import create_retort, create_retort_with_bot
 from maxo.types import NewMessageBody
 from maxo.types.base import MaxoType
 
@@ -62,7 +62,7 @@ def test_bot_default_disable_link_preview(default: Omittable[bool]) -> None:
         assert data["query"]["disable_link_preview"] == default
 
 
-def test_retort_with_bot_load_bot() -> None:
+def test_retort_from_bot_load_bot() -> None:
     bot = Bot(token="", warming_up=False)
     retort = bot.retort
 
@@ -75,8 +75,21 @@ def test_retort_with_bot_load_bot() -> None:
     assert dump == data
 
 
+def test_retort_with_bot_load_bot() -> None:
+    bot = Bot(token="", warming_up=False)
+    retort = create_retort_with_bot(bot=bot, warming_up=False)
+
+    data = {"a": "a", "sub": {"b": 1}}
+
+    my = retort.load(data, MyType)
+    assert bot is my.bot is my.sub.bot
+
+    dump = retort.dump(my, MyType)
+    assert dump == data
+
+
 def test_retort_without_bot_no_load_bot() -> None:
-    retort = create_retort(warming_up=False, bot=None)
+    retort = create_retort(warming_up=False)
 
     data = {"a": "a", "sub": {"b": 1}}
 
