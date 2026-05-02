@@ -1,13 +1,14 @@
-"""
-Из-за того, что в BotMixin надо указать __slots__, и без __init__ это не сделать,
-и наследование от BaseMethodsFacade и BotMixin одновременно ломает что-то питоновское,
-и BaseMethodsFacade по сути определял только пропертю bot,
-то BaseMethodsFacade просто стал BotMixin'ом.
+from abc import ABC, abstractmethod
+from typing import TYPE_CHECKING
 
-https://github.com/K1rL3s/maxo/pull/103
-https://github.com/K1rL3s/maxo/pull/107
-"""
+if TYPE_CHECKING:
+    from maxo import Bot
 
-from maxo.types import BotMixin
 
-BaseMethodsFacade = BotMixin
+class BaseMethodsFacade(ABC):
+    __slots__ = ()
+
+    @property
+    @abstractmethod
+    def bot(self) -> "Bot":
+        raise NotImplementedError

@@ -1,4 +1,5 @@
 import asyncio
+from abc import ABC
 from collections.abc import Sequence
 from typing import TypeAlias
 
@@ -28,7 +29,7 @@ from maxo.utils.upload_media import InputFile
 MediaInput: TypeAlias = InputFile | MediaAttachmentsRequests
 
 
-class AttachmentsFacade(SubscriptionMethodsFacade):
+class AttachmentsFacade(SubscriptionMethodsFacade, ABC):
     __slots__ = ()
 
     async def build_attachments(

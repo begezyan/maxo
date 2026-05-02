@@ -44,11 +44,10 @@ class BaseMaxoType(metaclass=_MaxoTypeABCMeta):
 class BotMixin:
     __slots__ = ("_bot",)
 
-    def __init__(self, bot: Optional["Bot"] = None) -> None:
-        self._bot = bot
-
     @property
     def bot(self) -> "Bot":
+        self._bot = getattr(self, "_bot", None)
+
         if is_defined(self._bot):
             return self._bot
 
@@ -67,5 +66,4 @@ class BotMixin:
 
 
 class MaxoType(BaseMaxoType, BotMixin):
-    def __post_init__(self) -> None:
-        BotMixin.__init__(self)
+    pass

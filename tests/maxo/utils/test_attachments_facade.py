@@ -11,13 +11,28 @@ from maxo.utils.upload_media import BufferedInputFile
 
 
 class DummyFacade(AttachmentsFacade):
-    pass
+    def __init__(self, bot: Bot) -> None:
+        self._bot = bot
+
+    @property
+    def bot(self) -> Bot:
+        return self._bot
 
 
 class DummyMessageFacade(MessageMethodsFacade):
+    def __init__(self, bot: Bot) -> None:
+        self._bot = bot
+
+    @property
+    def bot(self) -> Bot:
+        return self._bot
+
     @property
     def message(self) -> object:
         return AsyncMock()
+
+    def chat_id(self) -> int:
+        return 0
 
 
 @pytest.fixture

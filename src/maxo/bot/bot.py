@@ -9,6 +9,7 @@ from adaptix import Retort
 from aiohttp import ClientTimeout
 from unihttp.bind_method import bind_method
 from unihttp.clients.base import BaseAsyncClient
+from unihttp.method import BaseMethod, ResponseType
 from unihttp.middlewares import AsyncMiddleware
 
 from maxo import loggers
@@ -151,8 +152,8 @@ class Bot(BaseAsyncClient):
 
     async def call_method(
         self,
-        method: MaxoMethod[_MethodResultT],
-    ) -> _MethodResultT:
+        method: BaseMethod[ResponseType],
+    ) -> ResponseType:
         return await self.state.api_client.call_method(method)
 
     async def silent_call_method(self, method: MaxoMethod[_MethodResultT]) -> None:

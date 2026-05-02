@@ -13,9 +13,13 @@ class BaseUpdateFacade(SubscriptionMethodsFacade, Generic[_UpdateT]):
         bot: Bot,
         update: _UpdateT,
     ) -> None:
-        super().__init__(bot)
+        self._bot = bot
         self._update = update
 
     @property
     def update(self) -> _UpdateT:
         return self._update
+
+    @property
+    def bot(self) -> Bot:
+        return self._bot

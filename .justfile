@@ -37,7 +37,7 @@ tests:
 test-all:
     nox
 
-just tests-all:
+tests-all:
     just test-all
 
 all:

@@ -1,3 +1,4 @@
+from abc import ABC
 from typing import TYPE_CHECKING
 
 from maxo.omit import Omittable, Omitted
@@ -9,7 +10,7 @@ if TYPE_CHECKING:
     from maxo.types.update_list import UpdateList
 
 
-class SubscriptionMethodsFacade(BotMethodsFacade):
+class SubscriptionMethodsFacade(BotMethodsFacade, ABC):
     __slots__ = ()
 
     async def get_subscriptions(self) -> GetSubscriptionsResult:

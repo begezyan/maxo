@@ -61,7 +61,7 @@
 
           from maxo import Bot, Dispatcher
           from maxo.routing.updates import MessageCreated
-          from maxo.routing.facades.updates import MessageCreatedFacade
+          from maxo.routing.facades import MessageCreatedFacade
           from maxo.transport.long_polling import LongPolling
 
           bot = Bot(os.environ["TOKEN"])
