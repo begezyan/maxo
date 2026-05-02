@@ -107,7 +107,8 @@ class Dispatcher(Router):
         ctx = Ctx({**self.workflow_data, "bot": bot, "update": update})
         ctx["ctx"] = ctx
 
-        # TODO: Костыль для фасадов и подобного. Можно ли иначе?
+        # Костыль для тестов (в них апдейты создаются без `.as_`)
+        # и неправильных вызовах `.feed_update`. Удачи отдебажить >:)
         update.bot = bot
 
         return await self.trigger(ctx)
@@ -117,7 +118,8 @@ class Dispatcher(Router):
         ctx_copy["ctx"] = ctx_copy
         ctx_copy["update"] = update.update
 
-        # TODO: Костыль для фасадов и подобного. Можно ли иначе?
+        # Костыль для тестов (в них апдейты создаются без `.as_`)
+        # и неправильных вызовах `.feed_update`. Удачи отдебажить >:)
         update.update.bot = update.bot = ctx["bot"]
 
         result = await self.trigger(ctx_copy)
