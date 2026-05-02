@@ -1,4 +1,3 @@
-from abc import ABCMeta
 from dataclasses import dataclass
 from typing import TYPE_CHECKING, Any, Optional, Self, dataclass_transform
 
@@ -33,21 +32,18 @@ class _MaxoTypeMetaClass(type):
         )(class_)
 
 
-class _MaxoTypeABCMeta(_MaxoTypeMetaClass, ABCMeta):
-    pass
-
-
-class BaseMaxoType(metaclass=_MaxoTypeABCMeta):
+class BaseMaxoType(metaclass=_MaxoTypeMetaClass):
     pass
 
 
 class BotMixin:
     __slots__ = ("_bot",)
 
+    def __init__(self, bot: Optional["Bot"] = None) -> None:
+        self._bot = bot
+
     @property
     def bot(self) -> "Bot":
-        self._bot = getattr(self, "_bot", None)
-
         if is_defined(self._bot):
             return self._bot
 
@@ -66,4 +62,5 @@ class BotMixin:
 
 
 class MaxoType(BaseMaxoType, BotMixin):
-    pass
+    def __post_init__(self) -> None:
+        BotMixin.__init__(self)

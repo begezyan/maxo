@@ -1,4 +1,4 @@
-from abc import ABC, abstractmethod
+from abc import abstractmethod
 from collections.abc import Sequence
 
 from maxo.enums import MessageLinkType, TextFormat
@@ -12,7 +12,7 @@ from maxo.types.simple_query_result import SimpleQueryResult
 from maxo.utils.helpers.calculating import calculate_chat_id_and_user_id
 
 
-class MessageMethodsFacade(ChatMethodsFacade, ABC):
+class MessageMethodsFacade(ChatMethodsFacade):
     __slots__ = ()
 
     @property

@@ -1,4 +1,4 @@
-from abc import ABC, abstractmethod
+from abc import abstractmethod
 
 from maxo.omit import Omittable, Omitted
 from maxo.routing.updates.mixins.subscription import SubscriptionMethodsFacade
@@ -7,7 +7,7 @@ from maxo.types.new_message_body import NewMessageBody
 from maxo.types.simple_query_result import SimpleQueryResult
 
 
-class CallbackMethodsFacade(SubscriptionMethodsFacade, ABC):
+class CallbackMethodsFacade(SubscriptionMethodsFacade):
     __slots__ = ()
 
     @property
