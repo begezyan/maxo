@@ -22,6 +22,10 @@ codespell:
 slots:
     PYTHONPATH=src slotscheck -m maxo
 
+[windows]
+slots:
+    $env:PYTHONPATH="src"; slotscheck -m maxo
+
 bandit:
     bandit src -r
 

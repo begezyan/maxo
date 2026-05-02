@@ -57,7 +57,7 @@ class MessageCallback(MaxUpdate, MessageMethodsFacade, CallbackMethodsFacade):
         return self.callback.callback_id
 
     @property
-    def payload(self) -> str | None:
+    def payload(self) -> Omittable[str]:
         return self.callback.payload
 
     @property

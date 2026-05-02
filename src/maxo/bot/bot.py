@@ -99,7 +99,7 @@ class Bot(BaseAsyncClient):
             warming_up=warming_up,
         )
 
-        self._state = EmptyBotState()
+        self._state: BotState = EmptyBotState()
 
     @property
     def state(self) -> BotState:

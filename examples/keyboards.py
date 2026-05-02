@@ -25,8 +25,8 @@ async def start_handler(update: MessageCreated) -> None:
         .add_message(text="Сообщение")
         .add_link(text="Перейти в maxo", url=maxo_url)
         .add_clipboard(text="Скопировать maxo", payload=maxo_url)
-        .add_request_contact(text="Поделится контактами")
-        .add_request_geo_location(text="Поделится гео позицией")
+        .add_request_contact(text="Поделиться контактами")
+        .add_request_geo_location(text="Поделиться гео позицией")
         .adjust(2, 2, 1, 1)
     )
 

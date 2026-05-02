@@ -21,11 +21,11 @@ async def getter(dialog_manager: DialogManager, **__: Any) -> dict[str, Any]:
 
 
 async def on_text_click(
-    event: MessageCallback,
+    callback: MessageCallback,
     widget: ManagedCounter,
     dialog_manager: DialogManager,
 ) -> None:
-    await event.answer(f"Value: {widget.get_value()}")
+    await callback.callback_answer(f"Value: {widget.get_value()}")
 
 
 counter_dialog = Dialog(

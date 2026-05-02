@@ -25,23 +25,23 @@ async def attachments_handler(
         FSInputFile.video(path="./files/watermelon.mp4"),
     ):
         # Отправка через InputFile
-        message = await message.send_message(media=(file,))
+        bot_message = await message.send_message(media=(file,))
 
-        sent_attachs = message.body.attachments or []
+        sent_attachments = bot_message.body.attachments or []
 
         # Отправка через AttachmetsRequests
-        requests = [attachment.to_request() for attachment in sent_attachs]
-        await message.send_message(
+        requests = [attachment.to_request() for attachment in sent_attachments]
+        await message.bot.send_message(
             user_id=update_context.user_id,
             chat_id=update_context.chat_id,
             attachments=requests,
         )
 
         # Отправка через Attachmets
-        await message.send_message(
+        await message.bot.send_message(
             user_id=update_context.user_id,
             chat_id=update_context.chat_id,
-            attachments=message.body.attachments,
+            attachments=bot_message.body.attachments,
         )
 
 

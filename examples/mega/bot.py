@@ -41,20 +41,22 @@ async def start(message: MessageCreated, dialog_manager: DialogManager) -> None:
 async def on_unknown_intent(event: ErrorEvent, dialog_manager: DialogManager) -> None:
     # Example of handling UnknownIntent Error and starting new dialog.
     logger.error("Restarting dialog: %s", event.exception)
-    if isinstance(event.update, MessageCallback):
-        await event.update.callback_answer(
+    if isinstance(event.event, MessageCallback):
+        callback: MessageCallback = event.event
+        await event.event.callback_answer(
             notification=(
                 "Bot process was restarted due to maintenance.\n"
                 "Redirecting to main menu."
             ),
         )
-        if event.update.message:
+        if callback.message:
             try:  # noqa: SIM105
-                await event.update.delete_message()
+                await callback.delete_message()
             except MaxBotApiError:
                 pass  # whatever
-    elif isinstance(event.update, MessageCallback):
-        await event.update.answer_text(
+    elif isinstance(event.event, MessageCreated):
+        message: MessageCreated = event.event
+        await message.answer_text(
             text=(
                 "Bot process was restarted due to maintenance.\n"
                 "Redirecting to main menu."

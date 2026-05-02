@@ -12,12 +12,8 @@ class DialogAttachmentsFacade(AttachmentsFacade):
         bot: Bot,
         media_id_storage: MediaIdStorageProtocol,
     ) -> None:
-        self._bot = bot
+        super().__init__(bot)
         self._media_id_storage = media_id_storage
-
-    @property
-    def bot(self) -> Bot:
-        return self._bot
 
     async def upload_media(self, file: InputFile) -> tuple[UploadType, str]:
         type_, token = await super().upload_media(file)

@@ -57,7 +57,7 @@ async def name_handler(
 
     dialog_manager.dialog_data["name"] = name
 
-    await message.answer_text(f"Привет, {message.message.body.text}")
+    await message.answer_text(f"Привет, {name}")
 
     await dialog_manager.next()
 

@@ -86,7 +86,7 @@
 
 Ниже приведен список всех фасадов для различных типов событий.
 
-.. automodule:: maxo.utils.facades
+.. automodule:: maxo.routing.facades
    :members:
    :undoc-members:
    :show-inheritance:

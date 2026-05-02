@@ -30,7 +30,7 @@ class MessageCallbackFacade(
         return self._update.callback_id
 
     @property
-    def payload(self) -> str | None:
+    def payload(self) -> Omittable[str]:
         return self._update.payload
 
     @property
