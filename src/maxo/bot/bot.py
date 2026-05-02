@@ -57,7 +57,7 @@ from maxo.bot.state import (
     RunningBotState,
 )
 from maxo.errors import MaxBotApiError
-from maxo.serialization import create_retort
+from maxo.serialization import create_retort_with_bot
 from maxo.types import AttachmentPayload, MaxoType
 
 _MethodResultT = TypeVar("_MethodResultT", bound=MaxoType)
@@ -92,10 +92,10 @@ class Bot(BaseAsyncClient):
         self._json_dumps = json_dumps
         self._json_loads = json_loads
 
-        self._retort = create_retort(
+        self._retort = create_retort_with_bot(
+            bot=self,
             defaults=self._defaults,
             warming_up=warming_up,
-            bot=self,
         )
 
         self._state = EmptyBotState()

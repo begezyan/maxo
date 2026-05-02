@@ -1,19 +1,18 @@
-from abc import abstractmethod
+from abc import ABC, abstractmethod
 from collections.abc import Sequence
 
 from maxo.enums import MessageLinkType, TextFormat
-from maxo.omit import Omittable, Omitted
-from maxo.routing.updates.mixins.attachments import AttachmentsFacade, MediaInput
+from maxo.omit import Omittable, Omitted, is_defined
+from maxo.routing.updates.mixins.attachments import MediaInput
+from maxo.routing.updates.mixins.chat import ChatMethodsFacade
 from maxo.types.buttons import InlineButtons
-from maxo.types.chat import Chat
-from maxo.types.chat_members_list import ChatMembersList
 from maxo.types.message import Message
 from maxo.types.new_message_link import NewMessageLink
 from maxo.types.simple_query_result import SimpleQueryResult
 from maxo.utils.helpers.calculating import calculate_chat_id_and_user_id
 
 
-class MessageMethodsFacade(AttachmentsFacade):
+class MessageMethodsFacade(ChatMethodsFacade, ABC):
     __slots__ = ()
 
     @property
@@ -22,8 +21,8 @@ class MessageMethodsFacade(AttachmentsFacade):
         raise NotImplementedError
 
     @property
-    def chat_id(self) -> int | None:
-        return self.message.recipient.chat_id
+    def chat_id(self) -> int:
+        return self.message.recipient.unsafe_chat_id
 
     async def delete_message(self) -> SimpleQueryResult:
         message_id = self.message.body.mid
@@ -40,9 +39,10 @@ class MessageMethodsFacade(AttachmentsFacade):
         media: Sequence[MediaInput] | None = None,
     ) -> Message:
         recipient = self.message.recipient
+        sender = self.message.sender
         chat_id, user_id = calculate_chat_id_and_user_id(
             chat_id=recipient.chat_id,
-            user_id=recipient.user_id,
+            user_id=sender.user_id if is_defined(sender) else None,
             chat_type=recipient.chat_type,
         )
 
@@ -176,25 +176,6 @@ class MessageMethodsFacade(AttachmentsFacade):
             type=type,
             mid=self.message.body.mid,
         )
-
-    async def get_chat(self) -> Chat:
-        return await self.bot.get_chat(chat_id=self.chat_id)
-
-    async def get_members(
-        self,
-        count: Omittable[int] = Omitted(),
-        marker: Omittable[int] = Omitted(),
-        user_ids: Omittable[list[int] | None] = Omitted(),
-    ) -> ChatMembersList:
-        return await self.bot.get_members(
-            chat_id=self.chat_id,
-            count=count,
-            marker=marker,
-            user_ids=user_ids,
-        )
-
-    async def leave_chat(self) -> SimpleQueryResult:
-        return await self.bot.leave_chat(chat_id=self.chat_id)
 
     async def get_message_by_id(self, message_id: str) -> Message:
         return await self.bot.get_message_by_id(message_id=message_id)

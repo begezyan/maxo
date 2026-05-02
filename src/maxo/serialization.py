@@ -144,12 +144,7 @@ TAG_PROVIDERS = concat_provider(
 )
 
 
-def create_retort(
-    *,
-    defaults: BotDefaults | None = None,
-    warming_up: bool = True,
-    bot: typing.Optional["Bot"] = None,
-) -> Retort:
+def _create_retort(*, defaults: BotDefaults | None = None) -> Retort:
     if defaults is None:
         defaults = BotDefaults()
 
@@ -175,12 +170,9 @@ def create_retort(
                 return datetime.max.replace(tzinfo=UTC)
             return datetime.min.replace(tzinfo=UTC)
 
-    def _load_bot[T: base.MaxoType](x: T) -> T:
-        return x.as_(bot)
-
     exec_type_checking(base)
 
-    retort = DEFAULT_RETORT.extend(
+    return DEFAULT_RETORT.extend(
         recipe=[
             TAG_PROVIDERS,
             dumper(
@@ -208,10 +200,36 @@ def create_retort(
             loader(P[datetime], _load_datetime),
         ],
     )
-    if bot is not None:
-        retort = retort.extend(
-            recipe=[loader(is_subclass(base.MaxoType), _load_bot, Chain.LAST)],
-        )
+
+
+def create_retort(
+    *,
+    defaults: BotDefaults | None = None,
+    warming_up: bool = True,
+) -> Retort:
+    retort = _create_retort(defaults=defaults)
+
+    if warming_up:
+        retort = warming_up_retort(retort, warming_up=WarmingUpType.TYPES)
+        retort = warming_up_retort(retort, warming_up=WarmingUpType.METHOD)
+
+    return retort
+
+
+def create_retort_with_bot(
+    bot: "Bot",
+    *,
+    defaults: BotDefaults | None = None,
+    warming_up: bool = True,
+) -> Retort:
+    def _load_bot[T: base.MaxoType](x: T) -> T:
+        return x.as_(bot)
+
+    retort = _create_retort(defaults=defaults)
+
+    retort = retort.extend(
+        recipe=[loader(is_subclass(base.MaxoType), _load_bot, Chain.LAST)],
+    )
 
     if warming_up:
         retort = warming_up_retort(retort, warming_up=WarmingUpType.TYPES)

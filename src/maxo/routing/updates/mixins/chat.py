@@ -1,4 +1,4 @@
-from abc import abstractmethod
+from abc import ABC, abstractmethod
 from collections.abc import Sequence
 from datetime import datetime
 
@@ -14,7 +14,7 @@ from maxo.types.new_message_link import NewMessageLink
 from maxo.types.simple_query_result import SimpleQueryResult
 
 
-class ChatMethodsFacade(AttachmentsFacade):
+class ChatMethodsFacade(AttachmentsFacade, ABC):
     __slots__ = ()
 
     @property

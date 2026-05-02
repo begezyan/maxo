@@ -1,3 +1,4 @@
+from abc import ABCMeta
 from dataclasses import dataclass
 from typing import TYPE_CHECKING, Any, Optional, Self, dataclass_transform
 
@@ -32,7 +33,11 @@ class _MaxoTypeMetaClass(type):
         )(class_)
 
 
-class BaseMaxoType(metaclass=_MaxoTypeMetaClass):
+class _MaxoTypeABCMeta(_MaxoTypeMetaClass, ABCMeta):
+    pass
+
+
+class BaseMaxoType(metaclass=_MaxoTypeABCMeta):
     pass
 
 
