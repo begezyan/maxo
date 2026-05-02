@@ -1,7 +1,7 @@
 import warnings
-from logging import getLogger
 from typing import Any
 
+from maxo import loggers
 from maxo.dialogs.api.entities import (
     EVENT_CONTEXT_KEY,
     EventContext,
@@ -29,8 +29,6 @@ from .widgets.utils import (
     ensure_data_getter,
     ensure_widgets,
 )
-
-logger = getLogger(__name__)
 
 _DEFAULT_MARKUP_FACTORY = InlineKeyboardFactory()
 
@@ -160,12 +158,12 @@ class Window(WindowProtocol):
         dialog: DialogProtocol,
         manager: DialogManager,
     ) -> NewMessage:
-        logger.debug("Show window: %s", self)
+        loggers.dialogs.debug("Show window: %s", self)
         event_context: EventContext = manager.middleware_data[EVENT_CONTEXT_KEY]
         try:
             current_data = await self.load_data(dialog, manager)
         except Exception:
-            logger.exception("Cannot get window data for state %s", self.state)
+            loggers.dialogs.exception("Cannot get window data for state %s", self.state)
             raise
         try:
             media = await self.render_media(current_data, manager)
@@ -190,7 +188,7 @@ class Window(WindowProtocol):
                 keyboard=keyboard,
             )
         except Exception:
-            logger.exception("Cannot render window for state %s", self.state)
+            loggers.dialogs.exception("Cannot render window for state %s", self.state)
             raise
 
     def get_state(self) -> State:

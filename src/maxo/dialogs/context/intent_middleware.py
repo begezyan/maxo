@@ -1,6 +1,6 @@
-import logging
 from typing import Any
 
+from maxo import loggers
 from maxo.dialogs.api.entities import (
     DEFAULT_STACK_ID,
     EVENT_CONTEXT_KEY,
@@ -44,8 +44,6 @@ from maxo.routing.updates import (
     UserAddedToChat,
     UserRemovedFromChat,
 )
-
-logger = logging.getLogger(__name__)
 
 FORBIDDEN_STACK_KEY = "aiogd_stack_forbidden"
 
@@ -203,7 +201,7 @@ class IntentMiddlewareFactory:
         stack_id: str | None,
         ctx: Ctx,
     ) -> None:
-        logger.debug(
+        loggers.dialogs.debug(
             "Loading context for stack: `%s`, user: `%s`, chat: `%s`",
             stack_id,
             proxy.user_id,
@@ -227,7 +225,7 @@ class IntentMiddlewareFactory:
             event,
             ctx,
         ):
-            logger.debug(
+            loggers.dialogs.debug(
                 "Stack %s is not allowed for user %s",
                 stack.id,
                 proxy.user_id,
@@ -247,7 +245,7 @@ class IntentMiddlewareFactory:
         intent_id: str,
         ctx: Ctx,
     ) -> None:
-        logger.debug(
+        loggers.dialogs.debug(
             "Loading context for intent: `%s`, user: `%s`, chat: `%s`",
             intent_id,
             proxy.user_id,
@@ -269,7 +267,7 @@ class IntentMiddlewareFactory:
             event,
             ctx,
         ):
-            logger.debug(
+            loggers.dialogs.debug(
                 "Stack %s is not allowed for user %s",
                 stack.id,
                 proxy.user_id,
@@ -534,7 +532,7 @@ class IntentErrorMiddleware(BaseMiddleware[ErrorEvent]):
         try:
             return await storage.load_context(stack.last_intent_id())
         except (UnknownIntent, OutdatedIntent):
-            logger.warning(
+            loggers.dialogs.warning(
                 "Stack is broken for user %s, chat %s, resetting",
                 storage.user_id,
                 storage.chat_id,
@@ -592,7 +590,7 @@ class IntentErrorMiddleware(BaseMiddleware[ErrorEvent]):
                 ctx[STACK_KEY] = stack
                 ctx[CONTEXT_KEY] = context
             else:
-                logger.debug(
+                loggers.dialogs.debug(
                     "Stack %s is not allowed for user %s",
                     stack.id,
                     proxy.user_id,

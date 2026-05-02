@@ -1,13 +1,9 @@
-from logging import getLogger
-
 from maxo.dialogs import ChatEvent
 from maxo.dialogs.api.entities import Context, Stack
 from maxo.dialogs.api.protocols import StackAccessValidator
 from maxo.routing.ctx import Ctx
 from maxo.routing.middlewares.update_context import EVENT_FROM_USER_KEY
 from maxo.types import User
-
-logger = getLogger(__name__)
 
 
 class DefaultAccessValidator(StackAccessValidator):
