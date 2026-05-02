@@ -1,3 +1,5 @@
+# Диалог - цепочка Window (окон) с виджетами (Text, Media, Input)
+
 import logging
 import os
 from pathlib import Path
@@ -18,7 +20,6 @@ from maxo.dialogs.widgets.media import StaticMedia
 from maxo.dialogs.widgets.text import Const, Format, Multi
 from maxo.fsm import State, StatesGroup
 from maxo.fsm.key_builder import DefaultKeyBuilder
-from maxo.routing.facades import MessageCallbackFacade, MessageCreatedFacade
 from maxo.routing.filters import CommandStart
 from maxo.routing.updates import MessageCallback, MessageCreated
 from maxo.transport.long_polling import LongPolling
@@ -29,7 +30,6 @@ key_builder = DefaultKeyBuilder(with_destiny=True)
 dp = Dispatcher(key_builder=key_builder)
 
 
-# Диалог - цепочка Window (окон) с виджетами (Text, Media, Input)
 class DialogSG(StatesGroup):
     greeting = State()
     age = State()
@@ -57,8 +57,7 @@ async def name_handler(
 
     dialog_manager.dialog_data["name"] = name
 
-    facade: MessageCreatedFacade = dialog_manager.middleware_data["facade"]
-    await facade.answer_text(f"Привет, {message.message.body.text}")
+    await message.answer_text(f"Привет, {message.message.body.text}")
 
     await dialog_manager.next()
 
@@ -68,8 +67,7 @@ async def other_type_handler(
     message_input: MessageInput,
     dialog_manager: DialogManager,
 ) -> None:
-    facade: MessageCreatedFacade = dialog_manager.middleware_data["facade"]
-    await facade.answer_text("Ожидался текст")
+    await message.answer_text("Ожидался текст")
 
 
 async def on_finish(
@@ -81,8 +79,7 @@ async def on_finish(
         await dialog_manager.done()
         return
 
-    facade: MessageCallbackFacade = dialog_manager.middleware_data["facade"]
-    await facade.callback_answer("Спасибо. Чтобы начать заново - /start")
+    await callback.callback_answer("Спасибо. Чтобы начать заново - /start")
 
     await dialog_manager.done()
 

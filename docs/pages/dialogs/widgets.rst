@@ -86,7 +86,7 @@ Button
     from maxo.dialogs.widgets.text import Const
 
     async def on_click(callback, button, manager):
-        await callback.answer("Вы нажали на кнопку!")
+        await callback.callback_answer("Вы нажали на кнопку!")
 
     Button(Const("Нажми меня"), id="btn1", on_click=on_click)
 
@@ -157,7 +157,7 @@ Select
     from maxo.dialogs.widgets.text import Format
 
     async def on_fruit_selected(callback, widget, manager, item_id):
-        await callback.answer(f"Вы выбрали: {item_id}")
+        await callback.callback_answer(f"Вы выбрали: {item_id}")
 
     # items - ключ из данных геттера (list[tuple[str, str]])
     # В геттере: return {"fruits": [("apple", "🍎 Яблоко"), ("banana", "🍌 Банан")]}

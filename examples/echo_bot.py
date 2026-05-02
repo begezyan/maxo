@@ -2,7 +2,6 @@ import logging
 import os
 
 from maxo import Bot, Dispatcher
-from maxo.routing.facades import MessageCreatedFacade
 from maxo.routing.updates import MessageCreated
 from maxo.transport.long_polling import LongPolling
 
@@ -12,10 +11,7 @@ dp = Dispatcher()
 
 # Без фильтра - хендлер получает любое сообщение
 @dp.message_created()
-async def echo_handler(
-    update: MessageCreated,
-    facade: MessageCreatedFacade,
-) -> None:
+async def echo_handler(update: MessageCreated) -> None:
     text = update.message.body.text or "Текста нет"
     await update.answer(text=text)
 

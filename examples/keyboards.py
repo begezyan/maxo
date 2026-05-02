@@ -1,11 +1,13 @@
+# KeyboardBuilder: callback, link, request_contact, request_geo_location;
+# adjust - кол-во кнопок в ряд
+
 import logging
 import os
 
 from magic_filter import F
 
-from maxo import Bot, Ctx, Dispatcher, Router
+from maxo import Bot, Dispatcher, Router
 from maxo.integrations.magic_filter import MagicFilter
-from maxo.routing.facades import MessageCallbackFacade, MessageCreatedFacade
 from maxo.routing.filters import CommandStart
 from maxo.routing.updates import MessageCallback, MessageCreated
 from maxo.transport.long_polling import LongPolling
@@ -14,14 +16,8 @@ from maxo.utils.builders import KeyboardBuilder
 router = Router()
 
 
-# KeyboardBuilder: callback, link, request_contact, request_geo_location;
-# adjust - кол-во кнопок в ряд
 @router.message_created(CommandStart())
-async def start_handler(
-    update: MessageCreated,
-    ctx: Ctx,
-    facade: MessageCreatedFacade,
-) -> None:
+async def start_handler(update: MessageCreated) -> None:
     maxo_url = "https://github.com/K1rL3s/maxo"
     keyboard = (
         KeyboardBuilder()
@@ -34,18 +30,15 @@ async def start_handler(
         .adjust(2, 2, 1, 1)
     )
 
-    await facade.answer_text(
+    await update.answer_text(
         "Клавиатура",
         keyboard=keyboard.build(),
     )
 
 
 @router.message_callback(MagicFilter(F.payload == "click_me"))
-async def click_me_handler(
-    update: MessageCallback,
-    facade: MessageCallbackFacade,
-) -> None:
-    await facade.callback_answer("Ты кликнул на меня")
+async def click_me_handler(update: MessageCallback) -> None:
+    await update.callback_answer("Ты кликнул на меня")
 
 
 def main() -> None:

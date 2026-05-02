@@ -22,7 +22,6 @@ from maxo.errors import MaxBotApiError
 from maxo.fsm.key_builder import DefaultKeyBuilder
 from maxo.fsm.storages.memory import MemoryStorage
 from maxo.integrations.magic_filter import MagicFilter
-from maxo.routing.facades import MessageCallbackFacade, MessageCreatedFacade
 from maxo.routing.filters import ExceptionTypeFilter
 from maxo.routing.updates import ErrorEvent, MessageCallback, MessageCreated
 from maxo.transport.long_polling import LongPolling
@@ -39,27 +38,27 @@ async def start(message: MessageCreated, dialog_manager: DialogManager) -> None:
     )
 
 
-async def on_unknown_intent(
-    event: ErrorEvent,
-    dialog_manager: DialogManager,
-    facade: MessageCallbackFacade | MessageCreatedFacade,
-) -> None:
+async def on_unknown_intent(event: ErrorEvent, dialog_manager: DialogManager) -> None:
     # Example of handling UnknownIntent Error and starting new dialog.
     logger.error("Restarting dialog: %s", event.exception)
     if isinstance(event.update, MessageCallback):
-        await facade.callback_answer(
-            "Bot process was restarted due to maintenance.\n"
-            "Redirecting to main menu.",
+        await event.update.callback_answer(
+            notification=(
+                "Bot process was restarted due to maintenance.\n"
+                "Redirecting to main menu."
+            ),
         )
         if event.update.message:
             try:  # noqa: SIM105
-                await facade.delete_message()
+                await event.update.delete_message()
             except MaxBotApiError:
                 pass  # whatever
     elif isinstance(event.update, MessageCallback):
-        await facade.answer_text(
-            "Bot process was restarted due to maintenance.\n"
-            "Redirecting to main menu.",
+        await event.update.answer_text(
+            text=(
+                "Bot process was restarted due to maintenance.\n"
+                "Redirecting to main menu."
+            ),
         )
     await dialog_manager.start(
         states.Main.MAIN,

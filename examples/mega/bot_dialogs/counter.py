@@ -3,7 +3,6 @@ from typing import Any, cast
 from maxo.dialogs import Dialog, DialogManager, Window
 from maxo.dialogs.widgets.kbd import Counter, ManagedCounter
 from maxo.dialogs.widgets.text import Const, Progress
-from maxo.routing.facades import MessageCallbackFacade
 from maxo.routing.updates import MessageCallback
 
 from . import states
@@ -26,8 +25,7 @@ async def on_text_click(
     widget: ManagedCounter,
     dialog_manager: DialogManager,
 ) -> None:
-    facade: MessageCallbackFacade = dialog_manager.middleware_data["facade"]
-    await facade.callback_answer(f"Value: {widget.get_value()}")
+    await event.answer(f"Value: {widget.get_value()}")
 
 
 counter_dialog = Dialog(
