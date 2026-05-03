@@ -60,8 +60,8 @@
           import os
 
           from maxo import Bot, Dispatcher
-          from maxo.routing.updates import MessageCreated
           from maxo.routing.facades import MessageCreatedFacade
+          from maxo.routing.updates import MessageCreated
           from maxo.transport.long_polling import LongPolling
 
           bot = Bot(os.environ["TOKEN"])
@@ -84,9 +84,9 @@
           import os
 
           from maxo import Bot, Dispatcher, Router
+          from maxo.routing.facades import MessageCreatedFacade
           from maxo.routing.filters import CommandStart
           from maxo.routing.updates import MessageCreated
-          from maxo.routing.facades import MessageCreatedFacade
           from maxo.transport.long_polling import LongPolling
 
           bot = Bot(os.environ["TOKEN"])
@@ -118,11 +118,11 @@
 
           from maxo import Bot, Dispatcher, Router
           from maxo.integrations.magic_filter import MagicFilter
-          from maxo.routing.filters import CommandStart
-          from maxo.routing.updates import MessageCreated, MessageCallback
-          from maxo.utils.builders import KeyboardBuilder
           from maxo.routing.facades import MessageCallbackFacade, MessageCreatedFacade
+          from maxo.routing.filters import CommandStart
+          from maxo.routing.updates import MessageCallback, MessageCreated
           from maxo.transport.long_polling import LongPolling
+          from maxo.utils.builders import KeyboardBuilder
 
           bot = Bot(os.environ["TOKEN"])
           router = Router()

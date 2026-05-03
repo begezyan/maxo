@@ -10,10 +10,8 @@
 
 .. code-block:: python
 
-    await bot.send_message(
-        chat_id=update.message.chat_id,
-        text="Hello!"
-    )
+    await bot.send_message(chat_id=chat_id, text="Hello!")
+
 
 С использованием фасада код становится короче и понятнее, так как фасад уже знает контекст текущего обновления (в каком чате произошло событие, кто его инициатор):
 
@@ -41,7 +39,7 @@
 
 .. code-block:: python
 
-    from maxo.routing.facades.methods.attachments import MediaInput
+    from maxo.routing.updates.mixins.attachments import MediaInput
 
 Загрузка файла
 ~~~~~~~~~~~~~~

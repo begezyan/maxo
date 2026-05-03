@@ -15,7 +15,7 @@ BgManagerFactory
 .. code-block:: python
 
     from maxo import Bot
-    from maxo.dialogs.api.protocols import BgManagerFactory
+    from maxo.dialogs import BgManagerFactory
 
     async def background_job(bg_factory: BgManagerFactory, bot: Bot, chat_id: int, user_id: int):
         manager = bg_factory.bg(bot=bot, chat_id=chat_id, user_id=user_id)
@@ -38,16 +38,15 @@ BgManagerFactory
 
 .. code-block:: python
 
-    import anyio
+    import asyncio
     from typing import Any
 
     from maxo import Bot
-    from maxo.dialogs import Dialog, Window
-    from maxo.dialogs.widgets.text import Const, Format
+    from maxo.dialogs import BgManagerFactory, Dialog, DialogManager, Window
     from maxo.dialogs.widgets.kbd import Button
-    from maxo.dialogs.api.protocols import BgManagerFactory, DialogManager
-    from maxo.routing.updates import MessageCallback
+    from maxo.dialogs.widgets.text import Const, Format
     from maxo.fsm import State, StatesGroup
+    from maxo.routing.updates import MessageCallback
 
     class TimerSG(StatesGroup):
         running = State()
@@ -56,7 +55,11 @@ BgManagerFactory
         count = dialog_manager.dialog_data.get("count", 0)
         return {"count": count}
 
-    async def on_start_timer(callback: MessageCallback, button: Button, manager: DialogManager):
+    async def on_start_timer(
+        callback: MessageCallback,
+        button: Button,
+        dialog_manager: DialogManager,
+    ) -> None:
         """Запускает фоновую задачу, которая обновляет счётчик."""
         manager.dialog_data["count"] = 0
 
@@ -68,7 +71,7 @@ BgManagerFactory
         async def tick() -> None:
             bg = bg_factory.bg(bot=bot, chat_id=chat_id, user_id=user_id)
             for i in range(1, 11):
-                await anyio.sleep(1)
+                await asyncio.sleep(1)
                 await bg.update({"count": i})
 
         # Запускаем задачу через TaskGroup, зарегистрированную при старте приложения:

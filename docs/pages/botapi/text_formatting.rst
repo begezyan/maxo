@@ -80,10 +80,10 @@ TextFormat
 
 .. code-block:: python
 
-   from maxo.enums import TextFormat
+    from maxo.enums import TextFormat
 
-   await facade.answer_text("<b>Привет!</b>", format=TextFormat.HTML)
-   await facade.answer_text("**Привет!**", format=TextFormat.MARKDOWN)
+    await facade.answer_text("<b>Привет!</b>", format=TextFormat.HTML)
+    await facade.answer_text("**Привет!**", format=TextFormat.MARKDOWN)
 
 Text API (``maxo.utils.formatting``)
 =====================================
@@ -101,11 +101,11 @@ Text API (``maxo.utils.formatting``)
 
 .. code-block:: python
 
-   from maxo.utils.formatting import Bold, Italic, Link, Mention, Monospaced
+    from maxo.utils.formatting import Bold, Italic, Link, Mention
 
-   text = Bold("Важное ", Italic("сообщение"), "!")
-   link = Link("Библиотека maxo", url="https://github.com/K1rL3s/maxo")
-   mention = Mention("Иван Иванов", user_id=1234567890)
+    text = Bold("Важное ", Italic("сообщение"), "!")
+    link = Link("Библиотека maxo", url="https://github.com/K1rL3s/maxo")
+    mention = Mention("Иван Иванов", user_id=1234567890)
 
 Рендеринг и отправка
 ---------------------
@@ -114,16 +114,16 @@ Text API (``maxo.utils.formatting``)
 
 .. code-block:: python
 
-   from maxo.enums import TextFormat
-   from maxo.utils.formatting import Bold, Italic
+    from maxo.enums import TextFormat
+    from maxo.utils.formatting import Bold, Italic
 
-   text = Bold("Привет, ", Italic("мир"), "!")
+    text = Bold("Привет, ", Italic("мир"), "!")
 
-   # HTML
-   await facade.answer_text(text.as_html(), format=TextFormat.HTML)
+    # HTML
+    await facade.answer_text(text.as_html(), format=TextFormat.HTML)
 
-   # Markdown
-   await facade.answer_text(text.as_markdown(), format=TextFormat.MARKDOWN)
+    # Markdown
+    await facade.answer_text(text.as_markdown(), format=TextFormat.MARKDOWN)
 
 Метод ``.as_kwargs()`` возвращает ``{"text": "...", "format": None}`` - только текст без разметки
 (entities не передаются). Подходит для отправки содержимого ``Text`` объекта как plain text.
@@ -142,12 +142,12 @@ Text API (``maxo.utils.formatting``)
 
 .. code-block:: python
 
-   from maxo.enums import TextFormat
-   from maxo.utils.formatting import Bold, as_key_value, as_marked_list, as_section
+    from maxo.enums import TextFormat
+    from maxo.utils.formatting import Bold, as_key_value, as_marked_list, as_section
 
-   report = as_section(
-       Bold("Отчёт"),
-       as_key_value("Статус", "активен"),
-       as_marked_list("Пункт 1", "Пункт 2", "Пункт 3"),
-   )
-   await facade.answer_text(report.as_html(), format=TextFormat.HTML)
+    report = as_section(
+        Bold("Отчёт"),
+        as_key_value("Статус", "активен"),
+        as_marked_list("Пункт 1", "Пункт 2", "Пункт 3"),
+    )
+    await facade.answer_text(report.as_html(), format=TextFormat.HTML)

@@ -6,10 +6,10 @@
 
 .. code-block:: python
 
-    from maxo.routing.filters import Command
-    from maxo.routing.updates.message_created import MessageCreated
     from maxo.routing.ctx import Ctx
     from maxo.routing.facades import MessageCreatedFacade
+    from maxo.routing.filters import Command
+    from maxo.routing.updates import MessageCreated
 
     @dispatcher.message_created(Command("start"))
     async def start(update: MessageCreated, ctx: Ctx, facade: MessageCreatedFacade):
@@ -33,11 +33,12 @@
 
     from magic_filter import F
 
-    from maxo.routing.filters import Command
-    from maxo.routing.updates.message_created import MessageCreated
+    from maxo.integrations.magic_filter import MagicFilter
     from maxo.routing.ctx import Ctx
     from maxo.routing.facades import MessageCreatedFacade
-    from maxo.integrations.magic_filter import MagicFilter
+    from maxo.routing.filters import Command
+    from maxo.routing.updates import MessageCreated
+
 
     # Обработка команды /admin ИЛИ сообщения с текстом "secret"
     @dispatcher.message_created(Command("admin") | MagicFilter(F.text == "secret"))
@@ -53,10 +54,10 @@ Magic Filter
 
     from magic_filter import F
 
-    from maxo.routing.updates.message_created import MessageCreated
+    from maxo.integrations.magic_filter import MagicFilter
     from maxo.routing.ctx import Ctx
     from maxo.routing.facades import MessageCreatedFacade
-    from maxo.integrations.magic_filter import MagicFilter
+    from maxo.routing.updates import MessageCreated
 
     # Сработает, если текст сообщения равен "hello"
     @dispatcher.message_created(MagicFilter(F.text == "hello"))
@@ -76,9 +77,9 @@ Magic Filter
 
 .. code-block:: python
 
-    from maxo.routing.filters import BaseFilter
-    from maxo.routing.updates.message_created import MessageCreated
     from maxo.routing.ctx import Ctx
+    from maxo.routing.filters import BaseFilter
+    from maxo.routing.updates import MessageCreated
 
     class MyFilter(BaseFilter[MessageCreated]):
         async def __call__(self, update: MessageCreated, ctx: Ctx) -> bool:
@@ -91,9 +92,10 @@ Magic Filter
 
 .. code-block:: python
 
-    from maxo.routing.filters import BaseFilter
-    from maxo.routing.updates.message_created import MessageCreated
     from maxo.routing.ctx import Ctx
+    from maxo.routing.facades import MessageCreatedFacade
+    from maxo.routing.filters import BaseFilter
+    from maxo.routing.updates import MessageCreated
 
     class MinLengthFilter(BaseFilter[MessageCreated]):
         """Пропускает сообщения длиннее min_length символов."""

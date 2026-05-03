@@ -10,22 +10,25 @@
 
 .. code-block:: python
 
-    from maxo import Dispatcher, Bot
-    from maxo.routing.updates.message_created import MessageCreated
+    import os
+
+    from maxo import Bot, Dispatcher
     from maxo.routing.ctx import Ctx
     from maxo.routing.facades import MessageCreatedFacade
+    from maxo.routing.updates import MessageCreated
     from maxo.transport.long_polling import LongPolling
 
-    bot = Bot(token="ВАШ_ТОКЕН")
+    bot = Bot(token=os.environ["TOKEN"])
     dispatcher = Dispatcher()
-    
+
     # Регистрация обработчиков прямо в диспетчере (так как он тоже Router)
     @dispatcher.message_created()
     async def echo(update: MessageCreated, ctx: Ctx, facade: MessageCreatedFacade):
-        ...
-    
+        await facade.answer_text(update.message.body.text or "Текста нет")
+
     # Запуск
-    LongPolling(dispatcher).run(bot)
+    if __name__ == "__main__":
+        LongPolling(dispatcher).run(bot)
 
 Роутеры (Routers)
 -----------------
@@ -78,10 +81,10 @@
 .. code-block:: python
 
     from maxo import Router
-    from maxo.routing.filters import BaseFilter
-    from maxo.routing.updates.message_created import MessageCreated
     from maxo.routing.ctx import Ctx
     from maxo.routing.facades import MessageCreatedFacade
+    from maxo.routing.filters import BaseFilter
+    from maxo.routing.updates import MessageCreated
 
     class IsGroupChat(BaseFilter[MessageCreated]):
         """Пропускает только сообщения из групповых чатов."""
@@ -124,10 +127,10 @@
 .. code-block:: python
 
     from maxo import Dispatcher, Router
-    from maxo.routing.filters import Command
-    from maxo.routing.updates.message_created import MessageCreated
     from maxo.routing.ctx import Ctx
     from maxo.routing.facades import MessageCreatedFacade
+    from maxo.routing.filters import Command
+    from maxo.routing.updates import MessageCreated
 
     dispatcher = Dispatcher()
     admin_router = Router(name="admin")
@@ -149,11 +152,11 @@
     @user_router.message_created()
     async def echo(update: MessageCreated, ctx: Ctx, facade: MessageCreatedFacade):
         # Обрабатывает всё, что не было перехвачено выше
-        await facade.answer_text(update.message.body.text)
+        await facade.answer_text(update.message.body.text or "Текста нет")
 
     # Порядок подключения определяет приоритет между роутерами
     dispatcher.include(admin_router)  # admin_router проверяется раньше
-    dispatcher.include(user_router)   # user_router проверяется позже
+    dispatcher.include(user_router)  # user_router проверяется позже
 
 Доступные события
 -----------------

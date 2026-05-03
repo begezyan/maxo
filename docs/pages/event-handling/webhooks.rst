@@ -47,9 +47,9 @@ Webhooks
 
             from maxo import Bot, Dispatcher
             from maxo.enums import TextFormat
+            from maxo.routing.facades import MessageCreatedFacade
             from maxo.routing.updates import MessageCreated
             from maxo.routing.utils import collect_used_updates
-            from maxo.routing.facades import MessageCreatedFacade
             from maxo.transport.webhook.adapters.aiohttp.adapter import AiohttpWebAdapter
             from maxo.transport.webhook.engines import SimpleEngine, WebhookEngine
             from maxo.transport.webhook.routing import StaticRouting
@@ -104,9 +104,9 @@ Webhooks
 
             from maxo import Bot, Dispatcher
             from maxo.enums import TextFormat
+            from maxo.routing.facades import MessageCreatedFacade
             from maxo.routing.updates import MessageCreated
             from maxo.routing.utils import collect_used_updates
-            from maxo.routing.facades import MessageCreatedFacade
             from maxo.transport.webhook.adapters.fastapi.adapter import FastApiWebAdapter
             from maxo.transport.webhook.engines import SimpleEngine, WebhookEngine
             from maxo.transport.webhook.routing import StaticRouting
@@ -155,7 +155,6 @@ Webhooks
 
             logging.basicConfig(level=logging.DEBUG)
             app = main()
-
             # TOKEN=f9LHod fastapi dev ./examples/webhook_fastapi.py
 
 Обработка в фоне
