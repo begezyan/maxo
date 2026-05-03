@@ -18,8 +18,8 @@
 
 .. code-block:: python
 
-    from maxo.routing.updates.error import ErrorEvent
-    from maxo.routing.facades.updates.error import ErrorEventFacade
+    from maxo.routing.updates import ErrorEvent
+    from maxo.routing.facades import ErrorEventFacade
 
     @router.error()
     async def global_error_handler(event: ErrorEvent, facade: ErrorEventFacade):
@@ -42,8 +42,8 @@ ExceptionTypeFilter
 .. code-block:: python
 
     from maxo.routing.filters import ExceptionTypeFilter
-    from maxo.routing.facades.updates.error import ErrorEventFacade
-    from maxo.routing.updates.error import ErrorEvent
+    from maxo.routing.facades import ErrorEventFacade
+    from maxo.routing.updates import ErrorEvent
     from maxo.types import UpdateContext
 
     # Перехват ошибок конкретного типа
@@ -66,7 +66,7 @@ ExceptionMessageFilter
 .. code-block:: python
 
     from maxo.routing.filters import ExceptionMessageFilter
-    from maxo.routing.facades.updates.error import ErrorEventFacade
+    from maxo.routing.facades import ErrorEventFacade
 
     @router.error(ExceptionMessageFilter(r"Access denied"))
     async def access_denied_handler(event: ErrorEvent, facade: ErrorEventFacade):
@@ -89,8 +89,8 @@ ExceptionMessageFilter
 .. code-block:: python
 
     from maxo.routing.filters import ExceptionTypeFilter
-    from maxo.routing.updates.error import ErrorEvent
-    from maxo.routing.facades.updates.error import ErrorEventFacade
+    from maxo.routing.updates import ErrorEvent
+    from maxo.routing.facades import ErrorEventFacade
     from maxo.types import UpdateContext
 
     from maxo.routing.updates.message_created import MessageCreated

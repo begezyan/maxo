@@ -6,8 +6,6 @@ from maxo.types.message import Message
 
 
 class MessageCreatedFacade(BaseUpdateFacade[MessageCreated], MessageMethodsFacade):
-    __slots__ = ()
-
     @property
     def message(self) -> Message:
         return self._update.message

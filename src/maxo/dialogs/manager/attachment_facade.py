@@ -7,6 +7,8 @@ from maxo.utils.upload_media import FSInputFile, InputFile
 
 
 class DialogAttachmentsFacade(AttachmentsFacade):
+    __slots__ = ("_media_id_storage",)
+
     def __init__(
         self,
         bot: Bot,

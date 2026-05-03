@@ -80,7 +80,7 @@ async def share_handler(update: MessageCreated) -> None:
 
 @dp.message_created(AttachmentFilter(AttachmentType.STICKER))
 async def sticker_handler(update: MessageCreated) -> None:
-    await update.answer_text("Получил сообщение с стикером")
+    await update.answer_text("Получил сообщение со стикером")
     await update.bot.send_message(
         chat_id=update.chat_id,
         attachments=[update.message.body.sticker],

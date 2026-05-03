@@ -8,6 +8,8 @@ _UpdateT = TypeVar("_UpdateT", bound=BaseUpdate)
 
 
 class BaseUpdateFacade(SubscriptionMethodsFacade, Generic[_UpdateT]):
+    __slots__ = ("_update",)
+
     def __init__(
         self,
         bot: Bot,

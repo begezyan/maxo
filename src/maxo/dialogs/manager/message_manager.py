@@ -130,7 +130,7 @@ class MessageManager(MessageManagerProtocol):
             return _combine(new_message, sent_message)
 
         if not self._message_changed(new_message, old_message):
-            loggers.dialogs.debug("Message dit not change")
+            loggers.dialogs.debug("Message did not change")
             # nothing changed: text, keyboard or media
             return old_message
 
