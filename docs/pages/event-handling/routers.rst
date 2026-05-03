@@ -10,11 +10,8 @@
 
 .. code-block:: python
 
-    import os
-
-    from maxo import Bot, Dispatcher
+    from maxo import Dispatcher
     from maxo.routing.ctx import Ctx
-    from maxo.routing.facades import MessageCreatedFacade
     from maxo.routing.updates import MessageCreated
     from maxo.transport.long_polling import LongPolling
 
@@ -23,12 +20,11 @@
 
     # Регистрация обработчиков прямо в диспетчере (так как он тоже Router)
     @dispatcher.message_created()
-    async def echo(update: MessageCreated, ctx: Ctx, facade: MessageCreatedFacade):
-        await facade.answer_text(update.message.body.text or "Текста нет")
+    async def echo(update: MessageCreated, ctx: Ctx):
+        await update.answer_text(update.message.body.text or "Текста нет")
 
     # Запуск
-    if __name__ == "__main__":
-        LongPolling(dispatcher).run(bot)
+    LongPolling(dispatcher).run(bot)
 
 Роутеры (Routers)
 -----------------
@@ -82,7 +78,6 @@
 
     from maxo import Router
     from maxo.routing.ctx import Ctx
-    from maxo.routing.facades import MessageCreatedFacade
     from maxo.routing.filters import BaseFilter
     from maxo.routing.updates import MessageCreated
 
@@ -96,12 +91,12 @@
     group_router.message_created.filter(IsGroupChat())
 
     @group_router.message_created()
-    async def group_handler(update: MessageCreated, ctx: Ctx, facade: MessageCreatedFacade):
+    async def group_handler(update: MessageCreated, ctx: Ctx):
         # Этот обработчик вызовется ТОЛЬКО для групповых чатов
-        await facade.answer_text("Привет, группа!")
+        await update.answer_text("Привет, группа!")
 
     @group_router.message_created()
-    async def another_group_handler(update: MessageCreated, ctx: Ctx, facade: MessageCreatedFacade):
+    async def another_group_handler(update: MessageCreated, ctx: Ctx):
         # Этот обработчик тоже только для групповых чатов
         ...
 
@@ -128,7 +123,6 @@
 
     from maxo import Dispatcher, Router
     from maxo.routing.ctx import Ctx
-    from maxo.routing.facades import MessageCreatedFacade
     from maxo.routing.filters import Command
     from maxo.routing.updates import MessageCreated
 
@@ -138,21 +132,21 @@
 
     # 1. Обработчик диспетчера - проверяется ПЕРВЫМ
     @dispatcher.message_created(Command("start"))
-    async def global_start(update: MessageCreated, ctx: Ctx, facade: MessageCreatedFacade):
-        await facade.answer_text("Глобальный /start")
+    async def global_start(update: MessageCreated, ctx: Ctx):
+        await update.answer_text("Глобальный /start")
 
     # 2. Обработчик в admin_router - проверяется ВТОРЫМ
     @admin_router.message_created(Command("start"))
-    async def admin_start(update: MessageCreated, ctx: Ctx, facade: MessageCreatedFacade):
+    async def admin_start(update: MessageCreated, ctx: Ctx):
         # Этот обработчик НЕ будет вызван для /start,
         # потому что глобальный обработчик уже перехватил событие
-        await facade.answer_text("Админский /start")
+        await update.answer_text("Админский /start")
 
     # 3. Обработчик в user_router - проверяется ТРЕТЬИМ
     @user_router.message_created()
-    async def echo(update: MessageCreated, ctx: Ctx, facade: MessageCreatedFacade):
+    async def echo(update: MessageCreated, ctx: Ctx):
         # Обрабатывает всё, что не было перехвачено выше
-        await facade.answer_text(update.message.body.text or "Текста нет")
+        await update.answer_text(update.message.body.text or "Текста нет")
 
     # Порядок подключения определяет приоритет между роутерами
     dispatcher.include(admin_router)  # admin_router проверяется раньше

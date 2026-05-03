@@ -60,7 +60,6 @@
           import os
 
           from maxo import Bot, Dispatcher
-          from maxo.routing.facades import MessageCreatedFacade
           from maxo.routing.updates import MessageCreated
           from maxo.transport.long_polling import LongPolling
 
@@ -68,9 +67,9 @@
           dispatcher = Dispatcher()
 
           @dispatcher.message_created()
-          async def echo_handler(update: MessageCreated, facade: MessageCreatedFacade) -> None:
+          async def echo_handler(update: MessageCreated) -> None:
               text = update.message.body.text or "Текста нет"
-              await facade.answer_text(text)
+              await update.answer_text(text)
 
           logging.basicConfig(level=logging.INFO)
           LongPolling(dispatcher).run(bot)
@@ -84,7 +83,6 @@
           import os
 
           from maxo import Bot, Dispatcher, Router
-          from maxo.routing.facades import MessageCreatedFacade
           from maxo.routing.filters import CommandStart
           from maxo.routing.updates import MessageCreated
           from maxo.transport.long_polling import LongPolling
@@ -94,8 +92,8 @@
 
           @router.message_created(CommandStart())
           # или @router.message_created(Command("start"))
-          async def start_handler(update: MessageCreated, facade: MessageCreatedFacade) -> None:
-              await facade.answer_text("Привет! Я бот")
+          async def start_handler(update: MessageCreated) -> None:
+              await update.answer_text("Привет! Я бот")
 
           def main():
               logging.basicConfig(level=logging.INFO)
@@ -118,7 +116,6 @@
 
           from maxo import Bot, Dispatcher, Router
           from maxo.integrations.magic_filter import MagicFilter
-          from maxo.routing.facades import MessageCallbackFacade, MessageCreatedFacade
           from maxo.routing.filters import CommandStart
           from maxo.routing.updates import MessageCallback, MessageCreated
           from maxo.transport.long_polling import LongPolling
@@ -128,10 +125,7 @@
           router = Router()
 
           @router.message_created(CommandStart())
-          async def start_handler(
-              update: MessageCreated,
-              facade: MessageCreatedFacade,
-          ) -> None:
+          async def start_handler(update: MessageCreated) -> None:
               keyboard = (
                   KeyboardBuilder()
                   .add_callback(

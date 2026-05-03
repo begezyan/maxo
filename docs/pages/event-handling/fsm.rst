@@ -28,7 +28,6 @@
 
     from maxo.fsm import FSMContext
     from maxo.routing.ctx import Ctx
-    from maxo.routing.facades import MessageCreatedFacade
     from maxo.routing.filters import Command
     from maxo.routing.updates import MessageCreated
 
@@ -39,10 +38,9 @@
     async def start_registration(
         update: MessageCreated,
         ctx: Ctx,
-        facade: MessageCreatedFacade,
         fsm_context: FSMContext,
     ):
-        await facade.answer_text("Как вас зовут?")
+        await update.answer_text("Как вас зовут?")
         # Устанавливаем состояние "ожидание имени"
         await fsm_context.set_state(Registration.waiting_name)
 
@@ -55,7 +53,6 @@
 
     from maxo.fsm import FSMContext, StateFilter
     from maxo.routing.ctx import Ctx
-    from maxo.routing.facades import MessageCreatedFacade
     from maxo.routing.updates import MessageCreated
 
     # Этот хендлер сработает только если пользователь находится в состоянии waiting_name
@@ -97,7 +94,6 @@
     async def process_age(
         update: MessageCreated,
         ctx: Ctx,
-        facade: MessageCreatedFacade,
         fsm_context: FSMContext,
     ):
         age = update.message.body.text
@@ -106,11 +102,10 @@
         data = await fsm_context.get_data()
         name = data.get("name")
 
-        await facade.answer_text(f"Анкета:\nИмя: {name}\nВозраст: {age}")
+        await update.answer_text(f"Анкета:\nИмя: {name}\nВозраст: {age}")
 
         # Завершаем диалог
         await fsm_context.clear()
-
 
 Хранилища
 --------------------

@@ -47,7 +47,6 @@ Webhooks
 
             from maxo import Bot, Dispatcher
             from maxo.enums import TextFormat
-            from maxo.routing.facades import MessageCreatedFacade
             from maxo.routing.updates import MessageCreated
             from maxo.routing.utils import collect_used_updates
             from maxo.transport.webhook.adapters.aiohttp.adapter import AiohttpWebAdapter
@@ -60,8 +59,8 @@ Webhooks
 
 
             @dp.message_created()
-            async def echo_handler(message: MessageCreated, facade: MessageCreatedFacade) -> None:
-                await facade.answer_text(
+            async def echo_handler(message: MessageCreated) -> None:
+                await message.answer_text(
                     text=message.message.body.html_text,
                     format=TextFormat.HTML,
                 )
@@ -104,7 +103,6 @@ Webhooks
 
             from maxo import Bot, Dispatcher
             from maxo.enums import TextFormat
-            from maxo.routing.facades import MessageCreatedFacade
             from maxo.routing.updates import MessageCreated
             from maxo.routing.utils import collect_used_updates
             from maxo.transport.webhook.adapters.fastapi.adapter import FastApiWebAdapter
@@ -117,8 +115,8 @@ Webhooks
 
 
             @dp.message_created()
-            async def echo_handler(message: MessageCreated, facade: MessageCreatedFacade) -> None:
-                await facade.answer_text(
+            async def echo_handler(message: MessageCreated) -> None:
+                await message.answer_text(
                     text=message.message.body.html_text,
                     format=TextFormat.HTML,
                 )

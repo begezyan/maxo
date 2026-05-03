@@ -81,9 +81,12 @@ TextFormat
 .. code-block:: python
 
     from maxo.enums import TextFormat
+    from maxo.routing.updates import MessageCreated
 
-    await facade.answer_text("<b>Привет!</b>", format=TextFormat.HTML)
-    await facade.answer_text("**Привет!**", format=TextFormat.MARKDOWN)
+    @router.message_created()
+    async def handler(message: MessageCreated):
+        await message.answer_text("<b>Привет!</b>", format=TextFormat.HTML)
+        await message.answer_text("**Привет!**", format=TextFormat.MARKDOWN)
 
 Text API (``maxo.utils.formatting``)
 =====================================
@@ -115,15 +118,18 @@ Text API (``maxo.utils.formatting``)
 .. code-block:: python
 
     from maxo.enums import TextFormat
+    from maxo.routing.updates import MessageCreated
     from maxo.utils.formatting import Bold, Italic
 
-    text = Bold("Привет, ", Italic("мир"), "!")
+    @router.message_created()
+    async def handler(message: MessageCreated):
+        text = Bold("Привет, ", Italic("мир"), "!")
 
-    # HTML
-    await facade.answer_text(text.as_html(), format=TextFormat.HTML)
+        # HTML
+        await message.answer_text(text.as_html(), format=TextFormat.HTML)
 
-    # Markdown
-    await facade.answer_text(text.as_markdown(), format=TextFormat.MARKDOWN)
+        # Markdown
+        await message.answer_text(text.as_markdown(), format=TextFormat.MARKDOWN)
 
 Метод ``.as_kwargs()`` возвращает ``{"text": "...", "format": None}`` - только текст без разметки
 (entities не передаются). Подходит для отправки содержимого ``Text`` объекта как plain text.
@@ -143,11 +149,14 @@ Text API (``maxo.utils.formatting``)
 .. code-block:: python
 
     from maxo.enums import TextFormat
+    from maxo.routing.updates import MessageCreated
     from maxo.utils.formatting import Bold, as_key_value, as_marked_list, as_section
 
-    report = as_section(
-        Bold("Отчёт"),
-        as_key_value("Статус", "активен"),
-        as_marked_list("Пункт 1", "Пункт 2", "Пункт 3"),
-    )
-    await facade.answer_text(report.as_html(), format=TextFormat.HTML)
+    @router.message_created()
+    async def handler(message: MessageCreated):
+        report = as_section(
+            Bold("Отчёт"),
+            as_key_value("Статус", "активен"),
+            as_marked_list("Пункт 1", "Пункт 2", "Пункт 3"),
+        )
+        await message.answer_text(report.as_html(), format=TextFormat.HTML)

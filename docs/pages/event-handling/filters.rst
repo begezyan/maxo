@@ -7,12 +7,11 @@
 .. code-block:: python
 
     from maxo.routing.ctx import Ctx
-    from maxo.routing.facades import MessageCreatedFacade
     from maxo.routing.filters import Command
     from maxo.routing.updates import MessageCreated
 
     @dispatcher.message_created(Command("start"))
-    async def start(update: MessageCreated, ctx: Ctx, facade: MessageCreatedFacade):
+    async def start(update: MessageCreated, ctx: Ctx):
         ...
 
 Встроенные фильтры
@@ -34,15 +33,11 @@
     from magic_filter import F
 
     from maxo.integrations.magic_filter import MagicFilter
-    from maxo.routing.ctx import Ctx
-    from maxo.routing.facades import MessageCreatedFacade
-    from maxo.routing.filters import Command
     from maxo.routing.updates import MessageCreated
-
 
     # Обработка команды /admin ИЛИ сообщения с текстом "secret"
     @dispatcher.message_created(Command("admin") | MagicFilter(F.text == "secret"))
-    async def admin_area(update: MessageCreated, ctx: Ctx, facade: MessageCreatedFacade):
+    async def admin_area(update: MessageCreated):
         ...
 
 Magic Filter
@@ -93,7 +88,6 @@ Magic Filter
 .. code-block:: python
 
     from maxo.routing.ctx import Ctx
-    from maxo.routing.facades import MessageCreatedFacade
     from maxo.routing.filters import BaseFilter
     from maxo.routing.updates import MessageCreated
 
@@ -115,8 +109,6 @@ Magic Filter
     async def long_message_handler(
         update: MessageCreated,
         ctx: Ctx,
-        facade: MessageCreatedFacade,
         text_length: int,
     ):
-        await facade.answer_text(f"Длинное сообщение! ({text_length} символов)")
-
+        await update.answer_text(f"Длинное сообщение! ({text_length} символов)")

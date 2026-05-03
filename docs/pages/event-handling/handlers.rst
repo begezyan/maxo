@@ -11,7 +11,6 @@
 .. code-block:: python
 
     from maxo.routing.ctx import Ctx
-    from maxo.routing.facades import MessageCreatedFacade
     from maxo.routing.filters import Command, CommandStart
     from maxo.routing.updates import MessageCreated
 
@@ -19,9 +18,8 @@
     @router.message_created(CommandStart())
     # или
     # @router.message_created(Command("start"))
-    async def my_handler(update: MessageCreated, ctx: Ctx, facade: MessageCreatedFacade):
+    async def my_handler(update: MessageCreated, ctx: Ctx):
         ...
-
 
 Аргументы
 ---------
@@ -36,17 +34,11 @@
 .. code-block:: python
 
     from maxo.routing.ctx import Ctx
-    from maxo.routing.facades import MessageCreatedFacade
     from maxo.routing.updates import MessageCreated
 
     @router.message_created()
-    async def echo(
-        update: MessageCreated,
-        ctx: Ctx,
-        facade: MessageCreatedFacade,
-    ):
-        await facade.answer_text(update.message.body.text or "Текста нет")
-
+    async def echo(update: MessageCreated, ctx: Ctx):
+        await update.answer_text(update.message.body.text or "Текста нет")
 
 Dependency Injection (DI)
 -------------------------
