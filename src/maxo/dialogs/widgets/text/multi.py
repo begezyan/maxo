@@ -1,36 +1,16 @@
-from collections.abc import Callable, Hashable
 from typing import Any
 
 from maxo.dialogs.api.internal import TextWidget
 from maxo.dialogs.api.protocols import DialogManager
 from maxo.dialogs.integrations.magic_filter import DialogMagic
-from maxo.dialogs.widgets.common import WhenCondition
+from maxo.dialogs.widgets.common import (
+    Selector,
+    WhenCondition,
+    new_case_field,
+    new_magic_selector,
+)
 
 from .base import Text
-
-Selector = Callable[[dict, "Case", DialogManager], Hashable]
-
-
-def new_case_field(fieldname: str) -> Selector:
-    def case_field(
-        data: dict,
-        widget: "Case",
-        manager: DialogManager,
-    ) -> Hashable:
-        return data.get(fieldname)
-
-    return case_field
-
-
-def new_magic_selector(f: DialogMagic) -> Selector:
-    def when_magic(
-        data: dict,
-        widget: "Case",
-        manager: DialogManager,
-    ) -> bool:
-        return f.resolve(data)
-
-    return when_magic
 
 
 class Case(Text):
