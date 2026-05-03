@@ -97,7 +97,7 @@ def ensure_widgets(
     link_preview = []
 
     for w in widgets:
-        if isinstance(w, (str, Text)):  # TextWidget?
+        if isinstance(w, (str, TextWidget)):
             texts.append(ensure_text(w))
         elif isinstance(w, Keyboard):
             keyboards.append(ensure_keyboard(w))
@@ -110,7 +110,7 @@ def ensure_widgets(
         else:
             raise InvalidWidgetType(
                 f"Cannot add widget of type {type(w)}. "
-                f"Only str, Text, Keyboard, BaseInput "
+                f"Only str, TextWidget, Keyboard, BaseInput "
                 f"and Callable are supported",
             )
     return (

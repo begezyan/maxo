@@ -1,10 +1,9 @@
-from typing import Any
-
-from maxo.dialogs import DialogManager
 from maxo.dialogs.api.internal import RawKeyboard, TextWidget
+from maxo.dialogs.api.protocols import DialogManager
 from maxo.dialogs.widgets.common import WhenCondition
-from maxo.dialogs.widgets.kbd import Keyboard
 from maxo.types import ClipboardButton
+
+from .base import Keyboard
 
 
 class CopyText(Keyboard):
@@ -20,7 +19,7 @@ class CopyText(Keyboard):
 
     async def _render_keyboard(
         self,
-        data: dict[str, Any],
+        data: dict,
         manager: DialogManager,
     ) -> RawKeyboard:
         return [
