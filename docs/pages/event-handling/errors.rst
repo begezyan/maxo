@@ -39,7 +39,6 @@ ExceptionTypeFilter
 
 .. code-block:: python
 
-    from maxo.routing.facades import ErrorEventFacade
     from maxo.routing.filters import ExceptionTypeFilter
     from maxo.routing.updates import ErrorEvent
     from maxo.types import UpdateContext
@@ -78,8 +77,8 @@ ExceptionMessageFilter
 1.  **event**: объект :class:`~maxo.routing.updates.error.ErrorEvent`. Содержит:
     - ``event.exception`` - само исключение.
     - ``event.update`` - исходное событие (Update), при обработке которого возникла ошибка.
-2.  **facade**: объект :class:`~maxo.routing.facades.updates.error.ErrorEventFacade`.
-3.  **ctx**: контекст выполнения.
+2.  **ctx**: контекст выполнения.
+3.  Либо "заинлайненые" ключи **ctx**
 
 Пример
 ------
@@ -91,7 +90,7 @@ ExceptionMessageFilter
     from maxo.routing.ctx import Ctx
     from maxo.routing.filters import ExceptionTypeFilter
     from maxo.routing.updates import ErrorEvent, MessageCreated
-
+    from maxo.types import UpdateContext
 
     class MyCustomError(Exception):
         pass

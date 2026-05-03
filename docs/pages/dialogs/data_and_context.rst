@@ -76,6 +76,8 @@
 
 .. code-block:: python
 
+    from typing import Any
+
     from maxo.routing.ctx import Ctx
     from maxo.routing.interfaces.middleware import BaseMiddleware, NextMiddleware
     from maxo.routing.updates import MessageCreated
@@ -153,9 +155,9 @@ start_data - данные между диалогами
         dialog_manager: DialogManager,
     ) -> None:
         # Передаём данные из текущего диалога в дочерний
-        await manager.start(
+        await dialog_manager.start(
             EditSG.main,
-            data={"item_id": manager.dialog_data["selected_item"]},
+            data={"item_id": dialog_manager.dialog_data["selected_item"]},
         )
 
 

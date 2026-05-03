@@ -125,7 +125,7 @@
           router = Router()
 
           @router.message_created(CommandStart())
-          async def start_handler(update: MessageCreated) -> None:
+          async def start_handler(message: MessageCreated) -> None:
               keyboard = (
                   KeyboardBuilder()
                   .add_callback(
@@ -134,18 +134,17 @@
                   )
                   .build()
               )
-              await facade.answer_text(
+              await message.answer_text(
                   "Это сообщение с клавиатурой:",
                   keyboard=keyboard,
               )
 
           @router.message_callback(MagicFilter(F.payload == "my_callback"))
           async def button_handler(
-              update: MessageCallback,
-              facade: MessageCallbackFacade,
+              callback: MessageCallback,
               bot: Bot,
           ) -> None:
-              await facade.callback_answer("Вы нажали на кнопку!")
+              await callback.callback_answer("Вы нажали на кнопку!")
               await bot.send_message(
                   user_id=update.user.user_id,
                   text="Вы нажали на кнопку!",

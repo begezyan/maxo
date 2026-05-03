@@ -198,7 +198,7 @@ TimeSelect
 Виджет для выбора времени (часы и минуты). Представляет собой две отдельные клавиатуры для выбора часов и минут, что позволяет пользователю легко ввести нужное время.
 
 Использование
-^^^^^^^^^^^^
+^^^^^^^^^^^^^
 
 .. code-block:: python
 
@@ -208,7 +208,6 @@ TimeSelect
     from maxo.dialogs.widgets.kbd import TimeSelect
     from maxo.dialogs.widgets.text import Const
     from maxo.fsm import State, StatesGroup
-    from maxo.routing.facades import MessageCallbackFacade
 
 
     class MySG(StatesGroup):
@@ -216,8 +215,7 @@ TimeSelect
 
     async def on_time_selected(event, widget, manager: DialogManager, selected_time: time):
         # Здесь можно обработать выбранное время
-        facade: MessageCallbackFacade = manager.middleware_data["facade"]
-        await facade.answer_text(f"Вы выбрали время: {selected_time.strftime('%H:%M')}")
+        await event.callback_answer(f"Вы выбрали время: {selected_time.strftime('%H:%M')}")
         manager.dialog_data["selected_time"] = selected_time
 
     dialog = Dialog(
@@ -248,7 +246,7 @@ TimeSelect
 *   **minute_width** (:py:class:`int`, optional): Количество кнопок минут в одной строке. По умолчанию 6.
 
 Управление виджетом (ManagedTimeSelect)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Вы можете получить или установить выбранное время программно с помощью ``ManagedTimeSelect``, который доступен через ``widget`` в обработчиках, или через ``manager.find(widget_id).get_value()``.
 

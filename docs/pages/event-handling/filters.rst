@@ -51,17 +51,16 @@ Magic Filter
 
     from maxo.integrations.magic_filter import MagicFilter
     from maxo.routing.ctx import Ctx
-    from maxo.routing.facades import MessageCreatedFacade
     from maxo.routing.updates import MessageCreated
 
     # Сработает, если текст сообщения равен "hello"
     @dispatcher.message_created(MagicFilter(F.text == "hello"))
-    async def hello(update: MessageCreated, ctx: Ctx, facade: MessageCreatedFacade):
+    async def hello(update: MessageCreated, ctx: Ctx):
         ...
 
     # Сработает, если у отправителя имя "Kirill"
     @dispatcher.message_created(MagicFilter(F.message.sender.first_name == "Kirill"))
-    async def kirill_handler(update: MessageCreated, ctx: Ctx, facade: MessageCreatedFacade):
+    async def kirill_handler(update: MessageCreated, ctx: Ctx):
         ...
 
 Создание своих фильтров

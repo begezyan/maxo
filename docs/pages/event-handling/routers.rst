@@ -10,7 +10,9 @@
 
 .. code-block:: python
 
-    from maxo import Dispatcher
+    import os
+
+    from maxo import Bot, Dispatcher
     from maxo.routing.ctx import Ctx
     from maxo.routing.updates import MessageCreated
     from maxo.transport.long_polling import LongPolling

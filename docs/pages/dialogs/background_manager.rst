@@ -18,13 +18,13 @@ BgManagerFactory
     from maxo.dialogs import BgManagerFactory
 
     async def background_job(bg_factory: BgManagerFactory, bot: Bot, chat_id: int, user_id: int):
-        manager = bg_factory.bg(bot=bot, chat_id=chat_id, user_id=user_id)
+        bg_manager = bg_factory.bg(bot=bot, chat_id=chat_id, user_id=user_id)
 
         # Запуск нового диалога
-        await manager.start(SG.main)
+        await bg_manager.start(SG.main)
 
         # Или просто обновление UI текущего диалога
-        await manager.update({"status": "completed"})
+        await bg_manager.update({"status": "completed"})
 
 .. note::
 
@@ -61,12 +61,12 @@ BgManagerFactory
         dialog_manager: DialogManager,
     ) -> None:
         """Запускает фоновую задачу, которая обновляет счётчик."""
-        manager.dialog_data["count"] = 0
+        dialog_manager.dialog_data["count"] = 0
 
-        bg_factory: BgManagerFactory = manager.middleware_data["dialog_bg_factory"]
-        bot: Bot = manager.middleware_data["bot"]
-        chat_id = manager.event.chat_id
-        user_id = manager.event.user_id
+        bg_factory: BgManagerFactory = dialog_manager.middleware_data["dialog_bg_factory"]
+        bot: Bot = dialog_manager.middleware_data["bot"]
+        chat_id = dialog_manager.event.chat_id
+        user_id = dialog_manager.event.user_id
 
         async def tick() -> None:
             bg = bg_factory.bg(bot=bot, chat_id=chat_id, user_id=user_id)
@@ -75,7 +75,7 @@ BgManagerFactory
                 await bg.update({"count": i})
 
         # Запускаем задачу через TaskGroup, зарегистрированную при старте приложения:
-        manager.middleware_data["task_group"].start_soon(tick)
+        dialog_manager.middleware_data["task_group"].start_soon(tick)
         # Альтернатива (только для asyncio-бэкенда):
         # import asyncio; asyncio.create_task(tick())
 

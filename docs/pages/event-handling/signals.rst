@@ -179,7 +179,6 @@
 .. code-block:: python
 
     from maxo import Dispatcher
-    from maxo.routing.facades import MessageCreatedFacade
     from maxo.routing.updates import MessageCreated
 
     dispatcher = Dispatcher()
@@ -189,9 +188,9 @@
         dispatcher.workflow_data["admin_ids"] = [123, 456, 789]
 
     @dispatcher.message_created()
-    async def handler(update: MessageCreated, facade: MessageCreatedFacade, admin_ids: list[int]) -> None:
+    async def handler(update: MessageCreated, admin_ids: list[int]) -> None:
         if update.message.sender.user_id in admin_ids:
-            await facade.answer_text("Привет, админ!")
+            await update.answer_text("Привет, админ!")
 
 Отличие от обработчиков обновлений
 -----------------------------------

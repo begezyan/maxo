@@ -60,7 +60,6 @@
     async def process_name(
         update: MessageCreated,
         ctx: Ctx,
-        facade: MessageCreatedFacade,
         fsm_context: FSMContext,
     ):
         name = update.message.body.text
@@ -68,7 +67,7 @@
         # Сохраняем данные в память FSM
         await fsm_context.update_data(name=name)
 
-        await facade.answer_text(f"Приятно познакомиться, {name}! Сколько вам лет?")
+        await update.answer_text(f"Приятно познакомиться, {name}! Сколько вам лет?")
         # Переходим к следующему шагу
         await fsm_context.set_state(Registration.waiting_age)
 
@@ -87,7 +86,6 @@
 
     from maxo.fsm import FSMContext, StateFilter
     from maxo.routing.ctx import Ctx
-    from maxo.routing.facades import MessageCreatedFacade
     from maxo.routing.updates import MessageCreated
 
     @router.message_created(StateFilter(Registration.waiting_age))
