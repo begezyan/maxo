@@ -1,8 +1,7 @@
 from collections.abc import Callable
 
-from maxo.dialogs.api.internal import RawKeyboard
+from maxo.dialogs.api.internal import RawKeyboard, TextWidget
 from maxo.dialogs.api.protocols import DialogManager
-from maxo.dialogs.widgets.text import Text
 from maxo.omit import Omittable, Omitted
 from maxo.types import (
     RequestContactButton,
@@ -15,7 +14,7 @@ from .base import Keyboard
 class RequestContact(Keyboard):
     def __init__(
         self,
-        text: Text,
+        text: TextWidget,
         when: str | Callable | None = None,
     ) -> None:
         super().__init__(when=when)
@@ -38,7 +37,7 @@ class RequestContact(Keyboard):
 class RequestLocation(Keyboard):
     def __init__(
         self,
-        text: Text,
+        text: TextWidget,
         quick: Omittable[bool] = Omitted(),
         when: str | Callable | None = None,
     ) -> None:

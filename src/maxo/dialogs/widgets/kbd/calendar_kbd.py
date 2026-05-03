@@ -10,10 +10,10 @@ from typing import (
 )
 
 from maxo.dialogs.api.entities import ChatEvent
-from maxo.dialogs.api.internal import RawKeyboard
+from maxo.dialogs.api.internal import RawKeyboard, TextWidget
 from maxo.dialogs.api.protocols import DialogManager, DialogProtocol
 from maxo.dialogs.widgets.common import ManagedWidget, WhenCondition
-from maxo.dialogs.widgets.text import Format, Text
+from maxo.dialogs.widgets.text import Format
 from maxo.dialogs.widgets.widget_event import (
     WidgetEventProcessor,
     ensure_event_processor,
@@ -183,13 +183,13 @@ class CalendarDaysView(CalendarScopeView):
     def __init__(
         self,
         callback_generator: CallbackGenerator,
-        date_text: Text = DATE_TEXT,
-        today_text: Text = TODAY_TEXT,
-        weekday_text: Text = WEEK_DAY_TEXT,
-        header_text: Text = DAYS_HEADER_TEXT,
-        zoom_out_text: Text = ZOOM_OUT_TEXT,
-        next_month_text: Text = NEXT_MONTH_TEXT,
-        prev_month_text: Text = PREV_MONTH_TEXT,
+        date_text: TextWidget = DATE_TEXT,
+        today_text: TextWidget = TODAY_TEXT,
+        weekday_text: TextWidget = WEEK_DAY_TEXT,
+        header_text: TextWidget = DAYS_HEADER_TEXT,
+        zoom_out_text: TextWidget = ZOOM_OUT_TEXT,
+        next_month_text: TextWidget = NEXT_MONTH_TEXT,
+        prev_month_text: TextWidget = PREV_MONTH_TEXT,
     ) -> None:
         self.zoom_out_text = zoom_out_text
         self.next_month_text = next_month_text
@@ -386,12 +386,12 @@ class CalendarMonthView(CalendarScopeView):
     def __init__(
         self,
         callback_generator: CallbackGenerator,
-        month_text: Text = MONTH_TEXT,
-        this_month_text: Text = THIS_MONTH_TEXT,
-        header_text: Text = MONTHS_HEADER_TEXT,
-        zoom_out_text: Text = ZOOM_OUT_TEXT,
-        next_year_text: Text = NEXT_YEAR_TEXT,
-        prev_year_text: Text = PREV_YEAR_TEXT,
+        month_text: TextWidget = MONTH_TEXT,
+        this_month_text: TextWidget = THIS_MONTH_TEXT,
+        header_text: TextWidget = MONTHS_HEADER_TEXT,
+        zoom_out_text: TextWidget = ZOOM_OUT_TEXT,
+        next_year_text: TextWidget = NEXT_YEAR_TEXT,
+        prev_year_text: TextWidget = PREV_YEAR_TEXT,
     ) -> None:
         self.callback_generator = callback_generator
         self.month_text = month_text
@@ -568,10 +568,10 @@ class CalendarYearsView(CalendarScopeView):
     def __init__(
         self,
         callback_generator: CallbackGenerator,
-        year_text: Text = YEAR_TEXT,
-        this_year_text: Text = THIS_YEAR_TEXT,
-        next_page_text: Text = NEXT_YEARS_PAGE_TEXT,
-        prev_page_text: Text = PREV_YEARS_PAGE_TEXT,
+        year_text: TextWidget = YEAR_TEXT,
+        this_year_text: TextWidget = THIS_YEAR_TEXT,
+        next_page_text: TextWidget = NEXT_YEARS_PAGE_TEXT,
+        prev_page_text: TextWidget = PREV_YEARS_PAGE_TEXT,
     ) -> None:
         self.callback_generator = callback_generator
         self.year_text = year_text

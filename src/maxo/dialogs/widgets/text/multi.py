@@ -1,41 +1,22 @@
-from collections.abc import Callable, Hashable
 from typing import Any
 
+from maxo.dialogs.api.internal import TextWidget
 from maxo.dialogs.api.protocols import DialogManager
 from maxo.dialogs.integrations.magic_filter import DialogMagic
-from maxo.dialogs.widgets.common import WhenCondition
+from maxo.dialogs.widgets.common import (
+    Selector,
+    WhenCondition,
+    new_case_field,
+    new_magic_selector,
+)
 
 from .base import Text
-
-Selector = Callable[[dict, "Case", DialogManager], Hashable]
-
-
-def new_case_field(fieldname: str) -> Selector:
-    def case_field(
-        data: dict,
-        widget: "Case",
-        manager: DialogManager,
-    ) -> Hashable:
-        return data.get(fieldname)
-
-    return case_field
-
-
-def new_magic_selector(f: DialogMagic) -> Selector:
-    def when_magic(
-        data: dict,
-        widget: "Case",
-        manager: DialogManager,
-    ) -> bool:
-        return f.resolve(data)
-
-    return when_magic
 
 
 class Case(Text):
     def __init__(
         self,
-        texts: dict[Any, Text],
+        texts: dict[Any, TextWidget],
         selector: str | Selector | DialogMagic,
         when: WhenCondition = None,
     ) -> None:
@@ -58,7 +39,7 @@ class Case(Text):
                 selection = next(iter(self.texts))
         return await self.texts[selection].render_text(data, manager)
 
-    def find(self, widget_id: str) -> Text | None:
+    def find(self, widget_id: str) -> TextWidget | None:
         for text in self.texts.values():
             if found := text.find(widget_id):
                 return found

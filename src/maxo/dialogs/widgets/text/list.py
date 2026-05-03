@@ -1,6 +1,7 @@
 from collections.abc import Sequence
 from typing import Any
 
+from maxo.dialogs.api.internal import TextWidget
 from maxo.dialogs.api.protocols import DialogManager
 from maxo.dialogs.widgets.common import BaseScroll, OnPageChangedVariants, WhenCondition
 from maxo.dialogs.widgets.common.items import ItemsGetterVariant, get_items_getter
@@ -11,7 +12,7 @@ from .base import Text
 class List(Text, BaseScroll):
     def __init__(
         self,
-        field: Text,
+        field: TextWidget,
         items: ItemsGetterVariant,
         sep: str = "\n",
         when: WhenCondition = None,

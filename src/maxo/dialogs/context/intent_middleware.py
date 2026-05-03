@@ -16,7 +16,13 @@ from maxo.dialogs.api.exceptions import (
     UnknownIntent,
     UnknownState,
 )
-from maxo.dialogs.api.internal import CONTEXT_KEY, STACK_KEY, STORAGE_KEY
+from maxo.dialogs.api.internal import (
+    CALLBACK_DATA_KEY,
+    CONTEXT_KEY,
+    PAYLOAD_KEY,
+    STACK_KEY,
+    STORAGE_KEY,
+)
 from maxo.dialogs.api.protocols import DialogRegistryProtocol, StackAccessValidator
 from maxo.dialogs.utils import remove_intent_id
 from maxo.enums import ChatType
@@ -355,7 +361,7 @@ class IntentMiddlewareFactory:
                 )
             else:
                 await self._load_default_context(update, ctx, event_context)
-            ctx["payload"] = original_data
+            ctx[PAYLOAD_KEY] = ctx[CALLBACK_DATA_KEY] = original_data
         else:
             await self._load_default_context(update, ctx, event_context)
         result = await next(ctx)
