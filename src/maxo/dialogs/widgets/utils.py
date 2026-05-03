@@ -1,7 +1,7 @@
 from collections.abc import Callable, Sequence
 
 from maxo.dialogs.api.exceptions import InvalidWidgetType
-from maxo.dialogs.api.internal import DataGetter, LinkPreviewWidget
+from maxo.dialogs.api.internal import DataGetter, LinkPreviewWidget, TextWidget
 
 from .data.data_context import CompositeGetter, StaticGetter
 from .input import BaseInput, CombinedInput, MessageHandlerFunc, MessageInput
@@ -12,7 +12,13 @@ from .text import Format, Multi as MultiText, Text
 from .widget_event import WidgetEventProcessor
 
 WidgetSrc = (
-    str | Text | Keyboard | MessageHandlerFunc | Media | BaseInput | LinkPreviewBase
+    str
+    | TextWidget
+    | Keyboard
+    | MessageHandlerFunc
+    | Media
+    | BaseInput
+    | LinkPreviewBase
 )
 
 SingleGetterBase = DataGetter | dict
@@ -21,7 +27,7 @@ GetterVariant = (
 )
 
 
-def ensure_text(widget: str | Text | Sequence[Text]) -> Text:
+def ensure_text(widget: str | TextWidget | Sequence[TextWidget]) -> TextWidget:
     if isinstance(widget, str):
         return Format(widget)
     if isinstance(widget, Sequence):
@@ -91,7 +97,7 @@ def ensure_widgets(
     link_preview = []
 
     for w in widgets:
-        if isinstance(w, (str, Text)):
+        if isinstance(w, (str, Text)):  # TextWidget?
             texts.append(ensure_text(w))
         elif isinstance(w, Keyboard):
             keyboards.append(ensure_keyboard(w))

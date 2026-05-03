@@ -8,11 +8,11 @@ from typing import (
 )
 
 from maxo.dialogs.api.entities import ChatEvent
-from maxo.dialogs.api.internal import RawKeyboard
+from maxo.dialogs.api.internal import RawKeyboard, TextWidget
 from maxo.dialogs.api.protocols import DialogManager, DialogProtocol
 from maxo.dialogs.widgets.common import ManagedWidget, WhenCondition
 from maxo.dialogs.widgets.common.items import ItemsGetterVariant, get_items_getter
-from maxo.dialogs.widgets.text import Case, Text
+from maxo.dialogs.widgets.text import Case
 from maxo.dialogs.widgets.widget_event import (
     WidgetEventProcessor,
     ensure_event_processor,
@@ -57,7 +57,7 @@ class OnItemClick(Protocol[ManagedT, T]):
 class Select(Keyboard, Generic[T]):
     def __init__(
         self,
-        text: Text,
+        text: TextWidget,
         id: str,
         item_id_getter: ItemIdGetter,
         items: ItemsGetterVariant,
@@ -131,8 +131,8 @@ class Select(Keyboard, Generic[T]):
 class StatefulSelect(Select[T], ABC, Generic[T]):
     def __init__(
         self,
-        checked_text: Text,
-        unchecked_text: Text,
+        checked_text: TextWidget,
+        unchecked_text: TextWidget,
         id: str,
         item_id_getter: ItemIdGetter,
         items: ItemsGetterVariant,
@@ -227,8 +227,8 @@ class StatefulSelect(Select[T], ABC, Generic[T]):
 class Radio(StatefulSelect[T], Generic[T]):
     def __init__(
         self,
-        checked_text: Text,
-        unchecked_text: Text,
+        checked_text: TextWidget,
+        unchecked_text: TextWidget,
         id: str,
         item_id_getter: ItemIdGetter,
         items: ItemsGetterVariant,
@@ -336,8 +336,8 @@ class ManagedRadio(ManagedWidget[Radio[T]], Generic[T]):
 class Multiselect(StatefulSelect[T], Generic[T]):
     def __init__(
         self,
-        checked_text: Text,
-        unchecked_text: Text,
+        checked_text: TextWidget,
+        unchecked_text: TextWidget,
         id: str,
         item_id_getter: ItemIdGetter,
         items: ItemsGetterVariant,
@@ -468,7 +468,7 @@ class ManagedMultiselect(ManagedWidget[Multiselect[T]], Generic[T]):
 class Toggle(Radio[T], Generic[T]):
     def __init__(
         self,
-        text: Text,
+        text: TextWidget,
         id: str,
         item_id_getter: ItemIdGetter,
         items: ItemsGetterVariant,
