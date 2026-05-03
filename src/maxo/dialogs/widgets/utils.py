@@ -8,7 +8,7 @@ from .input import BaseInput, CombinedInput, MessageHandlerFunc, MessageInput
 from .kbd import Group, Keyboard
 from .link_preview import LinkPreviewBase
 from .media import Media, MultiMedia
-from .text import Format, Multi as MultiText, Text
+from .text import Format, Multi as MultiText
 from .widget_event import WidgetEventProcessor
 
 WidgetSrc = (
@@ -84,7 +84,7 @@ def ensure_link_preview(
 def ensure_widgets(
     widgets: Sequence[WidgetSrc],
 ) -> tuple[
-    Text,
+    TextWidget,
     Keyboard,
     BaseInput | None,
     Media,
@@ -110,7 +110,7 @@ def ensure_widgets(
         else:
             raise InvalidWidgetType(
                 f"Cannot add widget of type {type(w)}. "
-                f"Only str, TextWidget, Keyboard, BaseInput "
+                f"Only str, TextWidget, Keyboard, BaseInput, Media, LinkPreview "
                 f"and Callable are supported",
             )
     return (
