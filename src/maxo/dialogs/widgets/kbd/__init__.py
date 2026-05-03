@@ -13,6 +13,7 @@ from .calendar_kbd import (
     ManagedCalendar,
 )
 from .checkbox import Checkbox, ManagedCheckbox
+from .copy import CopyText
 from .counter import Counter, ManagedCounter
 from .group import Column, Group, Row
 from .list_group import ListGroup, ManagedListGroup
@@ -51,6 +52,7 @@ __all__ = (
     "Checkbox",
     "Clipboard",
     "Column",
+    "CopyText",
     "Counter",
     "CurrentPage",
     "FirstPage",

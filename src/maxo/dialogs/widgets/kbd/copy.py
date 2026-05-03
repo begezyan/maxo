@@ -1,0 +1,33 @@
+from typing import Any
+
+from maxo.dialogs import DialogManager
+from maxo.dialogs.api.internal import RawKeyboard, TextWidget
+from maxo.dialogs.widgets.common import WhenCondition
+from maxo.dialogs.widgets.kbd import Keyboard
+from maxo.types import ClipboardButton
+
+
+class CopyText(Keyboard):
+    def __init__(
+        self,
+        text: TextWidget,
+        copy_text: TextWidget,
+        when: WhenCondition = None,
+    ) -> None:
+        super().__init__(when=when)
+        self._text = text
+        self._copy_text = copy_text
+
+    async def _render_keyboard(
+        self,
+        data: dict[str, Any],
+        manager: DialogManager,
+    ) -> RawKeyboard:
+        return [
+            [
+                ClipboardButton(
+                    text=await self._text.render_text(data, manager),
+                    payload=await self._copy_text.render_text(data, manager),
+                ),
+            ],
+        ]
