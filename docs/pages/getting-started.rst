@@ -146,7 +146,7 @@
           ) -> None:
               await callback.callback_answer("Вы нажали на кнопку!")
               await bot.send_message(
-                  user_id=update.user.user_id,
+                  user_id=callback.user.user_id,
                   text="Вы нажали на кнопку!",
               )
 

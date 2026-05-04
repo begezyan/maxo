@@ -189,7 +189,7 @@
 
     @dispatcher.message_created()
     async def handler(update: MessageCreated, admin_ids: list[int]) -> None:
-        if update.message.sender.user_id in admin_ids:
+        if update.message.unsafe_sender.user_id in admin_ids:
             await update.answer_text("Привет, админ!")
 
 Отличие от обработчиков обновлений
