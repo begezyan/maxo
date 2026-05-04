@@ -89,7 +89,7 @@
             ctx: Ctx,
             next: NextMiddleware[MessageCreated],
         ) -> Any:
-            user = await get_user_from_db(update.message.sender.user_id)
+            user = await get_user_from_db(update.message.unsafe_sender.user_id)
             ctx["user"] = user  # кладём в контекст
             return await next(ctx)
 

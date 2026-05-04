@@ -60,7 +60,11 @@ Dependency Injection (DI)
     # Пример фильтра, который возвращает данные пользователя
     class UserFilter(BaseFilter[MessageCreated]):
         async def __call__(self, update: MessageCreated, ctx: Ctx) -> bool:
-            user = await get_user_from_db(update.message.sender.user_id)
+            sender = update.message.sender
+            if sender is None:
+                return False
+
+            user = await get_user_from_db(sender.user_id)
             if user:
                 ctx["user"] = user  # Передаем user в обработчик
                 return True
