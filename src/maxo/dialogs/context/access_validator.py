@@ -3,9 +3,9 @@ from logging import getLogger
 from maxo.dialogs import ChatEvent
 from maxo.dialogs.api.entities import Context, Stack
 from maxo.dialogs.api.protocols import StackAccessValidator
+from maxo.enums import ChatType
 from maxo.routing.ctx import Ctx
-from maxo.routing.middlewares.update_context import EVENT_FROM_USER_KEY
-from maxo.types import User
+from maxo.routing.middlewares.update_context import EVENT_CHAT_KEY, EVENT_FROM_USER_KEY
 
 logger = getLogger(__name__)
 
@@ -20,18 +20,15 @@ class DefaultAccessValidator(StackAccessValidator):
     ) -> bool:
         access_settings = context.access_settings if context else stack.access_settings
 
-        # if everything is disabled, it is allowed
-        if access_settings is None:
+        if not access_settings:
             return True
-        if not (access_settings.user_ids or access_settings.custom):
+        chat = ctx.get(EVENT_CHAT_KEY)
+        # У maxo нет ChatType.PRIVATE, аналог - ChatType.DIALOG
+        if chat is not None and chat.type is ChatType.DIALOG:
             return True
-
-        user: User | None = ctx.get(EVENT_FROM_USER_KEY)
-        # Если access требует user_ids а user отсутствует (например, пост в канале)
-        # - доступ запрещён, AttributeError быть не должен
-        if user is None:
-            return False
-        if user.id in access_settings.user_ids:  # noqa: SIM103
-            return True
-
-        return False
+        if access_settings.user_ids:
+            user = ctx.get(EVENT_FROM_USER_KEY)
+            # Пост в канале без user - не пройдёт user_ids, но не AttributeError
+            if user is None or user.id not in access_settings.user_ids:
+                return False
+        return True

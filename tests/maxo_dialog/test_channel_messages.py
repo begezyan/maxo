@@ -1,4 +1,5 @@
 """Тесты обработки сообщений из каналов (без sender.user) - закрывает issue #111."""
+from types import SimpleNamespace
 from typing import Any
 
 import pytest
@@ -12,7 +13,7 @@ from maxo.dialogs.test_tools import BotClient, MockMessageManager
 from maxo.dialogs.test_tools.memory_storage import JsonMemoryStorage
 from maxo.enums import ChatType
 from maxo.fsm.key_builder import DefaultKeyBuilder
-from maxo.routing.middlewares.update_context import EVENT_FROM_USER_KEY
+from maxo.routing.middlewares.update_context import EVENT_CHAT_KEY, EVENT_FROM_USER_KEY
 
 
 @pytest.fixture
@@ -107,14 +108,35 @@ async def test_access_validator_allows_when_no_settings() -> None:
 
 
 @pytest.mark.asyncio
+async def test_access_validator_allows_in_dialog_chat() -> None:
+    """В приватном чате (DIALOG) доступ разрешён даже при заданных user_ids."""
+    validator = DefaultAccessValidator()
+    stack = Stack(
+        _id="default",
+        access_settings=AccessSettings(user_ids=[999]),
+    )
+    ctx: dict = {
+        EVENT_CHAT_KEY: SimpleNamespace(type=ChatType.DIALOG),
+        EVENT_FROM_USER_KEY: None,
+    }
+
+    allowed = await validator.is_allowed(stack=stack, context=None, event=None, ctx=ctx)
+
+    assert allowed is True
+
+
+@pytest.mark.asyncio
 async def test_access_validator_denies_when_user_required_but_missing() -> None:
-    """Если access_settings требует user_ids а user=None - доступ запрещён (не AttributeError)."""
+    """В канале без user и при заданных user_ids - доступ запрещён (не AttributeError)."""
     validator = DefaultAccessValidator()
     stack = Stack(
         _id="default",
         access_settings=AccessSettings(user_ids=[1, 2, 3]),
     )
-    ctx: dict = {EVENT_FROM_USER_KEY: None}
+    ctx: dict = {
+        EVENT_CHAT_KEY: SimpleNamespace(type=ChatType.CHANNEL),
+        EVENT_FROM_USER_KEY: None,
+    }
 
     allowed = await validator.is_allowed(stack=stack, context=None, event=None, ctx=ctx)
 
