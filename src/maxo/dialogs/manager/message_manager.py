@@ -141,7 +141,8 @@ class MessageManager(MessageManagerProtocol):
             await self.remove_message_safe(bot, old_message, new_message)
             sent_message = await self.send_message(bot, new_message)
             return _combine(new_message, sent_message)
-        return await self.edit_message_safe(bot, new_message, old_message)
+        sent_message = await self.edit_message_safe(bot, new_message, old_message)
+        return _combine(new_message, sent_message)
 
     # Clear
     async def remove_kbd(
@@ -217,9 +218,9 @@ class MessageManager(MessageManagerProtocol):
         bot: Bot,
         new_message: NewMessage,
         old_message: OldMessage,
-    ) -> OldMessage:
+    ) -> Message:
         try:
-            await self.edit_message(bot, new_message, old_message)
+            return await self.edit_message(bot, new_message, old_message)
         except MaxBotBadRequestError as err:
             if "message is not modified" in err.message:
                 raise MessageNotModified from err
@@ -227,24 +228,15 @@ class MessageManager(MessageManagerProtocol):
                 "message can't be edited" in err.message
                 or "message to edit not found" in err.message
             ):
-                sent_message = await self.send_message(bot, new_message)
-                return _combine(new_message, sent_message)
+                return await self.send_message(bot, new_message)
             raise
-        # Edit прошёл - конструируем OldMessage без рефетча через get_message_by_id
-        return OldMessage(
-            message_id=old_message.message_id,
-            sequence_id=old_message.sequence_id,
-            recipient=old_message.recipient,
-            text=new_message.text,
-            attachments=old_message.attachments,
-        )
 
     async def edit_message(
         self,
         bot: Bot,
         new_message: NewMessage,
         old_message: OldMessage,
-    ) -> None:
+    ) -> Message:
         attachments = await self._build_attachments(
             bot,
             new_message.keyboard,
@@ -257,6 +249,7 @@ class MessageManager(MessageManagerProtocol):
             attachments=attachments,
             format=new_message.parse_mode,
         )
+        return await bot.get_message_by_id(message_id=old_message.message_id)
 
     async def send_message(self, bot: Bot, new_message: NewMessage) -> Message:
         if new_message.link_preview_options:
