@@ -19,7 +19,7 @@ class MessageManagerProtocol(Protocol):
         bot: Bot,
         show_mode: ShowMode,
         old_message: OldMessage | None,
-    ) -> str | None:
+    ) -> None:
         raise NotImplementedError
 
     @abstractmethod

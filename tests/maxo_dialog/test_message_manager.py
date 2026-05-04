@@ -37,8 +37,8 @@ def _make_old_message_with_kbd(mid: str = "55") -> OldMessage:
 
 
 @pytest.mark.asyncio
-async def test_remove_inline_kbd_returns_message_id_str() -> None:
-    """remove_inline_kbd теперь возвращает str (message_id), не Message."""
+async def test_remove_inline_kbd_skips_refetch() -> None:
+    """remove_inline_kbd не делает get_message_by_id после edit."""
     bot = AsyncMock()
     bot.edit_message = AsyncMock()
     bot.get_message_by_id = AsyncMock()
@@ -48,7 +48,7 @@ async def test_remove_inline_kbd_returns_message_id_str() -> None:
 
     bot.edit_message.assert_awaited_once()
     bot.get_message_by_id.assert_not_called()
-    assert result == "55"
+    assert result is None
 
 
 @pytest.mark.asyncio
@@ -65,7 +65,7 @@ async def test_remove_kbd_no_update_returns_none() -> None:
 
 @pytest.mark.asyncio
 async def test_edit_message_does_not_call_get_message_by_id() -> None:
-    """edit_message больше не делает рефетч после PUT - синтезирует Message локально."""
+    """edit_message больше не делает рефетч и не возвращает Message."""
     bot = AsyncMock()
     bot.edit_message = AsyncMock()
     bot.get_message_by_id = AsyncMock()
@@ -79,5 +79,25 @@ async def test_edit_message_does_not_call_get_message_by_id() -> None:
 
     bot.edit_message.assert_awaited_once()
     bot.get_message_by_id.assert_not_called()
-    assert result.body.mid == "42"
-    assert result.body.text == "new text"
+    assert result is None
+
+
+@pytest.mark.asyncio
+async def test_edit_message_safe_returns_old_message_without_refetch() -> None:
+    """edit_message_safe строит OldMessage напрямую из new + старого id, без рефетча."""
+    bot = AsyncMock()
+    bot.edit_message = AsyncMock()
+    bot.get_message_by_id = AsyncMock()
+    mgr = MessageManager(media_id_storage=AsyncMock())
+
+    result = await mgr.edit_message_safe(
+        bot,
+        _make_new_message("new text"),
+        _make_old_message(mid="42"),
+    )
+
+    bot.edit_message.assert_awaited_once()
+    bot.get_message_by_id.assert_not_called()
+    assert isinstance(result, OldMessage)
+    assert result.message_id == "42"
+    assert result.text == "new text"

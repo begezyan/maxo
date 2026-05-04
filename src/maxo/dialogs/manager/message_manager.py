@@ -1,6 +1,5 @@
 import warnings
 from collections.abc import Sequence
-from datetime import UTC, datetime
 from logging import getLogger
 
 from maxo import Bot
@@ -23,7 +22,6 @@ from maxo.types import (
     MediaAttachments,
     MediaAttachmentsRequests,
     Message,
-    MessageBody,
     PhotoAttachmentRequest,
     VideoAttachmentRequest,
 )
@@ -143,8 +141,7 @@ class MessageManager(MessageManagerProtocol):
             await self.remove_message_safe(bot, old_message, new_message)
             sent_message = await self.send_message(bot, new_message)
             return _combine(new_message, sent_message)
-        sent_message = await self.edit_message_safe(bot, new_message, old_message)
-        return _combine(new_message, sent_message)
+        return await self.edit_message_safe(bot, new_message, old_message)
 
     # Clear
     async def remove_kbd(
@@ -152,30 +149,29 @@ class MessageManager(MessageManagerProtocol):
         bot: Bot,
         show_mode: ShowMode,
         old_message: OldMessage | None,
-    ) -> str | None:
+    ) -> None:
         if show_mode is ShowMode.NO_UPDATE:
-            return None
+            return
         if show_mode is ShowMode.DELETE_AND_SEND and old_message:
-            # удалили - msg_id больше не валиден
             await self.remove_message_safe(bot, old_message, None)
-            return None
-        return await self._remove_kbd(bot, old_message, None)
+            return
+        await self._remove_kbd(bot, old_message, None)
 
     async def _remove_kbd(
         self,
         bot: Bot,
         old_message: OldMessage | None,
         new_message: NewMessage | None,
-    ) -> str | None:
-        return await self.remove_inline_kbd(bot, old_message)
+    ) -> None:
+        await self.remove_inline_kbd(bot, old_message)
 
     async def remove_inline_kbd(
         self,
         bot: Bot,
         old_message: OldMessage | None,
-    ) -> str | None:
+    ) -> None:
         if not old_message or old_message.keyboard is None:
-            return None
+            return
         logger.debug("remove_inline_kbd in %s", old_message.recipient)
         try:
             new_attachments = [
@@ -189,23 +185,21 @@ class MessageManager(MessageManagerProtocol):
             )
         except MaxBotBadRequestError as err:
             if "message is not modified" in err.message:
-                # клавиатуры уже не было, но сообщение есть
-                return old_message.message_id
+                return  # клавиатуры уже не было
             if (
                 "message can't be edited" in err.message
                 or "message to edit not found" in err.message
                 or "MESSAGE_ID_INVALID" in err.message
             ):
-                return None
+                return
             raise
-        return old_message.message_id
 
     async def remove_message_safe(
         self,
         bot: Bot,
         old_message: OldMessage,
         new_message: NewMessage | None,
-    ) -> Message | None:
+    ) -> None:
         try:
             await bot.delete_message(
                 message_id=old_message.message_id,
@@ -218,16 +212,14 @@ class MessageManager(MessageManagerProtocol):
             else:
                 raise
 
-        return None
-
     async def edit_message_safe(
         self,
         bot: Bot,
         new_message: NewMessage,
         old_message: OldMessage,
-    ) -> Message:
+    ) -> OldMessage:
         try:
-            return await self.edit_message(bot, new_message, old_message)
+            await self.edit_message(bot, new_message, old_message)
         except MaxBotBadRequestError as err:
             if "message is not modified" in err.message:
                 raise MessageNotModified from err
@@ -235,15 +227,24 @@ class MessageManager(MessageManagerProtocol):
                 "message can't be edited" in err.message
                 or "message to edit not found" in err.message
             ):
-                return await self.send_message(bot, new_message)
+                sent_message = await self.send_message(bot, new_message)
+                return _combine(new_message, sent_message)
             raise
+        # Edit прошёл - конструируем OldMessage без рефетча через get_message_by_id
+        return OldMessage(
+            message_id=old_message.message_id,
+            sequence_id=old_message.sequence_id,
+            recipient=old_message.recipient,
+            text=new_message.text,
+            attachments=old_message.attachments,
+        )
 
     async def edit_message(
         self,
         bot: Bot,
         new_message: NewMessage,
         old_message: OldMessage,
-    ) -> Message:
+    ) -> None:
         attachments = await self._build_attachments(
             bot,
             new_message.keyboard,
@@ -255,21 +256,6 @@ class MessageManager(MessageManagerProtocol):
             text=new_message.text,
             attachments=attachments,
             format=new_message.parse_mode,
-        )
-        # Синтезируем Message локально вместо лишнего GET /messages/{mid}
-        # attachments в MessageBody response-типизированы; реально мы их не знаем
-        # после edit без рефетча, поэтому переиспользуем старые - downstream
-        # _combine использует их как новое состояние OldMessage. Минорная
-        # стагнация в случае смены media, но без AttributeError.
-        return Message(
-            body=MessageBody(
-                mid=old_message.message_id,
-                seq=old_message.sequence_id,
-                text=new_message.text,
-                attachments=old_message.attachments,
-            ),
-            recipient=old_message.recipient,
-            timestamp=datetime.now(UTC),
         )
 
     async def send_message(self, bot: Bot, new_message: NewMessage) -> Message:
