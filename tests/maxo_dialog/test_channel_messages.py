@@ -1,5 +1,4 @@
 """Тесты обработки сообщений из каналов (без sender.user) - закрывает issue #111."""
-from types import SimpleNamespace
 from typing import Any
 
 import pytest
@@ -13,7 +12,11 @@ from maxo.dialogs.test_tools import BotClient, MockMessageManager
 from maxo.dialogs.test_tools.memory_storage import JsonMemoryStorage
 from maxo.enums import ChatType
 from maxo.fsm.key_builder import DefaultKeyBuilder
-from maxo.routing.middlewares.update_context import EVENT_CHAT_KEY, EVENT_FROM_USER_KEY
+from maxo.routing.middlewares.update_context import (
+    EVENT_FROM_USER_KEY,
+    UPDATE_CONTEXT_KEY,
+)
+from maxo.types.update_context import UpdateContext
 
 
 @pytest.fixture
@@ -116,7 +119,7 @@ async def test_access_validator_allows_in_dialog_chat() -> None:
         access_settings=AccessSettings(user_ids=[999]),
     )
     ctx: dict = {
-        EVENT_CHAT_KEY: SimpleNamespace(type=ChatType.DIALOG),
+        UPDATE_CONTEXT_KEY: UpdateContext(type=ChatType.DIALOG),
         EVENT_FROM_USER_KEY: None,
     }
 
@@ -134,7 +137,7 @@ async def test_access_validator_denies_when_user_required_but_missing() -> None:
         access_settings=AccessSettings(user_ids=[1, 2, 3]),
     )
     ctx: dict = {
-        EVENT_CHAT_KEY: SimpleNamespace(type=ChatType.CHANNEL),
+        UPDATE_CONTEXT_KEY: UpdateContext(type=ChatType.CHANNEL),
         EVENT_FROM_USER_KEY: None,
     }
 
