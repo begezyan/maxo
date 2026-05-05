@@ -1,14 +1,15 @@
-"""Пример параллельной обработки callback в Dialog.
+"""
+Пример параллельной обработки callback в Dialog
 
 Стандартный Dialog._callback_handler делает answer_callback() и show()
-последовательно. На больших RTT (например, RU↔SG ~220ms) это даёт
-лишнюю задержку - оба запроса независимы, можно параллелить.
+последовательно. На больших RTT (например, Россия<->Сингапур ~220ms) это даёт
+лишнюю задержку - оба запроса независимы, можно параллелить
 
 ParallelDialog ниже оверрайдит _callback_handler через asyncio.gather.
 Семантика та же: если show() кидает исключение - оно пробрасывается,
-как и в sequential варианте (gather по умолчанию не глотает).
+как и в sequential варианте (gather по умолчанию не глотает)
 
-Применять имеет смысл только если бот географически далеко от Max API.
+Применять имеет смысл только если бот географически далеко от Max API
 """
 import asyncio
 import dataclasses
@@ -69,8 +70,8 @@ class ParallelDialog(Dialog):
 
 
 class DialogSG(StatesGroup):
-    a = State()
-    b = State()
+    A = State()
+    B = State()
 
 
 async def on_ping(
@@ -78,24 +79,23 @@ async def on_ping(
     button: Button,
     dialog_manager: DialogManager,
 ) -> None:
-    dialog_manager.dialog_data["pongs"] = (
-        dialog_manager.dialog_data.get("pongs", 0) + 1
-    )
+    pongs = dialog_manager.dialog_data.get("pongs", 0)
+    dialog_manager.dialog_data["pongs"] = pongs + 1
 
 
 dialog = ParallelDialog(
     Window(
         Const("Окно A"),
         Row(
-            Button(Const("Ping"), id="ping", on_click=on_ping),
-            SwitchTo(Const("В B"), id="to_b", state=DialogSG.b),
+            Button(Const("Пинг"), id="ping", on_click=on_ping),
+            SwitchTo(Const("Окно Б"), id="to_b", state=DialogSG.B),
         ),
-        state=DialogSG.a,
+        state=DialogSG.A,
     ),
     Window(
-        Const("Окно B"),
-        SwitchTo(Const("В A"), id="to_a", state=DialogSG.a),
-        state=DialogSG.b,
+        Const("Окно Б"),
+        SwitchTo(Const("Окно A"), id="to_a", state=DialogSG.A),
+        state=DialogSG.B,
     ),
 )
 
@@ -105,8 +105,9 @@ dp = Dispatcher(key_builder=key_builder)
 
 
 @dp.message_created(CommandStart())
-async def start(message: MessageCreated, dialog_manager: DialogManager) -> None:
-    await dialog_manager.start(DialogSG.a, mode=StartMode.RESET_STACK)
+@dp.bot_started()
+async def start(_: Any, dialog_manager: DialogManager) -> None:
+    await dialog_manager.start(DialogSG.A, mode=StartMode.RESET_STACK)
 
 
 def main() -> None:
