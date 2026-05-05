@@ -4,7 +4,7 @@ from maxo.types.markup_element import MarkupElement
 
 class StrikethroughMarkup(MarkupElement):
     """
-    Представляет ~зачекрнутый~ текст
+    Представляет ~зачёкрнутый~ текст
 
     Args:
         type:

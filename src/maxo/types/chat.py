@@ -15,25 +15,28 @@ class Chat(MaxoType):
     """
     Args:
         chat_id: ID чата
-        chat_message_id: ID сообщения, содержащего кнопку, через которую был инициирован чат
+        chat_message_id: Идентификатор сообщения с кнопкой, через которую был инициирован чата
         description: Описание чата
         dialog_with_user: Данные о пользователе в диалоге (только для чатов типа `"dialog"`)
         icon: Иконка чата
         is_public: Доступен ли чат публично (для диалогов всегда `false`)
         last_event_time: Время последнего события в чате
         link: Ссылка на чат
+        messages_count: Количество сообщений в групповых чатах и каналах
         owner_id: ID владельца чата
         participants: Участники чата с временем последней активности. Может быть `null`, если запрашивается список чатов
         participants_count: Количество участников чата. Для диалогов всегда `2`
         pinned_message: Закреплённое сообщение в чате (возвращается только при запросе конкретного чата)
         status: Статус чата:
-            - `"active"` — Бот является активным участником чата.
-            - `"removed"` — Бот был удалён из чата.
-            - `"left"` — Бот покинул чат.
-            - `"closed"` — Чат был закрыт.
+            - `"active"` — Бот является активным участником чата
+            - `"removed"` — Бот был удалён из чата
+            - `"left"` — Бот покинул чат
+            - `"closed"` — Чат был закрыт
         title: Отображаемое название чата. Может быть `null` для диалогов
         type: Тип чата:
-             - `"chat"` — Групповой чат.
+             - `"chat"` — Групповой чат
+             - `"channel"` — Канал
+             - `"dialog"` — Диалог
     """
 
     chat_id: int
@@ -47,15 +50,17 @@ class Chat(MaxoType):
     status: ChatStatus
     """
     Статус чата:
-        - `"active"` — Бот является активным участником чата.
-        - `"removed"` — Бот был удалён из чата.
-        - `"left"` — Бот покинул чат.
-        - `"closed"` — Чат был закрыт.
+        - `"active"` — Бот является активным участником чата
+        - `"removed"` — Бот был удалён из чата
+        - `"left"` — Бот покинул чат
+        - `"closed"` — Чат был закрыт
     """
     type: ChatType
     """
     Тип чата:
-         - `"chat"` — Групповой чат.
+         - `"chat"` — Групповой чат
+         - `"channel"` — Канал
+         - `"dialog"` — Диалог
     """
 
     description: str | None = None
@@ -66,11 +71,13 @@ class Chat(MaxoType):
     """Отображаемое название чата. Может быть `null` для диалогов"""
 
     chat_message_id: Omittable[str | None] = Omitted()
-    """ID сообщения, содержащего кнопку, через которую был инициирован чат"""
+    """Идентификатор сообщения с кнопкой, через которую был инициирован чата"""
     dialog_with_user: Omittable[UserWithPhoto | None] = Omitted()
     """Данные о пользователе в диалоге (только для чатов типа `"dialog"`)"""
     link: Omittable[str | None] = Omitted()
     """Ссылка на чат"""
+    messages_count: Omittable[int | None] = Omitted()
+    """Количество сообщений в групповых чатах и каналах"""
     owner_id: Omittable[int | None] = Omitted()
     """ID владельца чата"""
     participants: Omittable[dict[str, Any] | None] = Omitted()
@@ -130,6 +137,16 @@ class Chat(MaxoType):
         raise AttributeIsEmptyError(
             obj=self,
             attr="link",
+        )
+
+    @property
+    def unsafe_messages_count(self) -> int:
+        if is_defined(self.messages_count):
+            return self.messages_count
+
+        raise AttributeIsEmptyError(
+            obj=self,
+            attr="messages_count",
         )
 
     @property

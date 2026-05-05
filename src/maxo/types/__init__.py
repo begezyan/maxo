@@ -67,6 +67,7 @@ from .photo_attachment_payload import PhotoAttachmentPayload
 from .photo_attachment_request import PhotoAttachmentRequest
 from .photo_attachment_request_payload import PhotoAttachmentRequestPayload
 from .photo_token import PhotoToken
+from .quote_markup import QuoteMarkup
 from .recipient import Recipient
 from .request_contact_button import RequestContactButton
 from .request_geo_location_button import RequestGeoLocationButton
@@ -164,6 +165,7 @@ __all__ = (
     "PhotoAttachmentRequest",
     "PhotoAttachmentRequestPayload",
     "PhotoToken",
+    "QuoteMarkup",
     "Recipient",
     "RequestContactButton",
     "RequestGeoLocationButton",
