@@ -1,7 +1,7 @@
 {
     "openapi": "3.0.0",
     "info": {
-        "version": "0.0.1",
+        "version": "0.0.30",
         "title": "Max Bot API",
         "license": {
             "name": "Apache 2.0"
@@ -591,7 +591,7 @@
                 "tags": [
                     "chats"
                 ],
-                "operationId": "setAdmins",
+                "operationId": "postAdmins",
                 "description": "Возвращает значение `true`, если в групповой чат добавлены все администраторы \n\nПример запроса:\n```bash\ncurl -X POST \"https://platform-api.max.ru/chats/{chatId}/members/admins\" \\\n  -H \"Authorization: {access_token}\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n  \"admins\": [\n    {\n      \"user_id\": \"{user_id}\",\n      \"permissions\": [\n        \"read_all_messages\",\n        \"add_remove_members\",\n        \"add_admins\",\n        \"change_chat_info\",\n        \"pin_message\",\n        \"write\"\n      ],\n      \"alias\": \"Admin\"\n    }\n  ]\n}'\n```",
                 "summary": "Назначить администратора группового чата",
                 "parameters": [
@@ -696,7 +696,7 @@
                     },
                     {
                         "name": "user_ids",
-                        "description": "Список ID пользователей, чье членство нужно получить. Когда этот параметр передан, параметры `count` и `marker` игнорируются",
+                        "description": "Список ID пользователей, чьё членство нужно получить. Когда этот параметр передан, параметры `count` и `marker` игнорируются",
                         "required": false,
                         "in": "query",
                         "schema": {
@@ -873,8 +873,8 @@
                     "subscriptions"
                 ],
                 "operationId": "getSubscriptions",
-                "description": "Если ваш бот получает данные через Webhook, этот метод возвращает список всех подписок. При настройке уведомлений для production-окружения рекомендуем использовать Webhook\n\n>Обратите внимание: для отправки вебхуков поддерживается только протокол HTTPS, включая самоподписанные сертификаты. HTTP не поддерживается\n\nПример запроса:\n```bash\ncurl -X GET \"https://platform-api.max.ru/subscriptions\" \\\n  -H \"Authorization: {access_token}\"\n```",
-                "summary": "Получение подписок",
+                "description": "Если ваш бот получает данные через Webhook, этот метод возвращает список всех подписок \n\n> ! Получение обновлений с помощью [Long Polling](/docs-api/methods/GET/updates) ограничено по скорости и сроку хранения событий — этот способ не подходит для production-окружения. Рекомендуем на всех этапах работы использовать [Webhook](/docs-api/methods/POST/subscriptions)\n\n>Обратите внимание: для отправки вебхуков поддерживается только протокол HTTPS, включая самоподписанные сертификаты. HTTP не поддерживается\n\nПример запроса:\n```bash\ncurl -X GET \"https://platform-api.max.ru/subscriptions\" \\\n  -H \"Authorization: {access_token}\"\n```",
+                "summary": "Получение всех подписок через Webhook",
                 "responses": {
                     "200": {
                         "description": "Ожидаемый результат",
@@ -899,8 +899,8 @@
                     "subscriptions"
                 ],
                 "operationId": "subscribe",
-                "description": "Метод настраивает доставку событий бота через Webhook — основной механизм получения событий в продуктовых интеграциях. При активной подписке Long Polling не работает\n\n## Модель доставки событий\n\nПосле вызова метода события отправляются на указанный Webhook-endpoint в виде HTTPS POST-запросов с объектом [`Update`](https://dev.max.ru/docs-api/objects/Update)\n\nКак обрабатывается событие:\n\n1. При наступлении события выполняется вызов Webhook-endpoint\n2. Выполняется TLS-валидация целевого endpoint для безопасной передачи данных\n3. На endpoint отправляется HTTP-запрос\n4. Если при создании подписки указан `secret`, проверяется заголовок `X-Max-Bot-Api-Secret` \n5. При успешной валидации возвращается HTTP 200 OK\n6. Выполняется бизнес-логика обработки события\n7. Инициируются вызовы MAX API\n\n\n## Требования к Webhook-endpoint\n\n### URL и порт\n\nWebhook-endpoint должен быть доступен по HTTPS на порту 443. Ваш сервер должен прослушивать этот порт. Порт в URL не указывается:\n\n```\nhttps://your-domain.com/webhook\n```\n\n> Поддерживается только порт 443. Если endpoint недоступен, события не доставляются\n\n### Безопасность соединения (TLS)\n\nПеред отправкой событий устанавливается HTTPS-соединение и проверяется TLS-сертификат Webhook-endpoint. Это необходимо для безопасной передачи информации\n\nТребования к сертификату:\n\n- сертификат выдан доверенным центром сертификации\n- самоподписанные сертификаты не поддерживаются\n- доменное имя в URL совпадает с CN или SAN сертификата\n- сервер предоставляет полную цепочку сертификатов\n\n> Если TLS-проверка не проходит, события не доставляются\n\n### Обработка запросов\n\nWebhook-endpoint должен возвращать **HTTP 200** в течение 30 секунд. Любой другой код ответа или превышение тайм-аута — ошибка доставки\n\nПример запроса:\n```bash\ncurl -X POST \"https://platform-api.max.ru/subscriptions\" \\\n  -H \"Authorization: {access_token}\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n  \"url\": \"https://your-domain.com/webhook\",\n  \"update_types\": [\"message_created\", \"bot_started\"],\n  \"secret\": \"your_secret\"\n}'\n```\n\n### Политика повторных попыток\n\nЕсли доставка не удалась, выполняется до 10 повторных попыток с экспоненциально растущим интервалом:\n\n- 1-я попытка: через 60 секунд\n- 2-я попытка: через 150 секунд (60 × 2,5)\n- 3-я попытка: через 375 секунд (150 × 2,5)\n- и так далее\n\n> Если в течение 8 часов по URL вебхука не получен успешный ответ, бот автоматически отписывается от вебхука\n\n## Безопасность Webhook-запросов\n\n Параметр `secret` позволяет убедиться, что Webhook-запросы приходят от MAX, а не от третьей стороны. Это необязательный параметр, но мы настоятельно рекомендуем указывать его. Проверяйте значение заголовка `X-Max-Bot-Api-Secret` на Webhook-сервере и отклоняйте запросы при несоответствии \n\nЕсли `secret` указан при создании подписки, он передаётся в заголовке `X-Max-Bot-Api-Secret` каждого Webhook-запроса\n\n  \n\n---\n\n## Формат и типы событий\n\nWebhook-запрос содержит объект [`Update`](https://dev.max.ru/docs-api/objects/Update)\n\nПолный список типов событий и структура объекта описаны в разделе [Update](https://dev.max.ru/docs-api/objects/Update)",
-                "summary": "Подписка на обновления",
+                "description": "Метод настраивает доставку событий бота через Webhook  — основной механизм получения событий в продуктовых интеграциях. При активной подписке Long Polling не работает \n\n> ! Получение обновлений с помощью [Long Polling](/docs-api/methods/GET/updates) ограничено по скорости и сроку хранения событий — этот способ не подходит для production-окружения. Рекомендуем на всех этапах работы использовать [Webhook](/docs-api/methods/POST/subscriptions)\n\n## Модель доставки событий\n\nПосле вызова метода `POST /subscriptions` события отправляются на указанный Webhook-endpoint в виде HTTPS POST-запросов с объектом [`Update`](https://dev.max.ru/docs-api/objects/Update)\n\nКак обрабатывается событие:\n\n1. При наступлении события выполняется вызов Webhook-endpoint\n2. Выполняется TLS-валидация целевого endpoint для безопасной передачи данных\n3. На endpoint отправляется HTTPS-запрос\n4. Если при создании подписки указан `secret`, проверяется заголовок `X-Max-Bot-Api-Secret` \n5. При успешной валидации возвращается HTTP `200 OK`\n6. Выполняется обработка события\n7. Инициируются вызовы MAX API\n\n\n## Требования к Webhook-endpoint\n\n### URL и порт\n\nWebhook-endpoint должен быть доступен по HTTPS на порту 443. Ваш сервер должен прослушивать этот порт. Порт в URL не указывается:\n\n```\nhttps://your-domain.com/webhook\n```\n\n> Поддерживается только порт 443. Если endpoint недоступен, события не доставляются\n\n### Безопасность соединения (TLS)\n\nПеред отправкой событий устанавливается HTTPS-соединение, и Webhook-endpoint проверяется на соответствие следующим требованиям безопасности соединения:\n- Webhook-endpoint удостоверен TLS-сертификатом, выданным доверенным центром сертификации. Самоподписанные сертификаты не поддерживаются \n- Доменное имя в URL Webhook-endpoint совпадает с CN или SAN сертификата\n- Сервер предоставляет полную цепочку сертификатов\n\n> Если проверка не пройдена, события не доставляются\n\n### Обработка запросов\n\nWebhook-endpoint должен возвращать **HTTP 200** в течение 30 секунд. Любой другой код ответа или превышение тайм-аута считается ошибкой доставки\n\nПример запроса:\n```bash\ncurl -X POST \"https://platform-api.max.ru/subscriptions\" \\\n  -H \"Authorization: {access_token}\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n  \"url\": \"https://your-domain.com/webhook\",\n  \"update_types\": [\"message_created\", \"bot_started\"],\n  \"secret\": \"your_secret\"\n}'\n```\n\n### Политика повторных попыток\n\nЕсли доставка не удалась, выполняется до 10 повторных попыток с экспоненциально растущим интервалом:\n\n- 1-я попытка: через 60 секунд\n- 2-я попытка: через 150 секунд (60 × 2,5)\n- 3-я попытка: через 375 секунд (150 × 2,5)\n- и так далее\n\n> Если в течение 8 часов от Webhook-endpoint не получен успешный ответ, бот автоматически от него отписывается\n\n## Безопасность Webhook-запросов\n\n Параметр `secret` позволяет убедиться, что Webhook-запросы приходят от MAX, а не от третьей стороны. Это необязательный параметр, но мы настоятельно рекомендуем указывать его. Проверяйте значение заголовка `X-Max-Bot-Api-Secret` на Webhook-сервере и отклоняйте запросы при несоответствии \n\nЕсли `secret` указан при создании подписки, он передаётся в заголовке `X-Max-Bot-Api-Secret` каждого Webhook-запроса\n\n  \n\n---\n\n## Формат и типы событий\n\nWebhook-запрос содержит объект [`Update`](https://dev.max.ru/docs-api/objects/Update)\n\nПолный список типов событий и структура объекта описаны в разделе [Update](https://dev.max.ru/docs-api/objects/Update)",
+                "summary": "Подписка на обновления о новых событиях через Webhook",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -928,8 +928,8 @@
                     "subscriptions"
                 ],
                 "operationId": "unsubscribe",
-                "description": "Отписывает бота от получения обновлений через Webhook. После вызова этого метода бот перестаёт получать уведомления о новых событиях, и становится доступна доставка уведомлений через API с длительным опросом\n\nПример запроса:\n```bash\ncurl -X DELETE \"https://platform-api.max.ru/subscriptions?url=https://your-domain.com/webhook\" \\\n  -H \"Authorization: {access_token}\"\n```",
-                "summary": "Отписка от обновлений",
+                "description": "Отписывает бота от получения обновлений о новых событиях через Webhook. После вызова этого метода бот перестаёт получать уведомления о новых событиях на Webhook-endpoint, и становится доступна доставка уведомлений через Long Polling \n\n  > ! Получение обновлений с помощью [Long Polling](/docs-api/methods/GET/updates) ограничено по скорости и сроку хранения событий — этот способ не подходит для production-окружения. Рекомендуем на всех этапах работы использовать [Webhook](/docs-api/methods/POST/subscriptions)\n\nПример запроса:\n```bash\ncurl -X DELETE \"https://platform-api.max.ru/subscriptions?url=https://your-domain.com/webhook\" \\\n  -H \"Authorization: {access_token}\"\n```",
+                "summary": "Отписка от обновлений о новых событиях через Webhook",
                 "parameters": [
                     {
                         "name": "url",
@@ -1086,7 +1086,7 @@
                     "messages"
                 ],
                 "operationId": "sendMessage",
-                "description": "Отправляет сообщение в чат\n\nПример запроса:\n````bash\ncurl -X POST \"https://platform-api.max.ru/messages?user_id={user_id}\" \\\n  -H \"Authorization: {access_token}\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n  \"text\": \"Это сообщение с кнопкой-ссылкой\",\n  \"attachments\": [\n    {\n      \"type\": \"inline_keyboard\",\n      \"payload\": {\n        \"buttons\": [\n          [\n            {\n              \"type\": \"link\",\n              \"text\": \"Откройте сайт\",\n              \"url\": \"https://example.com\"\n            }\n          ]\n        ]\n      }\n    }\n  ]\n}'",
+                "description": "Отправляет сообщение в чат\n\nНиже — пример запроса с одной кнопкой-ссылкой. Больше примеров запросов с кнопками — [в разделе «Клавиатура»](/docs-api#Как%20добавить%20кнопки)\n````bash\ncurl -X POST \"https://platform-api.max.ru/messages?user_id={user_id}\" \\\n  -H \"Authorization: {access_token}\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n  \"text\": \"Это сообщение с кнопкой-ссылкой\",\n  \"attachments\": [\n    {\n      \"type\": \"inline_keyboard\",\n      \"payload\": {\n        \"buttons\": [\n          [\n            {\n              \"type\": \"link\",\n              \"text\": \"Откройте сайт\",\n              \"url\": \"https://example.com\"\n            }\n          ]\n        ]\n      }\n    }\n  ]\n }'\n",
                 "summary": "Отправить сообщение",
                 "parameters": [
                     {
@@ -1305,7 +1305,7 @@
                 "parameters": [
                     {
                         "name": "callback_id",
-                        "description": "Идентификатор кнопки, по которой пользователь кликнул. Бот получает идентификатор как часть [Update](/docs-api/objects/Update) с типом`message_callback`.\n\nМожно получить из [GET:/updates](/docs-api/methods/GET/updates) через поле `updates[i].callback.callback_id`",
+                        "description": "Идентификатор кнопки, на которую нажал пользователь\n\n Идентификатор можно получить в обновлениях о событиях через [Webhook](/docs-api/methods/POST/subscriptions) или [Long Polling](/docs-api/methods/GET/updates)\n\n Получение обновлений с помощью [Long Polling](/docs-api/methods/GET/updates) ограничено по скорости и сроку хранения событий — этот способ не подходит для production-окружения. Рекомендуем на всех этапах работы использовать [Webhook](/docs-api/methods/POST/subscriptions)\n\n Когда пользователь нажмёт на кнопку, МАКС отправит событие, содержащее объект [Update](/docs-api/objects/Update) с типом `message_callback` и идентификатором кнопки в поле `updates[i].callback.callback_id`",
                         "required": true,
                         "in": "query",
                         "schema": {
@@ -1347,12 +1347,12 @@
                 "tags": [
                     "subscriptions"
                 ],
-                "description": "Этот метод можно использовать для получения обновлений при разработке и тестировании, если ваш бот не подписан на Webhook. Для production-окружения рекомендуем использовать Webhook \n\n Метод использует долгий опрос (long polling). Каждое обновление имеет свой номер последовательности. Свойство `marker` в ответе указывает на следующее ожидаемое обновление.\n\nВсе предыдущие обновления считаются завершёнными после прохождения параметра `marker`. Если параметр `marker` **не передан**, бот получит все обновления, произошедшие после последнего подтверждения\n\nПример запроса:\n```bash\ncurl -X GET \"https://platform-api.max.ru/updates\" \\\n  -H \"Authorization: {access_token}\"\n```",
-                "summary": "Получение обновлений",
+                "description": " > ! Получение обновлений с помощью [Long Polling](/docs-api/methods/GET/updates) ограничено по скорости и сроку хранения событий — этот способ не подходит для production-окружения. Рекомендуем на всех этапах работы использовать [Webhook](/docs-api/methods/POST/subscriptions)\n\nМетод `GET /updates` можно использовать для получения обновлений при разработке и тестировании, если ваш бот не подписан на Webhook. **Для production-окружения используйте только Webhook**\n\n  Каждое обновление со списком событий имеет свой порядковый номер. Свойство `marker` в ответе указывает на следующее ожидаемое обновление. После того, как вы передали `marker` с указателем на конкретное обновление, все предыдущие считаются прочитанными \n\n Если параметр `marker` **не передан** или передано значение `null`, вы получите только последнее обновление \n\n**Пример запроса:**\n```bash\ncurl -X GET \"https://platform-api.max.ru/updates\" \\\n  -H \"Authorization: {access_token}\"\n```",
+                "summary": "Получение обновлений о событиях через Long Polling",
                 "parameters": [
                     {
                         "name": "limit",
-                        "description": "Максимальное количество обновлений для получения",
+                        "description": "Максимальное количество обновлений о событиях, которое может вернуться в ответе на запрос",
                         "in": "query",
                         "schema": {
                             "type": "integer",
@@ -1374,7 +1374,7 @@
                     },
                     {
                         "name": "marker",
-                        "description": "Если передан, бот получит обновления, которые еще не были получены. Если не передан, получит все новые обновления",
+                        "description": "Чтобы получить последнее обновление событий, передайте `null` или оставьте поле пустым. Чтобы получить все обновления по событиям с момента предыдущего запроса, передайте значение `marker`, которое получили в ответ на предыдущий запрос",
                         "in": "query",
                         "schema": {
                             "type": "integer",
@@ -1384,7 +1384,7 @@
                     },
                     {
                         "name": "types",
-                        "description": "Список типов обновлений, которые бот хочет получить (например, `message_created`, `message_callback`)",
+                        "description": "Список типов событий, которые вы хотите получать, например: `message_created`, `message_callback`. Полный список возможных событий смотрите в описании [объекта `Update`](/docs-api/objects/Update)",
                         "in": "query",
                         "example": "types=message_created,message_callback",
                         "schema": {
@@ -1400,7 +1400,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Список обновлений",
+                        "description": "Список обновлений событий",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -1532,7 +1532,7 @@
                     "name": {
                         "description": "_Устаревшее поле, скоро будет удалено_",
                         "type": "string",
-                        "readOnly": false,
+                        "readOnly": true,
                         "nullable": true
                     }
                 },
@@ -1761,8 +1761,14 @@
                         "nullable": true,
                         "readOnly": false
                     },
+                    "messages_count": {
+                        "description": "Количество сообщений в групповых чатах и каналах",
+                        "nullable": true,
+                        "readOnly": false,
+                        "type": "integer"
+                    },
                     "chat_message_id": {
-                        "description": "ID сообщения, содержащего кнопку, через которую был инициирован чат",
+                        "description": "Идентификатор сообщения с кнопкой, через которую был инициирован чата",
                         "nullable": true,
                         "readOnly": false,
                         "type": "string"
@@ -1923,7 +1929,7 @@
                         "format": "int64"
                     },
                     "permissions": {
-                        "description": "Перечень прав доступа пользователя. Возможные значения:\n- `\"read_all_messages\"` — Читать все сообщения. Это право важно при назначении ботов: без него бот не будет получать апдейты (вебхуки) в групповом чате\n- `\"add_remove_members\"` — Добавлять/удалять участников\n- `\"add_admins\"` — Добавлять администраторов\n- `\"change_chat_info\"` — Изменять информацию о чате\n- `\"pin_message\"` — Закреплять сообщения\n- `\"write\"` — Писать сообщения\n- `\"can_call\"` — Совершать звонки\n- `\"edit_link\"` — Изменять ссылку на чат\n- `\"post_edit_delete_message\"` — Публиковать, редактировать и удалять сообщения\n- `\"edit_message\"` — Редактировать сообщения\n- `\"delete_message\"` — Удалять сообщения\n\nЕсли право назначается администратору, то обновляются его текущие права доступа",
+                        "description": "Перечень прав доступа пользователя. Возможные значения:\n- `\"read_all_messages\"` — Читать все сообщения. Это право важно при назначении ботов: без него бот не будет получать обновления через [Webhook](/docs-api/methods/POST/subscriptions) в групповом чате или канале\n- `\"add_remove_members\"` — Добавлять/удалять участников\n- `\"add_admins\"` — Добавлять администраторов\n- `\"change_chat_info\"` — Изменять информацию о чате\n- `\"pin_message\"` — Закреплять сообщения\n- `\"write\"` — Писать сообщения\n- `\"can_call\"` — Совершать звонки\n- `\"edit_link\"` — Изменять ссылку на чат\n- `\"post_edit_delete_message\"` — Публиковать, редактировать и удалять сообщения\n- `\"edit_message\"` — Редактировать сообщения\n- `\"delete_message\"` — Удалять сообщения\n\nЕсли право назначается администратору, то обновляются его текущие права доступа",
                         "type": "array",
                         "uniqueItems": true,
                         "items": {
@@ -2028,7 +2034,7 @@
                         "format": "int64"
                     },
                     "update_types": {
-                        "description": "Типы обновлений, на которые подписан бот",
+                        "description": "Типы событий, на которые подписан бот",
                         "example": "[\"message_created\", \"bot_started\"]",
                         "type": "array",
                         "nullable": true,
@@ -2042,8 +2048,7 @@
                 "required": [
                     "url",
                     "time",
-                    "update_types",
-                    "version"
+                    "update_types"
                 ]
             },
             "Recipient": {
@@ -2182,7 +2187,7 @@
                         }
                     },
                     "markup": {
-                        "description": "Разметка текста сообщения. Для подробной информации загляните в раздел [Форматирование](/docs-api#Форматирование%20текста)",
+                        "description": "Разметка текста сообщения. Для подробной информации загляните в раздел [Форматирование](/docs-api#Форматирование%20текста%20в%20сообщениях)",
                         "type": "array",
                         "nullable": true,
                         "readOnly": false,
@@ -2255,7 +2260,7 @@
                         "readOnly": false
                     },
                     "format": {
-                        "description": "Если установлен, текст сообщения будет форматирован данным способом. Для подробной информации загляните в раздел [Форматирование](/docs-api#Форматирование%20текста)",
+                        "description": "Если установлен, текст сообщения будет форматирован данным способом. Для подробной информации загляните в раздел [Форматирование](/docs-api#Форматирование%20текста%20в%20сообщениях)",
                         "readOnly": false,
                         "nullable": true,
                         "allOf": [
@@ -3005,7 +3010,7 @@
                 ]
             },
             "RequestContactButton": {
-                "description": "AПосле нажатия на такую кнопку клиент отправляет новое сообщение с вложением текущего контакта пользователя",
+                "description": "После нажатия на такую кнопку клиент отправляет новое сообщение с вложением текущего контакта пользователя",
                 "allOf": [
                     {
                         "$ref": "#/components/schemas/Button"
@@ -3098,6 +3103,26 @@
                     }
                 ]
             },
+            "ClipboardButton": {
+                "description": "При нажатии на кнопку с типом `clipboard` текст, указанный в свойстве `payload`, копируется в буфер обмена",
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/Button"
+                    },
+                    {
+                        "properties": {
+                            "payload": {
+                                "description": "Текст, который будет скопирован",
+                                "type": "string",
+                                "maxLength": 1024
+                            }
+                        },
+                        "required": [
+                            "payload"
+                        ]
+                    }
+                ]
+            },
             "MessageButton": {
                 "description": "Кнопка для запуска мини-приложения",
                 "allOf": [
@@ -3114,25 +3139,6 @@
                                 "type": "string"
                             }
                         }
-                    }
-                ]
-            },
-            "ClipboardButton": {
-                "description": "После нажатия на кнопку указанный текст копируется в буфер обмена",
-                "allOf": [
-                    {
-                        "$ref": "#/components/schemas/Button"
-                    },
-                    {
-                        "properties": {
-                            "payload": {
-                                "description": "Текст, который копируется в буфер обмена после нажатия на кнопку",
-                                "type": "string"
-                            }
-                        },
-                        "required": [
-                            "payload"
-                        ]
                     }
                 ]
             },
@@ -3616,7 +3622,7 @@
             "MarkupElement": {
                 "properties": {
                     "type": {
-                        "description": "Тип элемента разметки. Может быть **жирный**,  *курсив*, ~зачеркнутый~, <ins>подчеркнутый</ins>, `моноширинный`, ссылка или упоминание пользователя",
+                        "description": "Тип элемента разметки. Может быть **жирный**,  *курсив*, ~зачеркнутый~, <ins>подчеркнутый</ins>, `моноширинный`, выделенный, цитата, заголовок, ссылка или упоминание пользователя",
                         "type": "string"
                     },
                     "from": {
@@ -3639,7 +3645,10 @@
                         "link": "#/components/schemas/LinkMarkup",
                         "strikethrough": "#/components/schemas/StrikethroughMarkup",
                         "underline": "#/components/schemas/UnderlineMarkup",
-                        "user_mention": "#/components/schemas/UserMentionMarkup"
+                        "user_mention": "#/components/schemas/UserMentionMarkup",
+                        "heading": "#/components/schemas/HeadingMarkup",
+                        "highlighted": "#/components/schemas/HighlightedMarkup",
+                        "quote": "#/components/schemas/QuoteMarkup"
                     }
                 },
                 "required": [
@@ -3694,7 +3703,7 @@
                 ]
             },
             "StrikethroughMarkup": {
-                "description": "Представляет ~зачекрнутый~ текст",
+                "description": "Представляет ~зачёкрнутый~ текст",
                 "allOf": [
                     {
                         "$ref": "#/components/schemas/MarkupElement"
@@ -3702,7 +3711,7 @@
                 ]
             },
             "UnderlineMarkup": {
-                "description": "Представляет <ins>подчеркнутый</ins> текст",
+                "description": "Представляет <ins>подчёркнутый</ins> текст",
                 "allOf": [
                     {
                         "$ref": "#/components/schemas/MarkupElement"
@@ -3710,7 +3719,15 @@
                 ]
             },
             "HeadingMarkup": {
-                "description": "Представляет заголовок текста",
+                "description": "Представляет заголовок",
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/MarkupElement"
+                    }
+                ]
+            },
+            "QuoteMarkup": {
+                "description": "Представляет цитату",
                 "allOf": [
                     {
                         "$ref": "#/components/schemas/MarkupElement"
@@ -3743,7 +3760,7 @@
                 ]
             },
             "HighlightedMarkup": {
-                "description": "Представляет выделенную часть текста",
+                "description": "Представляет выделенный текст",
                 "allOf": [
                     {
                         "$ref": "#/components/schemas/MarkupElement"
@@ -3758,7 +3775,7 @@
                         "type": "string"
                     },
                     "update_types": {
-                        "description": "Список типов обновлений, которые хочет получать ваш бот. Для полного списка типов см. объект [Update](/docs-api/objects/Update)",
+                        "description": "Список типов событий, которые хочет получать ваш бот. Полный список смотрите в описании объекта [Update](/docs-api/objects/Update)",
                         "example": "[\"message_created\", \"bot_started\"]",
                         "type": "array",
                         "uniqueItems": true,
@@ -3938,14 +3955,15 @@
                 "properties": {
                     "user_ids": {
                         "name": "user_ids",
-                        "description": "Массив ID пользователей для добавления в чат",
+                        "description": "Массив ID пользователей для добавления в чат. В одном запросе можно передать максимум 100 идентификаторов",
                         "required": true,
                         "schema": {
                             "type": "array",
                             "uniqueItems": true,
                             "items": {
                                 "type": "integer",
-                                "format": "int64"
+                                "format": "int64",
+                                "maxItems": "100"
                             }
                         },
                         "style": "simple"
@@ -3976,10 +3994,10 @@
                 ]
             },
             "UpdateList": {
-                "description": "Список всех обновлений в чатах, в которых ваш бот участвовал",
+                "description": "Список обновлений о событиях в чатах и каналах, в которые добавлен бот. Обратите внимание, чтобы получать события из групповых чатов и каналов, бот должен быть администратором",
                 "properties": {
                     "updates": {
-                        "description": "Страница обновлений",
+                        "description": "Список обновлений о событиях в чатах и каналах, в которые добавлен бот. Обратите внимание, чтобы получать события из групповых чатов и каналов, бот должен быть администратором. Подробнее о возможных событиях — [в описании объекта Update](/docs-api/objects/Update)",
                         "type": "array",
                         "items": {
                             "$ref": "#/components/schemas/Update"
@@ -3998,25 +4016,55 @@
                 ]
             },
             "Update": {
-                "description": "Объект`Update` представляет различные типы событий, произошедших в чате. См. его наследников\n\n> Чтобы получать события из группового чата или канала, назначьте бота администратором",
+                "description": "Объект `Update` описывает возможные события в чате или канале. Может возвращаться в следующих случаях:  \n\n - Вы подписались на обновления через Webhook — при наступлении события МАКС пришлёт [POST-запрос `/subscriptions`](/docs-api/methods/POST/subscriptions), который содержит объект `Update` \n\n - Вы отправили [GET-запрос /updates](/docs-api/methods/GET/updates) для получения обновлений через  Long Polling— в ответ вернётся объект `Update` \n\n  >! Получение обновлений с помощью [Long Polling](/docs-api/methods/GET/updates) ограничено по скорости и сроку хранения событий — этот способ не подходит для production-окружения. Рекомендуем на всех этапах работы использовать [Webhook](/docs-api/methods/POST/subscriptions)\n\n ## Типы событий\n\n- `bot_added` — бот добавлен в чат или канал\n\n- `bot_started` — пользователь впервые начал общение с ботом или возобновил после остановки — нажал соответствующую кнопку в настройках бота в МАКС\n\n- `bot_stopped` — пользователь остановил бота – выбрал соответствующее действие в настройках бота в МАКС\n\n- `bot_removed` — бот удалён из чата или канала \n\n- `chat_title_changed` — пользователь изменил название чата или канала\n\n- `dialog_cleared` — пользователь очистил историю диалога с ботом\n\n- `dialog_muted` — пользователь отключил уведомления в диалоге с ботом \n\n- `dialog_unmuted` — пользователь включил уведомления в диалоге с ботом \n\n- `dialog_removed` — пользователь удалил диалог с ботом \n\n- `message_callback` — пользователь нажал на кнопку в чате или канале\n\n - `message_created` — пользователь отправил новое сообщение или опубликовал пост\n\n- `message_edited` — пользователь отредактировал сообщение в чате или канале\n\n- `message_removed` — пользователь удалил сообщение из чата или канала\n\n- `user_added` — в чат или канал добавлен или перешёл по ссылке новый пользователь\n\n- `user_removed` — пользователь удалён или покинул чат или канал \n\n ## Свойства объекта Update",
                 "discriminator": {
                     "propertyName": "update_type",
                     "mapping": {
-                        "message_created": "#/components/schemas/MessageCreatedUpdate",
-                        "message_callback": "#/components/schemas/MessageCallbackUpdate",
-                        "message_edited": "#/components/schemas/MessageEditedUpdate",
-                        "message_removed": "#/components/schemas/MessageRemovedUpdate",
-                        "bot_added": "#/components/schemas/BotAddedToChatUpdate",
-                        "bot_removed": "#/components/schemas/BotRemovedFromChatUpdate",
-                        "dialog_muted": "#/components/schemas/DialogMutedUpdate",
-                        "dialog_unmuted": "#/components/schemas/DialogUnmutedUpdate",
-                        "dialog_cleared": "#/components/schemas/DialogClearedUpdate",
-                        "dialog_removed": "#/components/schemas/DialogRemovedUpdate",
-                        "user_added": "#/components/schemas/UserAddedToChatUpdate",
-                        "user_removed": "#/components/schemas/UserRemovedFromChatUpdate",
-                        "bot_started": "#/components/schemas/BotStartedUpdate",
-                        "bot_stopped": "#/components/schemas/BotStoppedUpdate",
-                        "chat_title_changed": "#/components/schemas/ChatTitleChangedUpdate"
+                        "bot_added": {
+                            "$ref": "#/components/schemas/BotAddedToChatUpdate"
+                        },
+                        "bot_started": {
+                            "$ref": "#/components/schemas/BotStartedUpdate"
+                        },
+                        "bot_stopped": {
+                            "$ref": "#/components/schemas/BotStoppedUpdate"
+                        },
+                        "bot_removed": {
+                            "$ref": "#/components/schemas/BotRemovedFromChatUpdate"
+                        },
+                        "chat_title_changed": {
+                            "$ref": "#/components/schemas/ChatTitleChangedUpdate"
+                        },
+                        "dialog_cleared": {
+                            "$ref": "#/components/schemas/DialogClearedUpdate"
+                        },
+                        "dialog_muted": {
+                            "$ref": "#/components/schemas/DialogMutedUpdate"
+                        },
+                        "dialog_unmuted": {
+                            "$ref": "#/components/schemas/DialogUnmutedUpdate"
+                        },
+                        "dialog_removed": {
+                            "$ref": "#/components/schemas/DialogRemovedUpdate"
+                        },
+                        "message_callback": {
+                            "$ref": "#/components/schemas/MessageCallbackUpdate"
+                        },
+                        "message_created": {
+                            "$ref": "#/components/schemas/MessageCreatedUpdate"
+                        },
+                        "message_edited": {
+                            "$ref": "#/components/schemas/MessageEditedUpdate"
+                        },
+                        "message_removed": {
+                            "$ref": "#/components/schemas/MessageRemovedUpdate"
+                        },
+                        "user_added": {
+                            "$ref": "#/components/schemas/UserAddedToChatUpdate"
+                        },
+                        "user_removed": {
+                            "$ref": "#/components/schemas/UserRemovedFromChatUpdate"
+                        }
                     }
                 },
                 "properties": {
@@ -4035,7 +4083,7 @@
                 ]
             },
             "MessageCallbackUpdate": {
-                "description": "Вы получите этот `update` как только пользователь нажмёт кнопку",
+                "description": "Вы получите это событие, как только пользователь нажмёт кнопку",
                 "allOf": [
                     {
                         "$ref": "#/components/schemas/Update"
@@ -4051,7 +4099,7 @@
                                 ]
                             },
                             "message": {
-                                "description": "Изначальное сообщение, содержащее встроенную клавиатуру. Может быть `null`, если оно было удалено к моменту, когда бот получил это обновление",
+                                "description": "Изначальное сообщение, содержащее встроенную клавиатуру. Может быть `null`, если оно было удалено к моменту, когда бот получил это событие",
                                 "nullable": true,
                                 "allOf": [
                                     {
@@ -4074,7 +4122,7 @@
                 ]
             },
             "MessageCreatedUpdate": {
-                "description": "ы получите этот `update`, как только сообщение будет создано",
+                "description": "Вы получите это событие, как только сообщение будет создано",
                 "allOf": [
                     {
                         "$ref": "#/components/schemas/Update"
@@ -4103,7 +4151,7 @@
                 ]
             },
             "MessageRemovedUpdate": {
-                "description": "Вы получите этот `update`, как только сообщение будет удалено",
+                "description": "Вы получите это событие, как только сообщение будет удалено",
                 "allOf": [
                     {
                         "$ref": "#/components/schemas/Update"
@@ -4111,7 +4159,7 @@
                     {
                         "properties": {
                             "message_id": {
-                                "description": "ID удаленного сообщения",
+                                "description": "ID удалённого сообщения",
                                 "type": "string"
                             },
                             "chat_id": {
@@ -4134,7 +4182,7 @@
                 ]
             },
             "MessageEditedUpdate": {
-                "description": "Вы получите этот `update`, как только сообщение будет отредактировано",
+                "description": "Вы получите это событие, как только пользователь отредактирует сообщение",
                 "allOf": [
                     {
                         "$ref": "#/components/schemas/Update"
@@ -4157,7 +4205,7 @@
                 ]
             },
             "BotAddedToChatUpdate": {
-                "description": "Вы получите этот update, как только бот будет добавлен в чат",
+                "description": "Вы получите это событие, как только бот будет добавлен в чат или канал",
                 "allOf": [
                     {
                         "$ref": "#/components/schemas/Update"
@@ -4178,7 +4226,7 @@
                                 ]
                             },
                             "is_channel": {
-                                "description": "Указывает, был ли бот добавлен в канал или нет",
+                                "description": "Указывает, что бот добавлен в канал, а не в чат",
                                 "type": "boolean"
                             }
                         },
@@ -4191,7 +4239,7 @@
                 ]
             },
             "BotRemovedFromChatUpdate": {
-                "description": "Вы получите этот update, как только бот будет удалён из чата",
+                "description": "Вы получите это событие, как только бот будет удалён из чата",
                 "allOf": [
                     {
                         "$ref": "#/components/schemas/Update"
@@ -4212,7 +4260,7 @@
                                 ]
                             },
                             "is_channel": {
-                                "description": "Указывает, был ли бот удалён из канала или нет",
+                                "description": "Указывает, что бот удалён из канала, а не из чата",
                                 "type": "boolean"
                             }
                         },
@@ -4225,7 +4273,7 @@
                 ]
             },
             "DialogMutedUpdate": {
-                "description": "Вы получите этот update, когда пользователь заглушит диалог с ботом",
+                "description": "Вы получите это событие, как только пользователь отключит уведомления о новых сообщениях в диалоге с ботом",
                 "allOf": [
                     {
                         "$ref": "#/components/schemas/Update"
@@ -4264,7 +4312,7 @@
                 ]
             },
             "DialogUnmutedUpdate": {
-                "description": "Вы получите этот update, когда пользователь включит уведомления в диалоге с ботом",
+                "description": "Вы получите это событие, как только пользователь включит уведомления о новых сообщениях в диалоге с ботом",
                 "allOf": [
                     {
                         "$ref": "#/components/schemas/Update"
@@ -4297,7 +4345,7 @@
                 ]
             },
             "DialogClearedUpdate": {
-                "description": "Бот получает этот тип обновления сразу после очистки истории диалога.",
+                "description": "Вы получите это событие, как только пользователь очистит историю сообщений",
                 "allOf": [
                     {
                         "$ref": "#/components/schemas/Update"
@@ -4310,7 +4358,7 @@
                                 "format": "int64"
                             },
                             "user": {
-                                "description": "Пользователь, который включил уведомления",
+                                "description": "Пользователь, который очистил историю сообщений",
                                 "allOf": [
                                     {
                                         "$ref": "#/components/schemas/User"
@@ -4330,7 +4378,7 @@
                 ]
             },
             "DialogRemovedUpdate": {
-                "description": "Вы получите этот update, когда пользователь удаляет чат",
+                "description": "Вы получите это событие, как только пользователь удалит чат",
                 "allOf": [
                     {
                         "$ref": "#/components/schemas/Update"
@@ -4363,7 +4411,7 @@
                 ]
             },
             "UserAddedToChatUpdate": {
-                "description": "Вы получите это обновление, когда пользователь будет добавлен в чат, где бот является администратором",
+                "description": "Вы получите это событие, как только пользователь будет добавлен в чат, где бот является администратором",
                 "allOf": [
                     {
                         "$ref": "#/components/schemas/Update"
@@ -4384,14 +4432,14 @@
                                 ]
                             },
                             "inviter_id": {
-                                "description": "Пользователь, который добавил пользователя в чат. Может быть `null`, если пользователь присоединился к чату по ссылке",
+                                "description": "Пользователь, который добавил нового пользователя в чат. Может быть `null`, если пользователь присоединился к чату по ссылке",
                                 "type": "integer",
                                 "format": "int64",
                                 "readOnly": false,
                                 "nullable": true
                             },
                             "is_channel": {
-                                "description": "Указывает, был ли пользователь добавлен в канал или нет",
+                                "description": "Указывает, что пользователь добавлен в канал, а не в чат",
                                 "type": "boolean"
                             }
                         },
@@ -4404,7 +4452,7 @@
                 ]
             },
             "UserRemovedFromChatUpdate": {
-                "description": "Вы получите это обновление, когда пользователь будет удалён из чата, где бот является администратором",
+                "description": "Вы получите это событие, как только пользователь будет удалён из чата, где бот является администратором",
                 "allOf": [
                     {
                         "$ref": "#/components/schemas/Update"
@@ -4431,7 +4479,7 @@
                                 "readOnly": false
                             },
                             "is_channel": {
-                                "description": "Указывает, был ли пользователь удалён из канала или нет",
+                                "description": "Указывает, что пользователь удалён из канала, а не из чата",
                                 "type": "boolean"
                             }
                         },
@@ -4444,7 +4492,7 @@
                 ]
             },
             "BotStartedUpdate": {
-                "description": "Бот получает этот тип обновления, как только пользователь нажал кнопку `Start`",
+                "description": "Вы получите это событие, как только пользователь начнёт или возобновит общение с ботом: нажмёт соответствующую кнопку в настройках бота в МАКС",
                 "allOf": [
                     {
                         "$ref": "#/components/schemas/Update"
@@ -4457,7 +4505,7 @@
                                 "format": "int64"
                             },
                             "user": {
-                                "description": "Пользователь, который нажал кнопку 'Start'",
+                                "description": "Пользователь, который нажал кнопку `Start`",
                                 "allOf": [
                                     {
                                         "$ref": "#/components/schemas/User"
@@ -4465,7 +4513,7 @@
                                 ]
                             },
                             "payload": {
-                                "description": "Дополнительные данные из дип-линков, переданные при запуске бота",
+                                "description": "Дополнительные данные из диплинков, переданные при запуске бота",
                                 "type": "string",
                                 "maxLength": 512,
                                 "nullable": true,
@@ -4485,7 +4533,7 @@
                 ]
             },
             "BotStoppedUpdate": {
-                "description": "Бот получает этот тип обновления, как только пользователь останавливает бота",
+                "description": "Вы получите это событие, как только пользователь остановит бота в его настройках в МАКС",
                 "allOf": [
                     {
                         "$ref": "#/components/schemas/Update"
@@ -4498,7 +4546,7 @@
                                 "format": "int64"
                             },
                             "user": {
-                                "description": "Пользователь, который остановил чат",
+                                "description": "Пользователь, который остановил бота",
                                 "allOf": [
                                     {
                                         "$ref": "#/components/schemas/User"
@@ -4519,7 +4567,7 @@
                 ]
             },
             "ChatTitleChangedUpdate": {
-                "description": "BБот получит это обновление, когда будет изменено название чата",
+                "description": "Вы получите это событие, как только будет изменено название чата",
                 "allOf": [
                     {
                         "$ref": "#/components/schemas/Update"
@@ -4553,7 +4601,7 @@
                 ]
             },
             "MessageChatCreatedUpdate": {
-                "description": "Бот получит это обновление, когда чат будет создан, как только первый пользователь нажмёт кнопку чата",
+                "description": "Вы получите это событие, как только пользователь нажмёт в сообщении на кнопку с типом `chat` и будет создан новый чат с ботом, связанный с этим сообщением с кнопкой",
                 "allOf": [
                     {
                         "$ref": "#/components/schemas/Update"
