@@ -34,7 +34,7 @@ from maxo.fsm import State, StatesGroup
 from maxo.fsm.key_builder import DefaultKeyBuilder
 from maxo.routing.ctx import Ctx
 from maxo.routing.filters import CommandStart
-from maxo.routing.updates import MessageCallback, MessageCreated
+from maxo.routing.updates import MessageCallback
 from maxo.transport.long_polling import LongPolling
 
 
