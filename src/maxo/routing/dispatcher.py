@@ -104,8 +104,13 @@ class Dispatcher(Router):
         return await self.feed_update(signal, bot)
 
     async def feed_update(self, update: BaseUpdate, bot: Bot | None = None) -> Any:
-        ctx = Ctx({**self.workflow_data, "bot": bot, "update": update})
+        ctx = Ctx({**self.workflow_data, "update": update})
         ctx["ctx"] = ctx
+
+        if bot is not None:
+            ctx["bot"] = bot
+            ctx["bots"] = [bot]
+
         return await self.trigger(ctx)
 
     async def _feed_update_handler(self, update: MaxoUpdate[Any], ctx: Ctx) -> Any:

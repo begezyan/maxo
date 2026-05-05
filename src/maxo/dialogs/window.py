@@ -12,6 +12,7 @@ from maxo.dialogs.api.entities import (
 from maxo.dialogs.api.internal import Widget, WindowProtocol
 from maxo.enums.text_format import TextFormat
 from maxo.fsm import State
+from maxo.omit import Omittable, Omitted
 from maxo.routing.updates import MessageCallback, MessageCreated
 from maxo.types import Recipient
 
@@ -43,7 +44,7 @@ class Window(WindowProtocol):
         getter: GetterVariant = None,
         on_process_result: OnResultEvent | None = None,
         markup_factory: MarkupFactory = _DEFAULT_MARKUP_FACTORY,
-        parse_mode: TextFormat | None = None,
+        parse_mode: Omittable[TextFormat | None] = Omitted(),
         disable_web_page_preview: bool | None = None,
         protect_content: bool | None = None,
         preview_add_transitions: list[Keyboard] | None = None,

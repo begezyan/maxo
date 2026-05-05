@@ -18,6 +18,7 @@ class AttachmentType(StrEnum):
 
     # Подражание aiogram
     DOCUMENT = FILE
+    PHOTO = IMAGE
 
 
 # Подражание aiogram

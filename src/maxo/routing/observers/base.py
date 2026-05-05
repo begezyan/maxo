@@ -6,7 +6,7 @@ from maxo.routing.ctx import Ctx
 from maxo.routing.filters import AlwaysTrueFilter
 from maxo.routing.interfaces import Filter, Handler, Observer
 from maxo.routing.interfaces.observer import ObserverState
-from maxo.routing.middlewares.manager import MiddlewareManagerFacade
+from maxo.routing.middlewares.manager import MiddlewareManager, MiddlewareManagerFacade
 from maxo.routing.observers.state import EmptyObserverState
 from maxo.routing.sentinels import UNHANDLED, SkipHandler
 from maxo.routing.updates.base import BaseUpdate
@@ -55,6 +55,13 @@ class BaseObserver(Observer[_UpdateT, _HandlerT, _HandlerFnT], ABC):
     @property
     def middleware(self) -> MiddlewareManagerFacade[_UpdateT]:
         return self._middleware
+
+    # Подражаение aiogram,
+    # чтобы по `router.message_created.outer_middleware(MyMiddleware())`
+    # он добавлялся в outer-мидлвари
+    @property
+    def outer_middleware(self) -> MiddlewareManager[_UpdateT]:
+        return self.middleware.outer
 
     def __call__(
         self,

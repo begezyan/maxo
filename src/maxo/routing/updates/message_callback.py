@@ -54,6 +54,8 @@ class MessageCallback(MaxUpdate):
     def callback_id(self) -> str:
         return self.callback.callback_id
 
+    id = callback_id
+
     @property
     def payload(self) -> str | None:
         return self.callback.payload

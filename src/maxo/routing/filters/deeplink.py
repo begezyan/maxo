@@ -17,7 +17,9 @@ class DeeplinkFilter(BaseFilter[BotStarted]):
         if not payload:
             return False
 
-        ctx["payload"] = ctx["deeplink"] = self.validate_deeplink(payload)
+        # ctx["args"] для работы `F.args.startswith(...)`,
+        # как при фильтрации диплинков из тг с CommandStart
+        ctx["payload"] = ctx["deeplink"] = ctx["args"] = self.validate_deeplink(payload)
         return True
 
     def validate_deeplink(self, payload: str) -> str:
