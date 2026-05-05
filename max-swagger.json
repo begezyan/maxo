@@ -1086,7 +1086,7 @@
                     "messages"
                 ],
                 "operationId": "sendMessage",
-                "description": "Отправляет сообщение в чат\n\nНиже — пример запроса с одной кнопкой-ссылкой. Больше примеров запросов с кнопками — [в разделе «Клавиатура»](/docs-api#Как%20добавить%20кнопки)\n````bash\ncurl -X POST \"https://platform-api.max.ru/messages?user_id={user_id}\" \\\n  -H \"Authorization: {access_token}\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n  \"text\": \"Это сообщение с кнопкой-ссылкой\",\n  \"attachments\": [\n    {\n      \"type\": \"inline_keyboard\",\n      \"payload\": {\n        \"buttons\": [\n          [\n            {\n              \"type\": \"link\",\n              \"text\": \"Откройте сайт\",\n              \"url\": \"https://example.com\"\n            }\n          ]\n        ]\n      }\n    }\n  ]\n }'\n",
+                "description": "Отправляет сообщение в чат\n\nНиже — пример запроса с одной кнопкой-ссылкой. Больше примеров запросов с кнопками — [в разделе «Клавиатура»](/docs-api#Как%20добавить%20кнопки)\n```bash\ncurl -X POST \"https://platform-api.max.ru/messages?user_id={user_id}\" \\\n  -H \"Authorization: {access_token}\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n  \"text\": \"Это сообщение с кнопкой-ссылкой\",\n  \"attachments\": [\n    {\n      \"type\": \"inline_keyboard\",\n      \"payload\": {\n        \"buttons\": [\n          [\n            {\n              \"type\": \"link\",\n              \"text\": \"Откройте сайт\",\n              \"url\": \"https://example.com\"\n            }\n          ]\n        ]\n      }\n    }\n  ]\n }'\n```",
                 "summary": "Отправить сообщение",
                 "parameters": [
                     {
@@ -3703,7 +3703,7 @@
                 ]
             },
             "StrikethroughMarkup": {
-                "description": "Представляет ~зачёкрнутый~ текст",
+                "description": "Представляет ~зачёркнутый~ текст",
                 "allOf": [
                     {
                         "$ref": "#/components/schemas/MarkupElement"

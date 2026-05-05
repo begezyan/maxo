@@ -14,7 +14,7 @@ class SendMessage(MaxoMethod[SendMessageResult]):
     Отправляет сообщение в чат
 
     Ниже — пример запроса с одной кнопкой-ссылкой. Больше примеров запросов с кнопками — [в разделе «Клавиатура»](https://dev.max.ru/docs-api#Как%20добавить%20кнопки)
-    ````bash
+    ```bash
     curl -X POST "https://platform-api.max.ru/messages?user_id={user_id}" \
       -H "Authorization: {access_token}" \
       -H "Content-Type: application/json" \
@@ -37,6 +37,7 @@ class SendMessage(MaxoMethod[SendMessageResult]):
         }
       ]
      }'
+    ```
 
     Args:
         attachments: Вложения сообщения. Если пусто, все вложения будут удалены
