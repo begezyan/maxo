@@ -8,7 +8,7 @@ from maxo.types.message import Message
 
 class MessageCreated(MaxUpdate, MessageMethodsFacade):
     """
-    Вы получите этот `update`, как только сообщение будет создано
+    Вы получите это событие, как только сообщение будет создано
 
     Args:
         message: Новое созданное сообщение

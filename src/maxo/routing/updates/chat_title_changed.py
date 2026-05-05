@@ -6,7 +6,7 @@ from maxo.types.user import User
 
 class ChatTitleChanged(MaxUpdate, ChatMethodsFacade):
     """
-    Бот получит это обновление, когда будет изменено название чата
+    Вы получите это событие, как только будет изменено название чата
 
     Args:
         chat_id: ID чата, где произошло событие

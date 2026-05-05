@@ -10,7 +10,7 @@ from maxo.types.user import User
 
 class DialogMuted(MaxUpdate, ChatMethodsFacade):
     """
-    Вы получите этот update, когда пользователь заглушит диалог с ботом
+    Вы получите это событие, как только пользователь отключит уведомления о новых сообщениях в диалоге с ботом
 
     Args:
         chat_id: ID чата, где произошло событие
