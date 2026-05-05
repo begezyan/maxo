@@ -1,4 +1,4 @@
-from maxo.enums import MarkupElementType
+from maxo.enums.markup_element_type import MarkupElementType
 from maxo.types.base import MaxoType
 
 

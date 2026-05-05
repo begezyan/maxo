@@ -1,11 +1,12 @@
 from maxo.enums.update_type import UpdateType
 from maxo.routing.updates.base import MaxUpdate
+from maxo.routing.updates.mixins import ChatMethodsFacade
 from maxo.types.user import User
 
 
-class ChatTitleChanged(MaxUpdate):
+class ChatTitleChanged(MaxUpdate, ChatMethodsFacade):
     """
-    BБот получит это обновление, когда будет изменено название чата
+    Бот получит это обновление, когда будет изменено название чата
 
     Args:
         chat_id: ID чата, где произошло событие

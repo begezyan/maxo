@@ -2,10 +2,11 @@ from maxo.enums.update_type import UpdateType
 from maxo.errors import AttributeIsEmptyError
 from maxo.omit import Omittable, Omitted, is_defined
 from maxo.routing.updates.base import MaxUpdate
+from maxo.routing.updates.mixins import ChatMethodsFacade
 from maxo.types.user import User
 
 
-class BotStopped(MaxUpdate):
+class BotStopped(MaxUpdate, ChatMethodsFacade):
     """
     Бот получает этот тип обновления, как только пользователь останавливает бота
 

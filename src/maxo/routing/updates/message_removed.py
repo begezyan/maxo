@@ -1,8 +1,9 @@
 from maxo.enums.update_type import UpdateType
 from maxo.routing.updates.base import MaxUpdate
+from maxo.routing.updates.mixins import ChatMethodsFacade
 
 
-class MessageRemoved(MaxUpdate):
+class MessageRemoved(MaxUpdate, ChatMethodsFacade):
     """
     Вы получите этот `update`, как только сообщение будет удалено
 

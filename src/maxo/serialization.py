@@ -1,13 +1,14 @@
 import dataclasses
 import typing
 from datetime import UTC, datetime
+from typing import TYPE_CHECKING
 
 from adaptix import Chain, P, Retort, dumper, loader
+from adaptix.type_tools import exec_type_checking
 from unihttp.markers import QueryMarker
 from unihttp.serializers.adaptix import DEFAULT_RETORT, for_marker
 
-from maxo._internal._adaptix.concat_provider import concat_provider
-from maxo._internal._adaptix.has_tag_provider import has_tag_provider
+from maxo._internal.adaptix import concat_provider, has_tag_provider, is_subclass
 from maxo.bot.defaults import BotDefaults
 from maxo.bot.methods import EditMessage, SendMessage
 from maxo.bot.warming_up import WarmingUpType, warming_up_retort
@@ -74,7 +75,12 @@ from maxo.types import (
     UserMentionMarkup,
     VideoAttachment,
     VideoAttachmentRequest,
+    base,
 )
+
+if TYPE_CHECKING:
+    from maxo import Bot
+
 
 TAG_PROVIDERS = concat_provider(
     # ---> UpdateType <---
@@ -138,11 +144,7 @@ TAG_PROVIDERS = concat_provider(
 )
 
 
-def create_retort(
-    *,
-    defaults: BotDefaults | None = None,
-    warming_up: bool = True,
-) -> Retort:
+def _create_retort(*, defaults: BotDefaults | None = None) -> Retort:
     if defaults is None:
         defaults = BotDefaults()
 
@@ -168,7 +170,9 @@ def create_retort(
                 return datetime.max.replace(tzinfo=UTC)
             return datetime.min.replace(tzinfo=UTC)
 
-    retort = DEFAULT_RETORT.extend(
+    exec_type_checking(base)
+
+    return DEFAULT_RETORT.extend(
         recipe=[
             TAG_PROVIDERS,
             dumper(
@@ -196,6 +200,37 @@ def create_retort(
             loader(P[datetime], _load_datetime),
         ],
     )
+
+
+def create_retort(
+    *,
+    defaults: BotDefaults | None = None,
+    warming_up: bool = True,
+) -> Retort:
+    retort = _create_retort(defaults=defaults)
+
+    if warming_up:
+        retort = warming_up_retort(retort, warming_up=WarmingUpType.TYPES)
+        retort = warming_up_retort(retort, warming_up=WarmingUpType.METHOD)
+
+    return retort
+
+
+def create_retort_with_bot(
+    bot: "Bot",
+    *,
+    defaults: BotDefaults | None = None,
+    warming_up: bool = True,
+) -> Retort:
+    def _load_bot[T: base.MaxoType](x: T) -> T:
+        return x.as_(bot)
+
+    retort = _create_retort(defaults=defaults)
+
+    retort = retort.extend(
+        recipe=[loader(is_subclass(base.MaxoType), _load_bot, Chain.LAST)],
+    )
+
     if warming_up:
         retort = warming_up_retort(retort, warming_up=WarmingUpType.TYPES)
         retort = warming_up_retort(retort, warming_up=WarmingUpType.METHOD)

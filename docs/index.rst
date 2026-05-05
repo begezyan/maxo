@@ -134,6 +134,7 @@ Contributors
    pages/event-handling/signals
    pages/event-handling/long-polling
    pages/event-handling/webhooks
+   pages/event-handling/bot-mixin
 
 .. toctree::
    :maxdepth: 2

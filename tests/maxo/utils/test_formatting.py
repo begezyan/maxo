@@ -146,7 +146,7 @@ class TestNode:
     def test_getitem_position(self):
         node = Text("Hello, ", Bold("World"), "!")
         with pytest.raises(TypeError):
-            node[2]
+            _ = node[2]
 
     def test_getitem_empty_slice(self):
         node = Text("Hello, ", Bold("World"), "!")

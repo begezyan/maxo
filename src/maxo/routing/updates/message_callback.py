@@ -4,12 +4,14 @@ from maxo.enums.update_type import UpdateType
 from maxo.errors import AttributeIsEmptyError
 from maxo.omit import Omittable, Omitted, is_defined
 from maxo.routing.updates.base import MaxUpdate
+from maxo.routing.updates.mixins.callback import CallbackMethodsFacade
+from maxo.routing.updates.mixins.message import MessageMethodsFacade
 from maxo.types.callback import Callback
 from maxo.types.message import Message
 from maxo.types.user import User
 
 
-class MessageCallback(MaxUpdate):
+class MessageCallback(MaxUpdate, MessageMethodsFacade, CallbackMethodsFacade):
     """
     Вы получите этот `update` как только пользователь нажмёт кнопку
 
@@ -55,7 +57,7 @@ class MessageCallback(MaxUpdate):
         return self.callback.callback_id
 
     @property
-    def payload(self) -> str | None:
+    def payload(self) -> Omittable[str]:
         return self.callback.payload
 
     @property

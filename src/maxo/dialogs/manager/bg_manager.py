@@ -1,11 +1,10 @@
 import asyncio
-import logging
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 from datetime import UTC, datetime
 from typing import Any
 
-from maxo import Bot, Dispatcher
+from maxo import Bot, Dispatcher, loggers
 from maxo.dialogs import DialogManager
 from maxo.dialogs.api.entities import (
     DEFAULT_STACK_ID,
@@ -27,8 +26,6 @@ from maxo.dialogs.utils import is_user_loaded
 from maxo.enums import ChatType
 from maxo.fsm import State
 from maxo.types import Recipient, User
-
-logger = logging.getLogger(__name__)
 
 
 class BgManager(BaseDialogManager):
@@ -126,7 +123,7 @@ class BgManager(BaseDialogManager):
         if self.load:
             bot = self._event_context.bot
             if not is_user_loaded(self._event_context.user):
-                logger.debug(
+                loggers.dialogs.debug(
                     "load user %s from chat %s",
                     self._event_context.user_id,
                     self._event_context.chat_id,
