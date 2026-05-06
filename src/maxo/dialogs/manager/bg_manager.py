@@ -117,7 +117,7 @@ class BgManager(BaseDialogManager):
 
     async def _notify(self, event: DialogUpdateEvent) -> None:
         bot = self._event_context.bot
-        await self._updater.notify(update=event, bot=bot)
+        await self._updater.notify(bot=bot, update=event)
 
     async def _load(self) -> None:
         if self.load:
@@ -212,7 +212,7 @@ class BgManager(BaseDialogManager):
             **self._base_event_params(),
         )
         bot = self._event_context.bot
-        task = self._updater.notify_task(update=event, bot=bot)
+        task = self._updater.notify_task(bot=bot, update=event)
         try:
             manager = await event.entered
             yield manager
