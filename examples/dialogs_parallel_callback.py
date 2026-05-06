@@ -11,6 +11,7 @@ ParallelDialog ниже оверрайдит _callback_handler через asynci
 
 Применять имеет смысл только если бот географически далеко от Max API
 """
+
 import asyncio
 import dataclasses
 import logging

@@ -63,6 +63,7 @@ from maxo.types import (
     OpenAppButton,
     PhotoAttachment,
     PhotoAttachmentRequest,
+    QuoteMarkup,
     RequestContactButton,
     RequestGeoLocationButton,
     ShareAttachment,
@@ -119,6 +120,7 @@ TAG_PROVIDERS = concat_provider(
     has_tag_provider(UserMentionMarkup, "type", MarkupElementType.USER_MENTION),
     has_tag_provider(HeadingMarkup, "type", MarkupElementType.HEADING),
     has_tag_provider(HighlightedMarkup, "type", MarkupElementType.HIGHLIGHTED),
+    has_tag_provider(QuoteMarkup, "type", MarkupElementType.QUOTE),
     # ---> AttachmentRequestType <---
     has_tag_provider(PhotoAttachmentRequest, "type", AttachmentRequestType.IMAGE),
     has_tag_provider(VideoAttachmentRequest, "type", AttachmentRequestType.VIDEO),

@@ -8,7 +8,7 @@ from maxo.types.user import User
 
 class DialogRemoved(MaxUpdate, ChatMethodsFacade):
     """
-    Вы получите этот update, когда пользователь удаляет чат
+    Вы получите это событие, как только пользователь удалит чат
 
     Args:
         chat_id: ID чата, где произошло событие

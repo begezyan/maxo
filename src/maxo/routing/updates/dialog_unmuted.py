@@ -8,7 +8,7 @@ from maxo.types.user import User
 
 class DialogUnmuted(MaxUpdate, ChatMethodsFacade):
     """
-    Вы получите этот update, когда пользователь включит уведомления в диалоге с ботом
+    Вы получите это событие, как только пользователь включит уведомления о новых сообщениях в диалоге с ботом
 
     Args:
         chat_id: ID чата, где произошло событие

@@ -6,7 +6,7 @@ from maxo.types.message import Message
 
 class MessageEdited(MaxUpdate, MessageMethodsFacade):
     """
-    Вы получите этот `update`, как только сообщение будет отредактировано
+    Вы получите это событие, как только пользователь отредактирует сообщение
 
     Args:
         message: Отредактированное сообщение
