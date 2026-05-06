@@ -54,7 +54,7 @@ Multi и Case
 
 .. code-block:: python
 
-    from maxo.dialogs.widgets.text import Const, Format, Case, Multi
+    from maxo.dialogs.widgets.text import Case, Const, Format, Multi
 
     Multi(
         Const("Добро пожаловать!"),
@@ -82,11 +82,13 @@ Button
 
 .. code-block:: python
 
+    from maxo.dialogs.api.protocols import DialogManager
     from maxo.dialogs.widgets.kbd import Button
     from maxo.dialogs.widgets.text import Const
+    from maxo.routing.updates import MessageCallback
 
-    async def on_click(callback, button, manager):
-        await callback.answer("Вы нажали на кнопку!")
+    async def on_click(callback: MessageCallback, button: Button, manager: DialogManager):
+        await callback.callback_answer("Вы нажали на кнопку!")
 
     Button(Const("Нажми меня"), id="btn1", on_click=on_click)
 
@@ -121,7 +123,7 @@ Row, Column, Group
 
 .. code-block:: python
 
-    from maxo.dialogs.widgets.kbd import Button, Row, Column, Group
+    from maxo.dialogs.widgets.kbd import Button, Column, Group, Row
     from maxo.dialogs.widgets.text import Const
 
     # Две кнопки в одной строке
@@ -153,11 +155,13 @@ Select
 
 .. code-block:: python
 
+    from maxo.dialogs.api.protocols import DialogManager
     from maxo.dialogs.widgets.kbd import Select
     from maxo.dialogs.widgets.text import Format
+    from maxo.routing.updates import MessageCallback
 
-    async def on_fruit_selected(callback, widget, manager, item_id):
-        await callback.answer(f"Вы выбрали: {item_id}")
+    async def on_fruit_selected(callback: MessageCallback, widget: Select, manager: DialogManager, item_id: str):
+        await callback.callback_answer(f"Вы выбрали: {item_id}")
 
     # items - ключ из данных геттера (list[tuple[str, str]])
     # В геттере: return {"fruits": [("apple", "🍎 Яблоко"), ("banana", "🍌 Банан")]}
@@ -181,7 +185,7 @@ Radio
 
     Radio(
         Format("✅ {item[1]}"),  # текст для выбранного
-        Format("  {item[1]}"),   # текст для невыбранного
+        Format("  {item[1]}"),  # текст для невыбранного
         id="lang_radio",
         item_id_getter=lambda item: item[0],
         items="languages",
@@ -194,23 +198,24 @@ TimeSelect
 Виджет для выбора времени (часы и минуты). Представляет собой две отдельные клавиатуры для выбора часов и минут, что позволяет пользователю легко ввести нужное время.
 
 Использование
-^^^^^^^^^^^^
+^^^^^^^^^^^^^
 
 .. code-block:: python
 
-    from maxo.dialogs import Dialog, Window
+    from datetime import time
+
+    from maxo.dialogs import Dialog, DialogManager, Window
     from maxo.dialogs.widgets.kbd import TimeSelect
     from maxo.dialogs.widgets.text import Const
-    from maxo.fsm.state import State, StatesGroup
-    from datetime import time
+    from maxo.fsm import State, StatesGroup
+
 
     class MySG(StatesGroup):
         time_selection = State()
 
-    async def on_time_selected(event, widget, manager, selected_time: time):
+    async def on_time_selected(event, widget, manager: DialogManager, selected_time: time):
         # Здесь можно обработать выбранное время
-        facade: MessageCallbackFacade = manager.middleware_data["facade"]
-        await facade.answer_text(f"Вы выбрали время: {selected_time.strftime('%H:%M')}")
+        await event.callback_answer(f"Вы выбрали время: {selected_time.strftime('%H:%M')}")
         manager.dialog_data["selected_time"] = selected_time
 
     dialog = Dialog(
@@ -241,7 +246,7 @@ TimeSelect
 *   **minute_width** (:py:class:`int`, optional): Количество кнопок минут в одной строке. По умолчанию 6.
 
 Управление виджетом (ManagedTimeSelect)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Вы можете получить или установить выбранное время программно с помощью ``ManagedTimeSelect``, который доступен через ``widget`` в обработчиках, или через ``manager.find(widget_id).get_value()``.
 

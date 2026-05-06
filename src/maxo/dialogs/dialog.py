@@ -1,13 +1,12 @@
 import dataclasses
 from collections.abc import Awaitable, Callable
-from logging import getLogger
 from typing import (
     Any,
     ParamSpec,
     TypeVar,
 )
 
-from maxo import Router
+from maxo import Router, loggers
 from maxo.dialogs.api.entities import Context, Data, LaunchMode, NewMessage
 from maxo.dialogs.api.exceptions import UnregisteredWindowError
 from maxo.dialogs.api.internal import Widget, WindowProtocol
@@ -28,8 +27,6 @@ from .context.intent_filter import IntentFilter
 from .utils import remove_intent_id
 from .widgets.data import PreviewAwareGetter
 from .widgets.utils import GetterVariant, ensure_data_getter
-
-logger = getLogger(__name__)
 
 OnDialogEvent = Callable[[Any, DialogManager], Awaitable]
 OnResultEvent = Callable[[Data, Any, DialogManager], Awaitable]
@@ -95,7 +92,7 @@ class Dialog(Router, DialogProtocol):
     ) -> None:
         if state is None:
             state = self._states[0]
-        logger.debug("Dialog start: %s (%s)", state, self)
+        loggers.dialogs.debug("Dialog start: %s (%s)", state, self)
         await manager.switch_to(state)
         await self._process_callback(self.on_start, start_data, manager)
 
@@ -129,7 +126,7 @@ class Dialog(Router, DialogProtocol):
         return data
 
     async def render(self, manager: DialogManager) -> NewMessage:
-        logger.debug("Dialog render (%s)", self)
+        loggers.dialogs.debug("Dialog render (%s)", self)
         window = await self._current_window(manager)
         return await window.render(self, manager)
 

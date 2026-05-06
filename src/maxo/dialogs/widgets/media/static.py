@@ -1,9 +1,10 @@
 from pathlib import Path
 
 from maxo.dialogs.api.entities import MediaAttachment
+from maxo.dialogs.api.internal import TextWidget
 from maxo.dialogs.api.protocols import DialogManager
 from maxo.dialogs.widgets.common import WhenCondition
-from maxo.dialogs.widgets.text import Const, Text
+from maxo.dialogs.widgets.text import Const
 from maxo.enums import AttachmentType
 
 from .base import Media
@@ -13,8 +14,8 @@ class StaticMedia(Media):
     def __init__(
         self,
         *,
-        path: Text | str | Path | None = None,
-        url: Text | str | None = None,
+        path: TextWidget | str | Path | None = None,
+        url: TextWidget | str | None = None,
         type: AttachmentType = AttachmentType.IMAGE,
         use_pipe: bool = False,
         media_params: dict | None = None,

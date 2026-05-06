@@ -1,9 +1,10 @@
 from maxo.enums.update_type import UpdateType
 from maxo.routing.updates.base import MaxUpdate
+from maxo.routing.updates.mixins import ChatMethodsFacade
 from maxo.types.user import User
 
 
-class BotRemovedFromChat(MaxUpdate):
+class BotRemovedFromChat(MaxUpdate, ChatMethodsFacade):
     """
     Вы получите этот update, как только бот будет удалён из чата
 

@@ -1,3 +1,4 @@
+from maxo.dialogs.api.internal import TextWidget
 from maxo.dialogs.api.protocols import DialogManager
 from maxo.dialogs.widgets.common import (
     BaseScroll,
@@ -11,7 +12,7 @@ from .base import Text
 class ScrollingText(Text, BaseScroll):
     def __init__(
         self,
-        text: Text,
+        text: TextWidget,
         id: str,
         page_size: int = 0,
         when: WhenCondition = None,

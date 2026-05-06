@@ -7,6 +7,7 @@ from maxo.fsm.key_builder import BaseKeyBuilder, DefaultKeyBuilder
 from maxo.fsm.storages.base import BaseEventIsolation, BaseStorage
 from maxo.fsm.storages.memory import MemoryStorage, SimpleEventIsolation
 from maxo.routing.ctx import Ctx
+from maxo.routing.facades.middleware import FacadeMiddleware
 from maxo.routing.middlewares.error import ErrorMiddleware
 from maxo.routing.middlewares.fsm_context import FSMContextMiddleware
 from maxo.routing.middlewares.update_context import UpdateContextMiddleware
@@ -18,7 +19,6 @@ from maxo.routing.signals.update import MaxoUpdate
 from maxo.routing.updates.base import BaseUpdate
 from maxo.routing.utils._resolving_inner_middlewares import resolve_middlewares
 from maxo.routing.utils.validate_router_graph import validate_router_graph
-from maxo.utils.facades.middleware import FacadeMiddleware
 
 
 class Dispatcher(Router):
@@ -106,12 +106,21 @@ class Dispatcher(Router):
     async def feed_update(self, update: BaseUpdate, bot: Bot | None = None) -> Any:
         ctx = Ctx({**self.workflow_data, "bot": bot, "update": update})
         ctx["ctx"] = ctx
+
+        # Костыль для тестов (в них апдейты создаются без `.as_`)
+        # и неправильных вызовах `.feed_update`. Удачи отдебажить >:)
+        update.bot = bot
+
         return await self.trigger(ctx)
 
     async def _feed_update_handler(self, update: MaxoUpdate[Any], ctx: Ctx) -> Any:
         ctx_copy = Ctx(dict(ctx))
         ctx_copy["ctx"] = ctx_copy
         ctx_copy["update"] = update.update
+
+        # Костыль для тестов (в них апдейты создаются без `.as_`)
+        # и неправильных вызовах `.feed_update`. Удачи отдебажить >:)
+        update.update.bot = update.bot = ctx["bot"]
 
         result = await self.trigger(ctx_copy)
         if result is UNHANDLED:

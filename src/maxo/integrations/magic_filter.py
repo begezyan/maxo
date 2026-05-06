@@ -4,13 +4,12 @@ except ImportError as e:
     e.add_note(" * Please run `pip install maxo[magic_filter]`")
     raise
 
-from typing import Any, final
+from typing import Any
 
 from maxo.routing.ctx import Ctx
 from maxo.routing.filters.base import BaseFilter
 
 
-@final
 class MagicData(BaseFilter[Any]):
     __slots__ = ("_magic_filter", "_result_key")
 
@@ -33,7 +32,6 @@ class MagicData(BaseFilter[Any]):
         return True
 
 
-@final
 class MagicFilter(BaseFilter[Any]):
     __slots__ = ("_magic_filter", "_result_key")
 

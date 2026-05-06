@@ -46,12 +46,10 @@ class User(MaxoType):
         return self.user_id
 
     @property
-    def fullname(self) -> str | None:
+    def fullname(self) -> str:
         if self.first_name and self.last_name:
             return f"{self.first_name} {self.last_name}"
-        if self.first_name:
-            return self.first_name
-        return None
+        return self.first_name
 
     @property
     def unsafe_last_name(self) -> str:
