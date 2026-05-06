@@ -71,8 +71,8 @@ class MultiMedia(Media):
         data: dict,
         manager: DialogManager,
     ) -> list[MediaAttachment]:
-        medias = [await m.render_media(data, manager) for m in self.media]
-        return list(itertools.chain(*medias))
+        media = [await m.render_media(data, manager) for m in self.media]
+        return list(itertools.chain(*media))
 
     def __iadd__(self, other: Media) -> Self:
         self.media += (other,)

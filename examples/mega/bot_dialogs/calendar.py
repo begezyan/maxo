@@ -22,7 +22,6 @@ from maxo.dialogs.widgets.kbd.calendar_kbd import (
     CalendarYearsView,
 )
 from maxo.dialogs.widgets.text import Const, Format, Text
-from maxo.utils.facades import MessageCallbackFacade
 
 from . import states
 from .common import MAIN_MENU_BUTTON
@@ -94,8 +93,7 @@ async def on_date_clicked(
     selected_date: date,
     /,
 ) -> None:
-    facade: MessageCallbackFacade = manager.middleware_data["facade"]
-    await facade.callback_answer(str(selected_date))
+    await callback.callback_answer(str(selected_date))
 
 
 async def on_date_selected(

@@ -8,10 +8,26 @@ set windows-shell := ["powershell.exe", "-NoLogo", "-Command"]
 set shell := ["sh", "-c"]
 
 lint:
-    ruff check
+    just ruff
+    just codespell
+    just slots
+    just bandit
+
+ruff:
+    ruff check --fix .
+
+codespell:
     codespell src examples
+
+slots:
+    PYTHONPATH=src slotscheck -m maxo
+
+[windows]
+slots:
+    $env:PYTHONPATH="src"; slotscheck -m maxo
+
+bandit:
     bandit src -r
-    slotscheck src
 
 mypy:
     mypy
@@ -19,8 +35,14 @@ mypy:
 test:
     pytest --cov src
 
+tests:
+    just test
+
 test-all:
     nox
+
+tests-all:
+    just test-all
 
 all:
     just lint

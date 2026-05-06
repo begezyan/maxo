@@ -1,14 +1,15 @@
 from maxo.enums.update_type import UpdateType
 from maxo.routing.updates.base import MaxUpdate
+from maxo.routing.updates.mixins import ChatMethodsFacade
 
 
-class MessageRemoved(MaxUpdate):
+class MessageRemoved(MaxUpdate, ChatMethodsFacade):
     """
-    Вы получите этот `update`, как только сообщение будет удалено
+    Вы получите это событие, как только сообщение будет удалено
 
     Args:
         chat_id: ID чата, где сообщение было удалено
-        message_id: ID удаленного сообщения
+        message_id: ID удалённого сообщения
         type:
         user_id: Пользователь, удаливший сообщение
     """
@@ -18,6 +19,6 @@ class MessageRemoved(MaxUpdate):
     chat_id: int
     """ID чата, где сообщение было удалено"""
     message_id: str
-    """ID удаленного сообщения"""
+    """ID удалённого сообщения"""
     user_id: int
     """Пользователь, удаливший сообщение"""

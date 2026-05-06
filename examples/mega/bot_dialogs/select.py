@@ -14,7 +14,6 @@ from maxo.dialogs.widgets.kbd import (
 )
 from maxo.dialogs.widgets.text import Const, Format, List
 from maxo.routing.updates import MessageCallback
-from maxo.utils.facades import MessageCallbackFacade
 
 from . import states
 from .common import MAIN_MENU_BUTTON
@@ -64,8 +63,7 @@ async def on_item_selected(
     manager: DialogManager,
     selected_item: str,
 ) -> None:
-    facade: MessageCallbackFacade = manager.middleware_data["facade"]
-    await facade.callback_answer(selected_item)
+    await callback.callback_answer(selected_item)
 
 
 async def reset_multi_select(

@@ -2,12 +2,13 @@ from maxo.enums.update_type import UpdateType
 from maxo.errors import AttributeIsEmptyError
 from maxo.omit import Omittable, Omitted, is_defined
 from maxo.routing.updates.base import MaxUpdate
+from maxo.routing.updates.mixins import ChatMethodsFacade
 from maxo.types.user import User
 
 
-class DialogRemoved(MaxUpdate):
+class DialogRemoved(MaxUpdate, ChatMethodsFacade):
     """
-    Вы получите этот update, когда пользователь удаляет чат
+    Вы получите это событие, как только пользователь удалит чат
 
     Args:
         chat_id: ID чата, где произошло событие

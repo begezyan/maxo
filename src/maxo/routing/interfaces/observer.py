@@ -26,6 +26,8 @@ class ObserverState(Protocol):
 
 
 class Observer(Protocol[_UpdateT, _HandlerT, _HandlerFnT]):
+    __slots__ = ()
+
     @property
     @abstractmethod
     def state(self) -> ObserverState:

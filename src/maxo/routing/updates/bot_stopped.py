@@ -2,17 +2,18 @@ from maxo.enums.update_type import UpdateType
 from maxo.errors import AttributeIsEmptyError
 from maxo.omit import Omittable, Omitted, is_defined
 from maxo.routing.updates.base import MaxUpdate
+from maxo.routing.updates.mixins import ChatMethodsFacade
 from maxo.types.user import User
 
 
-class BotStopped(MaxUpdate):
+class BotStopped(MaxUpdate, ChatMethodsFacade):
     """
-    Бот получает этот тип обновления, как только пользователь останавливает бота
+    Вы получите это событие, как только пользователь остановит бота в его настройках в МАКС
 
     Args:
         chat_id: ID диалога, где произошло событие
         type:
-        user: Пользователь, который остановил чат
+        user: Пользователь, который остановил бота
         user_locale: Текущий язык пользователя в формате IETF BCP 47
     """
 
@@ -21,7 +22,7 @@ class BotStopped(MaxUpdate):
     chat_id: int
     """ID диалога, где произошло событие"""
     user: User
-    """Пользователь, который остановил чат"""
+    """Пользователь, который остановил бота"""
 
     user_locale: Omittable[str] = Omitted()
     """Текущий язык пользователя в формате IETF BCP 47"""

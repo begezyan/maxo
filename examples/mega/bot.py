@@ -25,7 +25,6 @@ from maxo.integrations.magic_filter import MagicFilter
 from maxo.routing.filters import ExceptionTypeFilter
 from maxo.routing.updates import ErrorEvent, MessageCallback, MessageCreated
 from maxo.transport.long_polling import LongPolling
-from maxo.utils.facades import MessageCallbackFacade, MessageCreatedFacade
 
 logger = logging.getLogger(__name__)
 
@@ -39,27 +38,29 @@ async def start(message: MessageCreated, dialog_manager: DialogManager) -> None:
     )
 
 
-async def on_unknown_intent(
-    event: ErrorEvent,
-    dialog_manager: DialogManager,
-    facade: MessageCallbackFacade | MessageCreatedFacade,
-) -> None:
+async def on_unknown_intent(event: ErrorEvent, dialog_manager: DialogManager) -> None:
     # Example of handling UnknownIntent Error and starting new dialog.
     logger.error("Restarting dialog: %s", event.exception)
-    if isinstance(event.update, MessageCallback):
-        await facade.callback_answer(
-            "Bot process was restarted due to maintenance.\n"
-            "Redirecting to main menu.",
+    if isinstance(event.event, MessageCallback):
+        callback: MessageCallback = event.event
+        await event.event.callback_answer(
+            notification=(
+                "Bot process was restarted due to maintenance.\n"
+                "Redirecting to main menu."
+            ),
         )
-        if event.update.message:
+        if callback.message:
             try:  # noqa: SIM105
-                await facade.delete_message()
+                await callback.delete_message()
             except MaxBotApiError:
                 pass  # whatever
-    elif isinstance(event.update, MessageCallback):
-        await facade.answer_text(
-            "Bot process was restarted due to maintenance.\n"
-            "Redirecting to main menu.",
+    elif isinstance(event.event, MessageCreated):
+        message: MessageCreated = event.event
+        await message.answer_text(
+            text=(
+                "Bot process was restarted due to maintenance.\n"
+                "Redirecting to main menu."
+            ),
         )
     await dialog_manager.start(
         states.Main.MAIN,
