@@ -14,7 +14,7 @@ class GetUpdates(MaxoMethod[UpdateList], slots=False):
     """
     Получение обновлений о событиях через Long Polling
 
-    > ! Получение обновлений с помощью [Long Polling](https://dev.max.ru/docs-api/methods/GET/updates) ограничено по скорости и сроку хранения событий — этот способ не подходит для production-окружения. Рекомендуем на всех этапах работы использовать [Webhook](https://dev.max.ru/docs-api/methods/POST/subscriptions)
+    > ! Получение обновлений с помощью [Long Polling](https://dev.max.ru/docs-api/methods/GET/updates) ограничено по скорости и сроку хранения событий - этот способ не подходит для production-окружения. Рекомендуем на всех этапах работы использовать [Webhook](https://dev.max.ru/docs-api/methods/POST/subscriptions)
 
     Метод `GET /updates` можно использовать для получения обновлений при разработке и тестировании, если ваш бот не подписан на Webhook. **Для production-окружения используйте только Webhook**
 

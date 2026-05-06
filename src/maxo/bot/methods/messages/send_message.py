@@ -13,7 +13,7 @@ class SendMessage(MaxoMethod[SendMessageResult]):
 
     Отправляет сообщение в чат
 
-    Ниже — пример запроса с одной кнопкой-ссылкой. Больше примеров запросов с кнопками — [в разделе «Клавиатура»](https://dev.max.ru/docs-api#Как%20добавить%20кнопки)
+    Ниже - пример запроса с одной кнопкой-ссылкой. Больше примеров запросов с кнопками - [в разделе «Клавиатура»](https://dev.max.ru/docs-api#Как%20добавить%20кнопки)
     ```bash
     curl -X POST "https://platform-api.max.ru/messages?user_id={user_id}" \
       -H "Authorization: {access_token}" \

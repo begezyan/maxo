@@ -9,7 +9,7 @@ class Unsubscribe(MaxoMethod[SimpleQueryResult]):
 
     Отписывает бота от получения обновлений о новых событиях через Webhook. После вызова этого метода бот перестаёт получать уведомления о новых событиях на Webhook-endpoint, и становится доступна доставка уведомлений через Long Polling 
 
-      > ! Получение обновлений с помощью [Long Polling](https://dev.max.ru/docs-api/methods/GET/updates) ограничено по скорости и сроку хранения событий — этот способ не подходит для production-окружения. Рекомендуем на всех этапах работы использовать [Webhook](https://dev.max.ru/docs-api/methods/POST/subscriptions)
+      > ! Получение обновлений с помощью [Long Polling](https://dev.max.ru/docs-api/methods/GET/updates) ограничено по скорости и сроку хранения событий - этот способ не подходит для production-окружения. Рекомендуем на всех этапах работы использовать [Webhook](https://dev.max.ru/docs-api/methods/POST/subscriptions)
 
     Пример запроса:
     ```bash

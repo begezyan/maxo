@@ -18,13 +18,13 @@ class ChatMember(UserWithPhoto):
         join_time: Дата присоединения к чату в формате Unix time
         last_access_time: Время последней активности пользователя в чате. Может быть устаревшим для суперчатов (равно времени вступления)
         permissions: Перечень прав пользователя. Возможные значения:
-            - `"read_all_messages"` — Читать все сообщения.
-            - `"add_remove_members"` — Добавлять/удалять участников.
-            - `"add_admins"` — Добавлять администраторов.
-            - `"change_chat_info"` — Изменять информацию о чате.
-            - `"pin_message"` — Закреплять сообщения.
-            - `"write"` — Писать сообщения.
-            - `"edit_link"` — Изменять ссылку на чат.
+            - `"read_all_messages"` - Читать все сообщения.
+            - `"add_remove_members"` - Добавлять/удалять участников.
+            - `"add_admins"` - Добавлять администраторов.
+            - `"change_chat_info"` - Изменять информацию о чате.
+            - `"pin_message"` - Закреплять сообщения.
+            - `"write"` - Писать сообщения.
+            - `"edit_link"` - Изменять ссылку на чат.
     """
 
     is_admin: bool
@@ -39,13 +39,13 @@ class ChatMember(UserWithPhoto):
     permissions: list[ChatAdminPermission] | None = None
     """
     Перечень прав пользователя. Возможные значения:
-        - `"read_all_messages"` — Читать все сообщения.
-        - `"add_remove_members"` — Добавлять/удалять участников.
-        - `"add_admins"` — Добавлять администраторов.
-        - `"change_chat_info"` — Изменять информацию о чате.
-        - `"pin_message"` — Закреплять сообщения.
-        - `"write"` — Писать сообщения.
-        - `"edit_link"` — Изменять ссылку на чат.
+        - `"read_all_messages"` - Читать все сообщения.
+        - `"add_remove_members"` - Добавлять/удалять участников.
+        - `"add_admins"` - Добавлять администраторов.
+        - `"change_chat_info"` - Изменять информацию о чате.
+        - `"pin_message"` - Закреплять сообщения.
+        - `"write"` - Писать сообщения.
+        - `"edit_link"` - Изменять ссылку на чат.
     """
 
     alias: Omittable[str] = Omitted()

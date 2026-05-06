@@ -8,9 +8,9 @@ class Subscribe(MaxoMethod[SimpleQueryResult]):
     """
     Подписка на обновления о новых событиях через Webhook
 
-    Метод настраивает доставку событий бота через Webhook  — основной механизм получения событий в продуктовых интеграциях. При активной подписке Long Polling не работает 
+    Метод настраивает доставку событий бота через Webhook  - основной механизм получения событий в продуктовых интеграциях. При активной подписке Long Polling не работает 
 
-    > ! Получение обновлений с помощью [Long Polling](https://dev.max.ru/docs-api/methods/GET/updates) ограничено по скорости и сроку хранения событий — этот способ не подходит для production-окружения. Рекомендуем на всех этапах работы использовать [Webhook](https://dev.max.ru/docs-api/methods/POST/subscriptions)
+    > ! Получение обновлений с помощью [Long Polling](https://dev.max.ru/docs-api/methods/GET/updates) ограничено по скорости и сроку хранения событий - этот способ не подходит для production-окружения. Рекомендуем на всех этапах работы использовать [Webhook](https://dev.max.ru/docs-api/methods/POST/subscriptions)
 
     ## Модель доставки событий
 
