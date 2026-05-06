@@ -167,6 +167,7 @@ class BotClient:
 
     async def send_channel_message_edited(self, text: str, mid: str) -> Any:
         """Эмулирует MessageEdited в канале без sender."""
+        seq = int(mid) if mid.isdigit() else self._new_message_id()
         msg = Message(
             recipient=Recipient(
                 chat_type=ChatType.CHANNEL,
@@ -174,7 +175,7 @@ class BotClient:
                 chat_id=self.chat.chat_id,
             ),
             timestamp=datetime.fromtimestamp(1234567890, tz=UTC),
-            body=MessageBody(mid=mid, seq=int(mid), text=text),
+            body=MessageBody(mid=mid, seq=seq, text=text),
             stat=MessageStat(views=1),
             url="https://max.ru/",
         )
