@@ -173,7 +173,7 @@ class IntentMiddlewareFactory:
             storage=fsm_storage,
             events_isolation=self.events_isolation,
             state_groups=self.registry.states_groups(),
-            user_id=event_context.user.id,
+            user_id=event_context.user_id,
             chat_id=event_context.chat_id,
             chat_type=event_context.chat_type,
         )
@@ -573,7 +573,7 @@ class IntentErrorMiddleware(BaseMiddleware[ErrorEvent]):
                 storage=ctx[FSM_STORAGE_KEY],
                 events_isolation=self.events_isolation,
                 state_groups=self.registry.states_groups(),
-                user_id=event_context.user.id,
+                user_id=event_context.user_id,
                 chat_id=event_context.chat_id,
                 chat_type=event_context.chat_type,
             )
