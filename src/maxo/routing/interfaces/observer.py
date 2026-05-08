@@ -63,7 +63,7 @@ class Observer(Protocol[_UpdateT, _HandlerT, _HandlerFnT]):
     ) -> _HandlerFnT:
         raise NotImplementedError
 
-    # Подражаение aiogram
+    # Подражание aiogram
     def register(
         self,
         handler_fn: _HandlerFnT,

@@ -56,7 +56,7 @@ class BaseObserver(Observer[_UpdateT, _HandlerT, _HandlerFnT], ABC):
     def middleware(self) -> MiddlewareManagerFacade[_UpdateT]:
         return self._middleware
 
-    # Подражаение aiogram,
+    # Подражание aiogram,
     # чтобы по `router.message_created.outer_middleware(MyMiddleware())`
     # он добавлялся в outer-мидлвари
     @property

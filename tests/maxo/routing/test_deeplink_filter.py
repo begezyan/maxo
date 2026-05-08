@@ -26,30 +26,30 @@ def bot_started(payload: str | None) -> BotStarted:
 @pytest.mark.asyncio
 async def test_deeplink_is_none() -> None:
     filter = DeeplinkFilter()
-    started_without_payload = bot_started(payload=None)
+    event = bot_started(payload=None)
 
     ctx = Ctx({})
-    assert await filter(started_without_payload, ctx) is False
+    assert await filter(event, ctx) is False
     assert ctx == {}
 
 
 @pytest.mark.asyncio
 async def test_deeplink_is_empty() -> None:
     filter = DeeplinkFilter()
-    started_without_payload = bot_started(payload="")
+    event = bot_started(payload="")
 
     ctx = Ctx({})
-    assert await filter(started_without_payload, ctx) is False
+    assert await filter(event, ctx) is False
     assert ctx == {}
 
 
 @pytest.mark.asyncio
 async def test_deeplink_is_filled() -> None:
     filter = DeeplinkFilter()
-    started_without_payload = bot_started(payload="helloworld")
+    event = bot_started(payload="helloworld")
 
     ctx = Ctx({})
-    assert await filter(started_without_payload, ctx) is True
+    assert await filter(event, ctx) is True
 
     assert len(ctx) == 3
     assert ctx["payload"] == ctx["deeplink"] == ctx["args"] == "helloworld"
@@ -58,10 +58,10 @@ async def test_deeplink_is_filled() -> None:
 @pytest.mark.asyncio
 async def test_deeplink_is_filled_and_encoded() -> None:
     filter = DeeplinkFilter(deep_link_encoded=True)
-    started_without_payload = bot_started(payload=encode_payload("helloworld"))
+    event = bot_started(payload=encode_payload("helloworld"))
 
     ctx = Ctx({})
-    assert await filter(started_without_payload, ctx) is True
+    assert await filter(event, ctx) is True
 
     assert len(ctx) == 3
     assert ctx["payload"] == ctx["deeplink"] == ctx["args"] == "helloworld"
@@ -70,8 +70,8 @@ async def test_deeplink_is_filled_and_encoded() -> None:
 @pytest.mark.asyncio
 async def test_deeplink_is_filled_and_bad_encoded() -> None:
     filter = DeeplinkFilter(deep_link_encoded=True)
-    started_without_payload = bot_started(payload="amongus_")
+    event = bot_started(payload="amongus_")
 
     ctx = Ctx({})
-    assert await filter(started_without_payload, ctx) is False
+    assert await filter(event, ctx) is False
     assert ctx == {}

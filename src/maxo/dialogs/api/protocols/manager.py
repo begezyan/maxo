@@ -58,7 +58,7 @@ class BaseDialogManager(Protocol):
     @abstractmethod
     async def update(
         self,
-        data: Data | None = None,
+        data: dict | None = None,
         show_mode: ShowMode | None = None,
     ) -> None:
         """Обновить данные диалога и перерисовать текущее окно."""

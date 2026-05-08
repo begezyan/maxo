@@ -1,4 +1,5 @@
 """Тесты MessageManager - закрывают п.1 issue #110 (skip get_message_by_id в remove_inline_kbd)."""
+
 from unittest.mock import AsyncMock
 
 import pytest
