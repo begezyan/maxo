@@ -55,9 +55,8 @@ class BgManager(BaseDialogManager):
         self.load = load
 
     def _get_fake_user(self, user_id: int | None = None) -> User:
-        if user_id is None or (
-            self._event_context.user is not None
-            and user_id == self._event_context.user.id
+        if self._event_context.user is not None and (
+            user_id is None or user_id == self._event_context.user.id
         ):
             return self._event_context.user
         return FakeUser(
