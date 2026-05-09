@@ -104,12 +104,15 @@ class Dispatcher(Router):
         return await self.feed_update(signal, bot)
 
     async def feed_update(self, update: BaseUpdate, bot: Bot | None = None) -> Any:
-        ctx = Ctx({**self.workflow_data, "bot": bot, "update": update})
+        ctx = Ctx({**self.workflow_data, "update": update})
         ctx["ctx"] = ctx
 
-        # Костыль для тестов (в них апдейты создаются без `.as_`)
-        # и неправильных вызовах `.feed_update`. Удачи отдебажить >:)
-        update.bot = bot
+        if bot is not None:
+            ctx["bot"] = bot
+            ctx["bots"] = [bot]
+            # Костыль для тестов (в них апдейты создаются без `.as_`)
+            # и неправильных вызовах `.feed_update`. Удачи отдебажить >:)
+            update.bot = bot
 
         return await self.trigger(ctx)
 
@@ -118,9 +121,10 @@ class Dispatcher(Router):
         ctx_copy["ctx"] = ctx_copy
         ctx_copy["update"] = update.update
 
-        # Костыль для тестов (в них апдейты создаются без `.as_`)
-        # и неправильных вызовах `.feed_update`. Удачи отдебажить >:)
-        update.update.bot = update.bot = ctx["bot"]
+        if "bot" in ctx:
+            # Костыль для тестов (в них апдейты создаются без `.as_`)
+            # и неправильных вызовах `.feed_update`. Удачи отдебажить >:)
+            update.update.bot = update.bot = ctx["bot"]
 
         result = await self.trigger(ctx_copy)
         if result is UNHANDLED:

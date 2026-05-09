@@ -138,14 +138,14 @@ async def run_middleware(
             BotStarted(chat_id=12, user=make_user(3), timestamp=datetime.now(UTC)),
             12,
             3,
-            None,
+            ChatType.DIALOG,
             True,
         ),
         (
             BotStopped(chat_id=13, user=make_user(4), timestamp=datetime.now(UTC)),
             13,
             4,
-            None,
+            ChatType.DIALOG,
             True,
         ),
         (
@@ -169,7 +169,7 @@ async def run_middleware(
             ),
             15,
             6,
-            None,
+            ChatType.DIALOG,
             True,
         ),
         (
@@ -182,7 +182,7 @@ async def run_middleware(
             ),
             16,
             7,
-            None,
+            ChatType.DIALOG,
             True,
         ),
         (
@@ -194,7 +194,7 @@ async def run_middleware(
             ),
             17,
             8,
-            None,
+            ChatType.DIALOG,
             True,
         ),
         (
@@ -206,7 +206,7 @@ async def run_middleware(
             ),
             18,
             9,
-            None,
+            ChatType.DIALOG,
             True,
         ),
         (

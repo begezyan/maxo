@@ -1,4 +1,5 @@
 """Тесты обработки сообщений из каналов (без sender.user) - закрывает issue #111."""
+
 from typing import Any
 
 import pytest

@@ -56,6 +56,7 @@ class Router(BaseRouter):
 
         self.message = self.message_created  # Подражание aiogram
         self.callback_query = self.message_callback  # Подражание aiogram
+        self.edited_message = self.message_edited  # Подражание aiogram
 
         self.exception = self.exceptions = self.error = self.errors = UpdateObserver[
             ErrorEvent[Any, Any]

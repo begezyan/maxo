@@ -1,6 +1,5 @@
 from maxo import Ctx
 from maxo.routing.filters.base import BaseFilter
-from maxo.routing.filters.command import CommandException
 from maxo.routing.updates.bot_started import BotStarted
 from maxo.utils.payload import decode_payload
 
@@ -17,7 +16,14 @@ class DeeplinkFilter(BaseFilter[BotStarted]):
         if not payload:
             return False
 
-        ctx["payload"] = ctx["deeplink"] = self.validate_deeplink(payload)
+        try:
+            deeplink = self.validate_deeplink(payload)
+        except ValueError:
+            return False
+
+        # ctx["args"] для работы `F.args.startswith(...)`,
+        # как при фильтрации диплинков из тг с CommandStart
+        ctx["payload"] = ctx["deeplink"] = ctx["args"] = deeplink
         return True
 
     def validate_deeplink(self, payload: str) -> str:
@@ -25,5 +31,5 @@ class DeeplinkFilter(BaseFilter[BotStarted]):
             try:
                 payload = decode_payload(payload)
             except UnicodeDecodeError as e:
-                raise CommandException(f"Failed to decode Base64: {e}") from e
+                raise ValueError(f"Failed to decode Base64: {e}") from e
         return payload

@@ -51,6 +51,8 @@ class User(MaxoType):
             return f"{self.first_name} {self.last_name}"
         return self.first_name
 
+    full_name = fullname  # Подражание aiogram
+
     @property
     def unsafe_last_name(self) -> str:
         if is_defined(self.last_name):
