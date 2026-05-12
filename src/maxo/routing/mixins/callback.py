@@ -21,6 +21,18 @@ class CallbackMethodsFacade(SubscriptionMethodsFacade):
         text: Omittable[str | None] = Omitted(),  # Подражание aiogram
         message: NewMessageBody | None = None,
     ) -> SimpleQueryResult:
+        """
+        Ответ на колбэк.
+
+        Args:
+            notification: Заполните это, если хотите просто отправить
+                          одноразовое уведомление пользователю.
+            text: Алиас для notification, подражание аиограму.
+                  Используется notification или он, преимущество у notification.
+            message: Заполните это, если хотите изменить текущее сообщение
+
+
+        """
         return await self.bot.answer_on_callback(
             callback_id=self.callback.callback_id,
             notification=notification if is_not_omitted(notification) else text,

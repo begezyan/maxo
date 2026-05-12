@@ -10,8 +10,8 @@ from maxo.types.user import User
 
 class MessageCallbackFacade(
     BaseUpdateFacade[MessageCallback],
-    MessageMethodsFacade,
     CallbackMethodsFacade,
+    MessageMethodsFacade,
 ):
     @property
     def message(self) -> Message:
