@@ -3,7 +3,7 @@ from typing import Self
 
 from maxo.errors import AttributeIsEmptyError
 from maxo.omit import Omittable, Omitted, is_defined
-from maxo.routing.updates.mixins import MessageMethodsFacade
+from maxo.routing.mixins import MessageMethodsFacade
 from maxo.types.base import MaxoType
 from maxo.types.linked_message import LinkedMessage
 from maxo.types.message_body import MessageBody

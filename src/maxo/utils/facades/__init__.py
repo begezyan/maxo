@@ -28,18 +28,16 @@ from maxo.routing.facades.message_created import MessageCreatedFacade
 from maxo.routing.facades.message_edited import MessageEditedFacade
 from maxo.routing.facades.message_removed import MessageRemovedFacade
 from maxo.routing.facades.user_added_to_chat import UserAddedToChatFacade
-from maxo.routing.facades.user_removed_from_chat import (
-    UserRemovedFromChatFacade,
-)
-from maxo.routing.updates.mixins import (
+from maxo.routing.facades.user_removed_from_chat import UserRemovedFromChatFacade
+from maxo.routing.mixins import (
     AttachmentsFacade,
     BaseMethodsFacade,
     BotMethodsFacade,
     ChatMethodsFacade,
+    MessageMethodsFacade,
+    SubscriptionMethodsFacade,
 )
-from maxo.routing.updates.mixins.callback import CallbackMethodsFacade
-from maxo.routing.updates.mixins.message import MessageMethodsFacade
-from maxo.routing.updates.mixins.subscription import SubscriptionMethodsFacade
+from maxo.routing.mixins.callback import CallbackMethodsFacade
 
 __all__ = (
     "AttachmentsFacade",

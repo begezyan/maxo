@@ -8,7 +8,7 @@ from maxo import loggers
 from maxo.enums import UploadType
 from maxo.errors.api import RetvalReturnedServerException
 from maxo.omit import is_defined
-from maxo.routing.updates.mixins.subscription import SubscriptionMethodsFacade
+from maxo.routing.mixins.subscription import SubscriptionMethodsFacade
 from maxo.types.attachments import AttachmentsRequests, MediaAttachmentsRequests
 from maxo.types.audio_attachment_request import AudioAttachmentRequest
 from maxo.types.buttons import InlineButtons

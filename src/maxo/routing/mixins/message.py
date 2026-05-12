@@ -1,15 +1,18 @@
 from abc import abstractmethod
 from collections.abc import Sequence
+from typing import TYPE_CHECKING
 
 from maxo.enums import MessageLinkType, TextFormat
 from maxo.omit import Omittable, Omitted, is_defined
-from maxo.routing.updates.mixins.attachments import MediaInput
-from maxo.routing.updates.mixins.chat import ChatMethodsFacade
+from maxo.routing.mixins.attachments import MediaInput
+from maxo.routing.mixins.chat import ChatMethodsFacade
 from maxo.types.buttons import InlineButtons
-from maxo.types.message import Message
 from maxo.types.new_message_link import NewMessageLink
 from maxo.types.simple_query_result import SimpleQueryResult
 from maxo.utils.helpers.calculating import calculate_chat_id_and_user_id
+
+if TYPE_CHECKING:
+    from maxo.types.message import Message
 
 
 class MessageMethodsFacade(ChatMethodsFacade):
@@ -17,7 +20,7 @@ class MessageMethodsFacade(ChatMethodsFacade):
 
     @property
     @abstractmethod
-    def message(self) -> Message:
+    def message(self) -> "Message":
         raise NotImplementedError
 
     @property
@@ -37,7 +40,7 @@ class MessageMethodsFacade(ChatMethodsFacade):
         disable_link_preview: Omittable[bool] = Omitted(),
         keyboard: Sequence[Sequence[InlineButtons]] | None = None,
         media: Sequence[MediaInput] | None = None,
-    ) -> Message:
+    ) -> "Message":
         recipient = self.message.recipient
         sender = self.message.sender
         chat_id, user_id = calculate_chat_id_and_user_id(
@@ -74,7 +77,7 @@ class MessageMethodsFacade(ChatMethodsFacade):
         disable_link_preview: Omittable[bool] = Omitted(),
         keyboard: Sequence[Sequence[InlineButtons]] | None = None,
         media: Sequence[MediaInput] | None = None,
-    ) -> Message:
+    ) -> "Message":
         link = self._make_new_message_link(type=MessageLinkType.REPLY)
         return await self.send_message(
             text=text,
@@ -93,7 +96,7 @@ class MessageMethodsFacade(ChatMethodsFacade):
         notify: Omittable[bool] = True,
         format: Omittable[TextFormat | None] = Omitted(),
         disable_link_preview: Omittable[bool] = Omitted(),
-    ) -> Message:
+    ) -> "Message":
         return await self.send_message(
             text=text,
             notify=notify,
@@ -109,7 +112,7 @@ class MessageMethodsFacade(ChatMethodsFacade):
         notify: Omittable[bool] = True,
         format: Omittable[TextFormat | None] = Omitted(),
         disable_link_preview: Omittable[bool] = Omitted(),
-    ) -> Message:
+    ) -> "Message":
         return await self.send_message(
             text=text,
             notify=notify,
@@ -128,7 +131,7 @@ class MessageMethodsFacade(ChatMethodsFacade):
         format: Omittable[TextFormat | None] = Omitted(),
         link: NewMessageLink | None = None,
         disable_link_preview: Omittable[bool] = Omitted(),
-    ) -> Message:
+    ) -> "Message":
         if not isinstance(media, Sequence):
             media = (media,)
 
@@ -150,7 +153,7 @@ class MessageMethodsFacade(ChatMethodsFacade):
         link: NewMessageLink | None = None,
         notify: bool = True,
         format: Omittable[TextFormat | None] = Omitted(),
-    ) -> Message:
+    ) -> "Message":
         message_id = self.message.body.mid
 
         if text is None:
@@ -177,5 +180,5 @@ class MessageMethodsFacade(ChatMethodsFacade):
             mid=self.message.body.mid,
         )
 
-    async def get_message_by_id(self, message_id: str) -> Message:
+    async def get_message_by_id(self, message_id: str) -> "Message":
         return await self.bot.get_message_by_id(message_id=message_id)

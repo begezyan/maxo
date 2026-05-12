@@ -1,7 +1,7 @@
 from abc import abstractmethod
 
 from maxo.omit import Omittable, Omitted, is_not_omitted
-from maxo.routing.updates.mixins.subscription import SubscriptionMethodsFacade
+from maxo.routing.mixins.subscription import SubscriptionMethodsFacade
 from maxo.types.callback import Callback
 from maxo.types.new_message_body import NewMessageBody
 from maxo.types.simple_query_result import SimpleQueryResult

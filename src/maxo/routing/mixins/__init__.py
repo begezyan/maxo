@@ -1,4 +1,4 @@
-from .attachments import AttachmentsFacade
+from .attachments import AttachmentsFacade, MediaInput
 from .base import BaseMethodsFacade
 from .bot import BotMethodsFacade
 from .callback import CallbackMethodsFacade
@@ -12,6 +12,7 @@ __all__ = (
     "BotMethodsFacade",
     "CallbackMethodsFacade",
     "ChatMethodsFacade",
+    "MediaInput",
     "MessageMethodsFacade",
     "SubscriptionMethodsFacade",
 )

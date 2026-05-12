@@ -2,7 +2,7 @@ from maxo import Bot
 from maxo.dialogs.api.entities import MediaId
 from maxo.dialogs.api.protocols import MediaIdStorageProtocol
 from maxo.enums import UploadType
-from maxo.routing.updates.mixins import AttachmentsFacade
+from maxo.routing.mixins import AttachmentsFacade
 from maxo.utils.upload_media import FSInputFile, InputFile
 
 

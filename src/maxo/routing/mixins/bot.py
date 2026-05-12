@@ -1,5 +1,5 @@
 from maxo.omit import Omittable, Omitted
-from maxo.routing.updates.mixins.base import BaseMethodsFacade
+from maxo.routing.mixins.base import BaseMethodsFacade
 from maxo.types.bot_command import BotCommand
 from maxo.types.bot_info import BotInfo
 from maxo.types.photo_attachment_request_payload import PhotoAttachmentRequestPayload

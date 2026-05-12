@@ -12,7 +12,7 @@ from maxo.dialogs.manager.attachment_facade import DialogAttachmentsFacade
 from maxo.enums import AttachmentType, UploadType
 from maxo.errors import MaxBotApiError, MaxBotBadRequestError
 from maxo.omit import Omitted
-from maxo.routing.updates.mixins.attachments import MediaInput
+from maxo.routing.mixins import MediaInput
 from maxo.types import (
     AttachmentsRequests,
     AudioAttachmentRequest,
