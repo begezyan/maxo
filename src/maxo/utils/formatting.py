@@ -174,7 +174,7 @@ class Text(Iterable[NodeType]):
         text, entities = self.render()
         return markdown_decoration.unparse(text, entities)
 
-    def replace(self: Self, *args: Any, **kwargs: Any) -> Self:
+    def replace(self, *args: Any, **kwargs: Any) -> Self:
         return type(self)(*args, **{**self._params, **kwargs})
 
     def as_pretty_string(self, indent: bool = False) -> str:

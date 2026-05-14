@@ -33,9 +33,6 @@ def encode_payload(
     payload: str,
     encoder: Callable[[bytes], bytes] | None = None,
 ) -> str:
-    if not isinstance(payload, str):
-        payload = str(payload)
-
     payload_bytes = payload.encode("utf-8")
     if encoder is not None:
         payload_bytes = encoder(payload_bytes)

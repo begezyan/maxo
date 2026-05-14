@@ -75,7 +75,7 @@ class RedisStorage(BaseStorage):
         else:
             await self.redis.set(
                 built_key,
-                state.state,
+                cast(str, state.state),
                 ex=self.state_ttl,
             )
 

@@ -89,9 +89,6 @@ def create_deep_link(
     encode: bool = False,
     encoder: Callable[[bytes], bytes] | None = None,
 ) -> str:
-    if not isinstance(payload, str):
-        payload = str(payload)
-
     if encode or encoder:
         payload = encode_payload(payload, encoder=encoder)
 

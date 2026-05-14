@@ -81,23 +81,23 @@ class Window(WindowProtocol):
 
     async def render_text(
         self,
-        data: dict,
+        data: dict[Any, Any],
         manager: DialogManager,
     ) -> str:
         return await self.text.render_text(data, manager)
 
     async def render_media(
         self,
-        data: dict,
+        data: dict[Any, Any],
         manager: DialogManager,
     ) -> list[MediaAttachment]:
-        if self.media:
+        if self.media:  # type: ignore[truthy-bool]
             return await self.media.render_media(data, manager)
         return []
 
     async def render_kbd(
         self,
-        data: dict,
+        data: dict[Any, Any],
         manager: DialogManager,
     ) -> MarkupVariant:
         keyboard = await self.keyboard.render_keyboard(data, manager)
@@ -109,7 +109,7 @@ class Window(WindowProtocol):
 
     async def render_link_preview(
         self,
-        data: dict,
+        data: dict[Any, Any],
         manager: DialogManager,
     ) -> LinkPreviewOptions | None:
         if self.link_preview:
@@ -120,7 +120,7 @@ class Window(WindowProtocol):
         self,
         dialog: "DialogProtocol",
         manager: DialogManager,
-    ) -> dict:
+    ) -> dict[Any, Any]:
         data = await dialog.load_data(manager)
         data.update(await self.getter(**manager.middleware_data))
         return data

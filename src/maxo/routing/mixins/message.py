@@ -6,6 +6,7 @@ from maxo.enums import MessageLinkType, TextFormat
 from maxo.omit import Omittable, Omitted, is_defined
 from maxo.routing.mixins.attachments import MediaInput
 from maxo.routing.mixins.chat import ChatMethodsFacade
+from maxo.types.attachments import AttachmentsRequests
 from maxo.types.buttons import InlineButtons
 from maxo.types.new_message_link import NewMessageLink
 from maxo.types.simple_query_result import SimpleQueryResult
@@ -40,6 +41,7 @@ class MessageMethodsFacade(ChatMethodsFacade):
         disable_link_preview: Omittable[bool] = Omitted(),
         keyboard: Sequence[Sequence[InlineButtons]] | None = None,
         media: Sequence[MediaInput] | None = None,
+        attachments: Sequence[AttachmentsRequests] | None = None,
     ) -> "Message":
         recipient = self.message.recipient
         sender = self.message.sender
@@ -50,7 +52,7 @@ class MessageMethodsFacade(ChatMethodsFacade):
         )
 
         attachments = await self.build_attachments(
-            base=[],
+            base=attachments or [],
             keyboard=keyboard,
             files=media,
         )
@@ -153,14 +155,15 @@ class MessageMethodsFacade(ChatMethodsFacade):
         link: NewMessageLink | None = None,
         notify: bool = True,
         format: Omittable[TextFormat | None] = Omitted(),
-    ) -> "Message":
+        attachments: Sequence[AttachmentsRequests] | None = None,
+    ) -> SimpleQueryResult:
         message_id = self.message.body.mid
 
         if text is None:
             text = self.message.body.text
 
-        attachments = await self.build_attachments(
-            base=[],
+        prepared_attachments = await self.build_attachments(
+            base=attachments or [],
             keyboard=keyboard,
             files=media,
         )
@@ -168,7 +171,7 @@ class MessageMethodsFacade(ChatMethodsFacade):
         return await self.bot.edit_message(
             message_id=message_id,
             text=text,
-            attachments=attachments,
+            attachments=prepared_attachments,
             link=link,
             notify=notify,
             format=format,

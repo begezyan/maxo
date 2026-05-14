@@ -1,5 +1,5 @@
 from abc import abstractmethod
-from typing import Self
+from typing import Any, Self
 
 from maxo.dialogs.api.internal import KeyboardWidget, RawKeyboard
 from maxo.dialogs.api.protocols import DialogManager, DialogProtocol
@@ -20,7 +20,7 @@ class Keyboard(Actionable, Whenable, KeyboardWidget):
     @add_exception_note
     async def render_keyboard(
         self,
-        data: dict,
+        data: dict[Any, Any],
         manager: DialogManager,
     ) -> RawKeyboard:
         """
@@ -36,7 +36,7 @@ class Keyboard(Actionable, Whenable, KeyboardWidget):
     @abstractmethod
     async def _render_keyboard(
         self,
-        data: dict,
+        data: dict[Any, Any],
         manager: DialogManager,
     ) -> RawKeyboard:
         """
@@ -135,7 +135,7 @@ class Or(Keyboard):
 
     async def _render_keyboard(
         self,
-        data: dict,
+        data: dict[Any, Any],
         manager: DialogManager,
     ) -> RawKeyboard:
         for widget in self.widgets:

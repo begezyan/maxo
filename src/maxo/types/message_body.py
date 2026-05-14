@@ -1,3 +1,4 @@
+from maxo.enums.attachment_type import AttachmentType
 from maxo.errors import AttributeIsEmptyError
 from maxo.omit import Omittable, Omitted, is_defined
 from maxo.types.attachments import Attachments
@@ -120,7 +121,7 @@ class MessageBody(MaxoType):
 
     def _unparse_entities(self, text_decoration: TextDecoration) -> str:
         text = self.text or ""
-        entities = self.markup or []
+        entities = self.markup if is_defined(self.markup) else None
         return text_decoration.unparse(text=text, entities=entities)
 
     @property
@@ -160,3 +161,27 @@ class MessageBody(MaxoType):
             obj=self,
             attr="text",
         )
+
+    @property
+    def attachment_type(self) -> AttachmentType:
+        if self.photo:
+            return AttachmentType.PHOTO
+        if self.video:
+            return AttachmentType.VIDEO
+        if self.audio:
+            return AttachmentType.AUDIO
+        if self.file:
+            return AttachmentType.DOCUMENT
+        if self.sticker:
+            return AttachmentType.STICKER
+        if self.contact:
+            return AttachmentType.CONTACT
+        if self.share:
+            return AttachmentType.SHARE
+        if self.location:
+            return AttachmentType.LOCATION
+        if self.text:
+            return AttachmentType.TEXT
+        return AttachmentType.UNKNOWN
+
+    content_type = attachment_type  # Подражание aiogram

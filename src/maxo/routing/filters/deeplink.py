@@ -1,4 +1,5 @@
 from maxo import Ctx
+from maxo.omit import is_not_defined
 from maxo.routing.filters.base import BaseFilter
 from maxo.routing.updates.bot_started import BotStarted
 from maxo.utils.payload import decode_payload
@@ -9,11 +10,8 @@ class DeeplinkFilter(BaseFilter[BotStarted]):
         self.deep_link_encoded = deep_link_encoded
 
     async def __call__(self, event: BotStarted, ctx: Ctx) -> bool:
-        if not isinstance(event, BotStarted):
-            return False
-
         payload = event.payload
-        if not payload:
+        if is_not_defined(payload) or not payload:
             return False
 
         try:

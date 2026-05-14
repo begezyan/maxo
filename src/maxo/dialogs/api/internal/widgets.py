@@ -38,7 +38,7 @@ class TextWidget(Widget, Protocol):
     @abstractmethod
     async def render_text(
         self,
-        data: dict,
+        data: dict[Any, Any],
         manager: DialogManager,
     ) -> str:
         """Create text."""
@@ -50,7 +50,7 @@ class LinkPreviewWidget(Widget, Protocol):
     @abstractmethod
     async def render_link_preview(
         self,
-        data: dict,
+        data: dict[Any, Any],
         manager: DialogManager,
     ) -> LinkPreviewOptions | None:
         """Create link preview."""
@@ -73,7 +73,7 @@ class KeyboardWidget(Widget, Protocol):
     @abstractmethod
     async def render_keyboard(
         self,
-        data: dict,
+        data: dict[Any, Any],
         manager: DialogManager,
     ) -> RawKeyboard:
         """Create Inline keyboard contents."""
@@ -101,7 +101,7 @@ class MediaWidget(Widget, Protocol):
     @abstractmethod
     async def render_media(
         self,
-        data: dict,
+        data: dict[Any, Any],
         manager: DialogManager,
     ) -> list[MediaAttachment]:
         """Create media attachment."""
@@ -135,7 +135,7 @@ class MarkupFactory(Protocol):
     @abstractmethod
     async def render_markup(
         self,
-        data: dict,
+        data: dict[Any, Any],
         manager: DialogManager,
         keyboard: RawKeyboard,
     ) -> MarkupVariant:

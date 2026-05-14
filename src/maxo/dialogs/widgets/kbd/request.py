@@ -1,4 +1,5 @@
 from collections.abc import Callable
+from typing import Any
 
 from maxo.dialogs.api.internal import RawKeyboard, TextWidget
 from maxo.dialogs.api.protocols import DialogManager
@@ -22,7 +23,7 @@ class RequestContact(Keyboard):
 
     async def _render_keyboard(
         self,
-        data: dict,
+        data: dict[Any, Any],
         manager: DialogManager,
     ) -> RawKeyboard:
         return [
@@ -47,7 +48,7 @@ class RequestLocation(Keyboard):
 
     async def _render_keyboard(
         self,
-        data: dict,
+        data: dict[Any, Any],
         manager: DialogManager,
     ) -> RawKeyboard:
         return [

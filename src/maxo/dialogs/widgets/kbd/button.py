@@ -1,4 +1,5 @@
 from collections.abc import Awaitable, Callable
+from typing import Any
 
 from maxo.dialogs.api.internal import RawKeyboard, TextWidget
 from maxo.dialogs.api.protocols import DialogManager, DialogProtocol
@@ -39,7 +40,7 @@ class Button(Keyboard):
 
     async def _render_keyboard(
         self,
-        data: dict,
+        data: dict[Any, Any],
         manager: DialogManager,
     ) -> RawKeyboard:
         return [
@@ -65,7 +66,7 @@ class Url(Keyboard):
 
     async def _render_keyboard(
         self,
-        data: dict,
+        data: dict[Any, Any],
         manager: DialogManager,
     ) -> RawKeyboard:
         return [
@@ -96,7 +97,7 @@ class WebApp(Keyboard):
 
     async def _render_keyboard(
         self,
-        data: dict,
+        data: dict[Any, Any],
         manager: DialogManager,
     ) -> RawKeyboard:
         text = await self.text.render_text(data, manager)
@@ -126,7 +127,7 @@ class Clipboard(Keyboard):
 
     async def _render_keyboard(
         self,
-        data: dict,
+        data: dict[Any, Any],
         manager: DialogManager,
     ) -> RawKeyboard:
         return [

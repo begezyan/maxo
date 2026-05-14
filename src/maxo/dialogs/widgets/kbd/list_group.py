@@ -46,14 +46,14 @@ class ListGroup(Keyboard, BaseScroll):
         total = len(items)
         return total // self.page_size + bool(total % self.page_size)
 
-    async def get_page_count(self, data: dict, manager: DialogManager) -> int:
+    async def get_page_count(self, data: dict[Any, Any], manager: DialogManager) -> int:
         if self.page_size == 0:
             return 1
         return self._get_page_count(self.items_getter(data))
 
     async def _render_keyboard(
         self,
-        data: dict,
+        data: dict[Any, Any],
         manager: DialogManager,
     ) -> RawKeyboard:
         kbd: RawKeyboard = []
@@ -74,7 +74,7 @@ class ListGroup(Keyboard, BaseScroll):
         self,
         pos: int,
         item: Any,
-        data: dict,
+        data: dict[Any, Any],
         manager: DialogManager,
     ) -> RawKeyboard:
         kbd: RawKeyboard = []

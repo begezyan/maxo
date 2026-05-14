@@ -1,5 +1,6 @@
 import pytest
 
+from maxo.omit import Omitted
 from maxo.transport.webhook.security import Security, StaticSecretToken
 from maxo.transport.webhook.security.secret_token import SECRET_HEADER
 
@@ -28,7 +29,7 @@ async def test_security_secret_token(secret_token, request_token, expected, bot)
     ("secret_token", "expected"),
     [
         (StaticSecretToken("test-secret"), "test-secret"),
-        (None, None),
+        (None, Omitted()),
     ],
     ids=["with-secret", "without-secret"],
 )

@@ -3,7 +3,7 @@ from collections.abc import AsyncIterator
 from typing import Self
 
 from maxo.bot.bot import Bot
-from maxo.omit import Omittable, is_omitted
+from maxo.omit import Omittable, Omitted, is_omitted
 from maxo.types.chat import Chat
 
 
@@ -14,7 +14,7 @@ class ChatsIterator(AsyncIterator[Chat]):
         self,
         bot: Bot,
         count: Omittable[int] = 50,
-        marker: Omittable[int | None] = None,
+        marker: Omittable[int] = Omitted(),
     ) -> None:
         self._bot = bot
         self._count = count

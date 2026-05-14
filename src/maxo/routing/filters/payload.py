@@ -31,10 +31,11 @@ import typing
 from decimal import Decimal
 from enum import Enum
 from fractions import Fraction
-from typing import Any, ClassVar, Self, TypeVar, get_args, get_origin
+from typing import Any, Self, TypeVar, get_args, get_origin
 from uuid import UUID
 
 from maxo import Ctx
+from maxo.omit import is_not_defined
 from maxo.routing.filters import BaseFilter
 from maxo.routing.interfaces import Filter
 from maxo.routing.updates import MessageCallback
@@ -53,10 +54,10 @@ class PayloadException(Exception):
 
 
 class Payload(MaxoType, slots=False):
-    __separator__: ClassVar[str]
-    __prefix__: ClassVar[str]
+    __separator__: typing.ClassVar[str]
+    __prefix__: typing.ClassVar[str]
 
-    def __init_subclass__(cls, **kwargs: Any) -> None:
+    def __init_subclass__(cls, **kwargs: typing.Any) -> None:
         if (
             getattr(cls, "__separator__", None) is not None
             and getattr(cls, "__prefix__", None) is not None
@@ -121,7 +122,7 @@ class Payload(MaxoType, slots=False):
         return payload
 
     @classmethod
-    def _decode_value(cls, field: dataclasses.Field, raw_value: str) -> Any:
+    def _decode_value(cls, field: dataclasses.Field[Any], raw_value: str) -> Any:
         is_empty = raw_value == ""
 
         if is_empty:
@@ -153,7 +154,7 @@ class Payload(MaxoType, slots=False):
             return Fraction(raw_value)
         if field_type is UUID:
             return UUID(hex=raw_value)
-        if issubclass(field_type, Enum):
+        if isinstance(field_type, type) and issubclass(field_type, Enum):  # TODO: ???
             return field_type(raw_value)
 
         return raw_value
@@ -219,7 +220,7 @@ class MessageCallbackFilter(BaseFilter[MessageCallback]):
         update: MessageCallback,
         ctx: Ctx,
     ) -> bool:
-        if not isinstance(update, MessageCallback) or not update.payload:
+        if not isinstance(update, MessageCallback) or is_not_defined(update.payload):
             return False
         try:
             payload = self.payload.unpack(update.payload)
@@ -241,7 +242,7 @@ class MessageCallbackFilter(BaseFilter[MessageCallback]):
         return result
 
 
-def _check_field_is_nullable(field: dataclasses.Field) -> bool:
+def _check_field_is_nullable(field: dataclasses.Field[Any]) -> bool:
     if (
         field.default is not dataclasses.MISSING
         or field.default_factory is not dataclasses.MISSING
@@ -249,7 +250,7 @@ def _check_field_is_nullable(field: dataclasses.Field) -> bool:
         return True
 
     origin = get_origin(field.type)
-    if origin in _UNION_TYPES or origin is typing.Union:
+    if origin in _UNION_TYPES:
         args = get_args(field.type)
         return type(None) in args
 

@@ -32,12 +32,13 @@ from re import Match, Pattern
 from typing import cast
 
 from maxo import Bot, Ctx
+from maxo.omit import is_defined
 from maxo.routing.filters import BaseFilter
 from maxo.routing.updates import MessageCreated
 from maxo.types.base import MaxoType
 from maxo.types.bot_command import BotCommand
 
-CommandPatternType = str | re.Pattern | BotCommand
+CommandPatternType = str | re.Pattern[str] | BotCommand
 
 
 class CommandException(Exception):
@@ -121,12 +122,13 @@ class Command(BaseFilter[MessageCreated]):
         message: MessageCreated,
         ctx: Ctx,
     ) -> bool:
-        if not isinstance(message, MessageCreated):
-            return False
+        if message.message.body.text:
+            text = message.message.body.text
+        elif is_defined(link := message.message.link) and link.message.text:
+            text = link.message.text
+        else:
+            text = None
 
-        text = (message.message.body and message.message.body.text) or (
-            message.message.link and message.message.link.message.text
-        )
         if not text:
             return False
 
