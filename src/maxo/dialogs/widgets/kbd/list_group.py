@@ -1,3 +1,4 @@
+import contextlib
 import dataclasses
 from collections.abc import Callable, Sequence
 from typing import Any
@@ -15,6 +16,7 @@ from maxo.dialogs.widgets.common import (
 )
 from maxo.dialogs.widgets.common.items import ItemsGetterVariant, get_items_getter
 from maxo.dialogs.widgets.widget_event import ensure_event_processor
+from maxo.errors import AttributeIsEmptyError
 from maxo.routing.updates import MessageCallback
 
 from .base import Keyboard
@@ -115,6 +117,10 @@ class ListGroup(Keyboard, BaseScroll):
 
         cleaned_callback = dataclasses.replace(callback.callback, payload=payload)
         cleaned_event = dataclasses.replace(callback, callback=cleaned_callback)
+
+        with contextlib.suppress(AttributeIsEmptyError):
+            cleaned_callback.as_(callback.bot)
+            cleaned_event.as_(callback.bot)
 
         sub_manager = SubManager(
             widget=self,
