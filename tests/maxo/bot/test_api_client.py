@@ -7,7 +7,7 @@ from multidict import CIMultiDict
 from unihttp.http import HTTPResponse
 
 from maxo.bot.api_client import MaxApiClient
-from maxo.bot.methods.base import BaseMethod
+from maxo.bot.methods.base import MaxoMethod
 from maxo.errors import (
     MaxBotApiError,
     MaxBotBadRequestError,
@@ -84,7 +84,7 @@ async def test_handle_error(
         cookies=SimpleCookie(),
         raw_response=AsyncMock(),
     )
-    method = BaseMethod()
+    method = MaxoMethod()
     with pytest.raises(error_class):
         api_client.handle_error(response, method)
 
@@ -97,7 +97,7 @@ async def test_validate_response_ok(api_client: MaxApiClient):
         cookies=SimpleCookie(),
         raw_response=AsyncMock(),
     )
-    method = BaseMethod()
+    method = MaxoMethod()
     api_client.validate_response(response, method)
     assert response.status_code == 200
 
@@ -110,7 +110,7 @@ async def test_validate_response_error(api_client: MaxApiClient):
         cookies=SimpleCookie(),
         raw_response=AsyncMock(),
     )
-    method = BaseMethod()
+    method = MaxoMethod()
     api_client.validate_response(response, method)
     assert response.status_code == 400
 

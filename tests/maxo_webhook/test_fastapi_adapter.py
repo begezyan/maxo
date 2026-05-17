@@ -64,7 +64,7 @@ async def test_register_and_handle(
 
     assert response.status_code == 200
     assert response.json() == {"ok": True}
-    handler_mock.assert_called_once()
+    handler_mock.assert_awaited_once()
 
     # Check bound request properties
     bound_request = handler_mock.call_args[0][0]

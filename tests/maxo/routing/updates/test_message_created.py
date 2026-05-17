@@ -17,7 +17,7 @@ def create_message(text: str, user_id: int | None = 1) -> Message:
             is_bot=False,
             last_activity_time=datetime.now(UTC),
         )
-        if user_id
+        if user_id is not None
         else None
     )
     return Message(

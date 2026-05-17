@@ -1,6 +1,7 @@
 import hashlib
 import hmac
 import json
+from typing import Any
 from urllib.parse import urlencode
 
 import pytest
@@ -33,7 +34,7 @@ TEST_DATA = {
 }
 
 
-def generate_test_init_data(token: str, data: dict) -> str:
+def generate_test_init_data(token: str, data: dict[str, Any]) -> str:
     sorted_data = dict(sorted(data.items()))
     data_check_string = "\n".join(f"{k}={v}" for k, v in sorted_data.items())
 
