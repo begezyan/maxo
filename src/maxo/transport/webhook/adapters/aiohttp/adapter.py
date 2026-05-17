@@ -32,7 +32,7 @@ class AiohttpBoundRequest(BoundRequest[Request]):
     def client_ip(self) -> IPv4Address | IPv6Address | str | None:
         peer_name = cast(Transport, self.request.transport).get_extra_info("peername")
         if peer_name:
-            return peer_name[0]  # type: ignore[no-any-return]
+            return cast(IPv4Address | IPv6Address | str, peer_name[0])
         return None
 
     @property

@@ -1,4 +1,4 @@
-from typing import Any, cast
+from typing import Any
 
 from maxo.dialogs.api.protocols import DialogManager
 from maxo.dialogs.widgets.common import WhenCondition
@@ -26,7 +26,8 @@ class Progress(Text):
         data: dict[Any, Any],
         manager: DialogManager,
     ) -> str:
-        percent = cast(float, 15 if manager.is_preview() else data.get(self.field))
+        raw_percent = 15 if manager.is_preview() else data.get(self.field, 0)
+        percent = float(raw_percent)
         done = round((self.width * percent) / 100)
         rest = self.width - done
 

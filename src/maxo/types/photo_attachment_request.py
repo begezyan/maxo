@@ -38,7 +38,7 @@ class PhotoAttachmentRequest(AttachmentRequest):
 
         """
         if is_defined(photos):
-            photos_tokens = [PhotoToken(token=token) for token in photos]
+            photos_tokens = [PhotoToken(token=photo_token) for photo_token in photos]
         else:
             photos_tokens = photos
 
