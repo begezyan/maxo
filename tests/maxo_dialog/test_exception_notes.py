@@ -49,7 +49,6 @@ async def start(message: Message, dialog_manager: DialogManager):
     await dialog_manager.start(MainSG.start, mode=StartMode.RESET_STACK)
 
 
-@pytest.mark.asyncio
 async def test_exception_notes():
     usecase = Mock()
     user_getter = Mock(side_effect=["Username"])

@@ -38,7 +38,6 @@ def message_facade(bot_mock) -> DummyMessageFacade:
     return DummyMessageFacade(bot=bot_mock)
 
 
-@pytest.mark.asyncio
 async def test_build_media_only_input_files(facade: DummyFacade) -> None:
     input_files = [
         BufferedInputFile.image(b"photo_bytes", "photo.jpg"),
@@ -69,7 +68,6 @@ async def test_build_media_only_input_files(facade: DummyFacade) -> None:
     assert result == uploaded_attachments
 
 
-@pytest.mark.asyncio
 async def test_build_media_only_requests(facade: DummyFacade) -> None:
     requests = [
         PhotoAttachmentRequest.factory(token="photo_token"),  # noqa: S106
@@ -95,7 +93,6 @@ async def test_build_media_only_requests(facade: DummyFacade) -> None:
     assert result == requests
 
 
-@pytest.mark.asyncio
 async def test_build_media_mixed_order(facade: DummyFacade) -> None:
     input_file1 = BufferedInputFile.image(b"photo_bytes", "photo.jpg")
     request1 = VideoAttachmentRequest.factory(token="video_token")  # noqa: S106
@@ -136,7 +133,6 @@ async def test_build_media_mixed_order(facade: DummyFacade) -> None:
     assert result == expected_result
 
 
-@pytest.mark.asyncio
 async def test_build_attachments_no_files(facade: DummyFacade) -> None:
     with patch.object(
         facade,
@@ -149,7 +145,6 @@ async def test_build_attachments_no_files(facade: DummyFacade) -> None:
     assert result == []
 
 
-@pytest.mark.asyncio
 async def test_build_attachments_with_files(facade: DummyFacade) -> None:
     input_files = [BufferedInputFile.image(b"photo_bytes", "photo.jpg")]
     built_media = [
@@ -172,7 +167,6 @@ async def test_build_attachments_with_files(facade: DummyFacade) -> None:
     assert result == built_media
 
 
-@pytest.mark.asyncio
 async def test_send_media_single_media_attachments_request(
     message_facade: DummyMessageFacade,
 ) -> None:

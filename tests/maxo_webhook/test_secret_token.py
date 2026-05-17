@@ -7,7 +7,6 @@ from maxo.transport.webhook.security.secret_token import SECRET_HEADER
 from .fixtures import DummyBoundRequest, DummyRequest
 
 
-@pytest.mark.asyncio
 @pytest.mark.parametrize(
     ("secret_token", "request_token", "expected"),
     [
@@ -24,7 +23,6 @@ async def test_security_secret_token(secret_token, request_token, expected, bot)
     assert await sec.verify(bot, req) is expected
 
 
-@pytest.mark.asyncio
 @pytest.mark.parametrize(
     ("secret_token", "expected"),
     [

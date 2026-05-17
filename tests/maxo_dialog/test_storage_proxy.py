@@ -1,5 +1,3 @@
-import pytest
-
 from maxo.dialogs.api.entities import Stack
 from maxo.dialogs.context.storage import StorageProxy
 from maxo.dialogs.test_tools.bot_client import FakeBot
@@ -21,7 +19,6 @@ from maxo.types import (
 )
 
 
-@pytest.mark.asyncio
 async def test_save_load_stack_with_all_attachments():
     bot = FakeBot()
     chat_id = 123

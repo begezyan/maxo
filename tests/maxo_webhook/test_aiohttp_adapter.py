@@ -22,7 +22,6 @@ def mocked_engine():
 
 
 @pytest.mark.skip("Разобраться с ошибкой")
-@pytest.mark.asyncio
 async def test_adapter(aiohttp_client, aiohttp_app):
     engine = AsyncMock(return_value=web.Response(status=200))
 

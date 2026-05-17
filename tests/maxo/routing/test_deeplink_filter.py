@@ -1,7 +1,5 @@
 from datetime import UTC, datetime
 
-import pytest
-
 from maxo import Ctx
 from maxo.routing.filters import DeeplinkFilter
 from maxo.routing.updates import BotStarted
@@ -23,7 +21,6 @@ def bot_started(payload: str | None) -> BotStarted:
     )
 
 
-@pytest.mark.asyncio
 async def test_deeplink_is_none() -> None:
     filter = DeeplinkFilter()
     event = bot_started(payload=None)
@@ -33,7 +30,6 @@ async def test_deeplink_is_none() -> None:
     assert ctx == {}
 
 
-@pytest.mark.asyncio
 async def test_deeplink_is_empty() -> None:
     filter = DeeplinkFilter()
     event = bot_started(payload="")
@@ -43,7 +39,6 @@ async def test_deeplink_is_empty() -> None:
     assert ctx == {}
 
 
-@pytest.mark.asyncio
 async def test_deeplink_is_filled() -> None:
     filter = DeeplinkFilter()
     event = bot_started(payload="helloworld")
@@ -55,7 +50,6 @@ async def test_deeplink_is_filled() -> None:
     assert ctx["payload"] == ctx["deeplink"] == ctx["args"] == "helloworld"
 
 
-@pytest.mark.asyncio
 async def test_deeplink_is_filled_and_encoded() -> None:
     filter = DeeplinkFilter(deep_link_encoded=True)
     event = bot_started(payload=encode_payload("helloworld"))
@@ -67,7 +61,6 @@ async def test_deeplink_is_filled_and_encoded() -> None:
     assert ctx["payload"] == ctx["deeplink"] == ctx["args"] == "helloworld"
 
 
-@pytest.mark.asyncio
 async def test_deeplink_is_filled_and_bad_encoded() -> None:
     filter = DeeplinkFilter(deep_link_encoded=True)
     event = bot_started(payload="amongus_")

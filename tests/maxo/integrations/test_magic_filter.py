@@ -1,10 +1,8 @@
-import pytest
 from magic_filter import F
 
 from maxo.integrations.magic_filter import MagicData, MagicFilter
 
 
-@pytest.mark.asyncio
 async def test_magic_filter_custom_cast() -> None:
     magic_filter = MagicFilter(F["item"].cast(str), result_key="result")
 
@@ -17,7 +15,6 @@ async def test_magic_filter_custom_cast() -> None:
     assert isinstance(ctx["result"], str)
 
 
-@pytest.mark.asyncio
 async def test_magic_data_custom_cast() -> None:
     magic_data = MagicData(F["item"].cast(str), result_key="result")
 
