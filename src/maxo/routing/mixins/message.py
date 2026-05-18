@@ -79,6 +79,7 @@ class MessageMethodsFacade(ChatMethodsFacade):
         disable_link_preview: Omittable[bool] = Omitted(),
         keyboard: Sequence[Sequence[InlineButtons]] | None = None,
         media: Sequence[MediaInput] | None = None,
+        attachments: Sequence[AttachmentsRequests] | None = None,
     ) -> "Message":
         link = self._make_new_message_link(type=MessageLinkType.REPLY)
         return await self.send_message(
@@ -89,6 +90,7 @@ class MessageMethodsFacade(ChatMethodsFacade):
             disable_link_preview=disable_link_preview,
             keyboard=keyboard,
             media=media,
+            attachments=attachments,
         )
 
     async def answer_text(
@@ -162,11 +164,15 @@ class MessageMethodsFacade(ChatMethodsFacade):
         if text is None:
             text = self.message.body.text
 
-        prepared_attachments = await self.build_attachments(
-            base=attachments or [],
-            keyboard=keyboard,
-            files=media,
-        )
+        if attachments is None and keyboard is None and media is None:
+            # Для случая, когда не надо редачить аттачменты
+            prepared_attachments = None
+        else:
+            prepared_attachments = await self.build_attachments(
+                base=attachments or [],
+                keyboard=keyboard,
+                files=media,
+            )
 
         return await self.bot.edit_message(
             message_id=message_id,
