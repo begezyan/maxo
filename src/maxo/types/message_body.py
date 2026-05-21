@@ -171,7 +171,7 @@ class MessageBody(MaxoType):
         if self.audio:
             return AttachmentType.AUDIO
         if self.file:
-            return AttachmentType.DOCUMENT
+            return AttachmentType.FILE
         if self.sticker:
             return AttachmentType.STICKER
         if self.contact:
