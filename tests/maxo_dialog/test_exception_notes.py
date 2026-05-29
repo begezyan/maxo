@@ -45,12 +45,12 @@ dialog = Dialog(
 )
 
 
-async def start(message: Message, dialog_manager: DialogManager):
+async def start(message: Message, dialog_manager: DialogManager) -> None:
     await dialog_manager.start(MainSG.start, mode=StartMode.RESET_STACK)
 
 
 @pytest.mark.asyncio
-async def test_exception_notes():
+async def test_exception_notes() -> None:
     usecase = Mock()
     user_getter = Mock(side_effect=["Username"])
     dp = Dispatcher(

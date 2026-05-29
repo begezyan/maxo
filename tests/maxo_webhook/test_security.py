@@ -41,7 +41,7 @@ from .fixtures import DummyBoundRequest, DummyRequest, FailingCheck, PassingChec
         "failing-last-passing",
     ],
 )
-async def test_security_checks(checks, expected, bot):
+async def test_security_checks(checks, expected, bot) -> None:
     sec = Security(*checks)
     req = DummyBoundRequest()
     assert await sec.verify(bot, req) is expected
