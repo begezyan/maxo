@@ -3,7 +3,6 @@ import pytest
 from maxo.enums import MarkupElementType
 from maxo.types import StrikethroughMarkup
 from maxo.types.emphasized_markup import EmphasizedMarkup
-from maxo.types.markup_element import MarkupElement
 from maxo.types.strong_markup import StrongMarkup
 from maxo.types.underline_markup import UnderlineMarkup
 from maxo.types.user_mention_markup import UserMentionMarkup
@@ -147,7 +146,7 @@ class TestNode:
     def test_getitem_position(self) -> None:
         node = Text("Hello, ", Bold("World"), "!")
         with pytest.raises(TypeError):
-            _ = node[2]
+            _ = node[2] # type: ignore[index]
 
     def test_getitem_empty_slice(self) -> None:
         node = Text("Hello, ", Bold("World"), "!")

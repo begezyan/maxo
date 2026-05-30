@@ -77,7 +77,8 @@ class TestSimpleEngine:
 
     @pytest.mark.asyncio
     async def test_on_startup(self, engine: SimpleEngine, dispatcher: Dispatcher) -> None:
-        dispatcher.feed_signal = AsyncMock()
+        feed_signal_mock = AsyncMock()
+        dispatcher.feed_signal = feed_signal_mock  # type: ignore[method-assign]
         await engine.on_startup(app=MagicMock())
         assert dispatcher.feed_signal.await_count == 2
         assert isinstance(
@@ -96,7 +97,8 @@ class TestSimpleEngine:
         dispatcher: Dispatcher,
         bot: MagicMock,
     ) -> None:
-        dispatcher.feed_signal = AsyncMock()
+        feed_signal_mock = AsyncMock()
+        dispatcher.feed_signal = feed_signal_mock  # type: ignore[method-assign]
         bot.close = AsyncMock()
         await engine.on_shutdown(app=MagicMock())
         assert dispatcher.feed_signal.await_count == 2
