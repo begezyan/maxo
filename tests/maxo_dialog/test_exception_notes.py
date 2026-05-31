@@ -18,6 +18,7 @@ from maxo.dialogs.widgets.text import Const, Jinja
 from maxo.fsm.state import State, StatesGroup
 from maxo.routing.filters import CommandStart
 from maxo.routing.signals import BeforeStartup
+from maxo.routing.updates import MessageCreated
 from maxo.types import Message
 
 
@@ -45,7 +46,7 @@ dialog = Dialog(
 )
 
 
-async def start(message: Message, dialog_manager: DialogManager) -> None:
+async def start(message: MessageCreated, dialog_manager: DialogManager) -> None:
     await dialog_manager.start(MainSG.start, mode=StartMode.RESET_STACK)
 
 
