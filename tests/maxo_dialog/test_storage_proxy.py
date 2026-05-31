@@ -18,11 +18,12 @@ from maxo.types import (
     ShareAttachment,
     StickerAttachment,
     VideoAttachment,
+    Attachments,
 )
 
 
 @pytest.mark.asyncio
-async def test_save_load_stack_with_all_attachments():
+async def test_save_load_stack_with_all_attachments() -> None:
     bot = FakeBot()
     chat_id = 123
     user_id = 456
@@ -39,7 +40,7 @@ async def test_save_load_stack_with_all_attachments():
         state_groups={},
     )
 
-    last_attachments = [
+    last_attachments: list[Attachments] = [
         PhotoAttachment.factory(
             photo_id=1,
             token="photo_token",  # noqa: S106
@@ -110,8 +111,8 @@ async def test_save_load_stack_with_all_attachments():
     assert loaded_stack.last_attachments[2].payload.token == "audio_token"  # noqa: S105
     assert loaded_stack.last_attachments[3].payload.token == "file_token"  # noqa: S105
     assert loaded_stack.last_attachments[4].payload.code == "sticker_code"
-    assert (
-        loaded_stack.last_attachments[6].payload.buttons[0][0].payload == "test_payload"
-    )
+    button = loaded_stack.last_attachments[6].payload.buttons[0][0]
+    assert isinstance(button, CallbackButton)
+    assert button.payload == "test_payload"
     assert loaded_stack.last_attachments[7].payload.token == "share_token"  # noqa: S105
     assert loaded_stack.last_attachments[8].latitude == 55.7558

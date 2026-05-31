@@ -2,7 +2,7 @@ from datetime import UTC, datetime
 
 import pytest
 
-from maxo import Router
+from maxo import Router, Bot
 from maxo.enums import ChatType
 from maxo.routing.ctx import Ctx
 from maxo.routing.dispatcher import Dispatcher
@@ -159,7 +159,7 @@ async def test_included_router_observers_state() -> None:
 
 
 @pytest.mark.asyncio
-async def test_dp_update_handler(update: MessageCreated, bot) -> None:
+async def test_dp_update_handler(update: MessageCreated, bot: Bot) -> None:
     dp = Dispatcher()
 
     triggered = False
