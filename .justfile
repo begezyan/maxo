@@ -19,6 +19,7 @@ ruff:
 codespell:
     codespell src examples
 
+[unix]
 slots:
     PYTHONPATH=src slotscheck -m maxo
 
