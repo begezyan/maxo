@@ -2,7 +2,7 @@ from datetime import UTC, datetime
 
 import pytest
 
-from maxo import Router, Bot
+from maxo import Bot, Router
 from maxo.enums import ChatType
 from maxo.routing.ctx import Ctx
 from maxo.routing.dispatcher import Dispatcher

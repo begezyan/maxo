@@ -4,7 +4,7 @@ from maxo.dialogs import DialogManager
 from maxo.dialogs.widgets.kbd import ListGroup
 from maxo.dialogs.widgets.kbd.button import Button, Url
 from maxo.dialogs.widgets.text import Const, Format
-from maxo.types import LinkButton, CallbackButton
+from maxo.types import CallbackButton, LinkButton
 
 
 @pytest.mark.asyncio

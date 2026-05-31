@@ -1,8 +1,9 @@
 import asyncio
 from asyncio import CancelledError
+from collections.abc import AsyncIterator
 from dataclasses import dataclass, field
 from datetime import UTC, datetime
-from typing import AsyncIterator, Any
+from typing import Any
 from unittest.mock import ANY, AsyncMock, call, patch
 
 import pytest
@@ -175,7 +176,7 @@ async def test_handles_general_exception(
     mock_bot: Bot,
     mock_dispatcher: Dispatcher,
     mock_api_client: AsyncMock,
-    mock_feed_max_update: AsyncMock
+    mock_feed_max_update: AsyncMock,
 ) -> None:
     mock_api_client.call_method.side_effect = ValueError(
         "Test ValueError",

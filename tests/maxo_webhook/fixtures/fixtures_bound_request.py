@@ -1,5 +1,5 @@
-from collections.abc import Awaitable, Callable
-from typing import Any, Never, Mapping
+from collections.abc import Awaitable, Callable, Mapping
+from typing import Any, Never
 
 from maxo.transport.webhook.adapters.base_adapter import BoundRequest, WebAdapter
 from maxo.transport.webhook.adapters.base_mapping import MappingABC

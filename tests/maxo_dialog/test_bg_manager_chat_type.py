@@ -19,7 +19,7 @@ from maxo.dialogs import (
     Window,
     setup_dialogs,
 )
-from maxo.dialogs.api.entities import DialogStartEvent, DialogAction
+from maxo.dialogs.api.entities import DialogAction, DialogStartEvent
 from maxo.dialogs.api.protocols import BgManagerFactory
 from maxo.dialogs.manager.bg_manager import BgManager, BgManagerFactoryImpl
 from maxo.dialogs.test_tools import BotClient, MockMessageManager

@@ -4,7 +4,6 @@ import pytest
 
 from maxo.dialogs import DialogManager
 from maxo.dialogs.widgets.kbd import TimeSelect
-from maxo.types import MaxoType
 
 
 @pytest.mark.asyncio

@@ -8,6 +8,7 @@ from maxo.enums import ChatType
 from maxo.fsm.key_builder import DefaultKeyBuilder
 from maxo.fsm.storages.memory import SimpleEventIsolation
 from maxo.types import (
+    Attachments,
     AudioAttachment,
     CallbackButton,
     ContactAttachment,
@@ -18,7 +19,6 @@ from maxo.types import (
     ShareAttachment,
     StickerAttachment,
     VideoAttachment,
-    Attachments,
 )
 
 

@@ -19,7 +19,6 @@ from maxo.fsm.state import State, StatesGroup
 from maxo.routing.filters import CommandStart
 from maxo.routing.signals import BeforeStartup
 from maxo.routing.updates import MessageCreated
-from maxo.types import Message
 
 
 class MainSG(StatesGroup):
