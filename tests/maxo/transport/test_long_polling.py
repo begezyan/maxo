@@ -29,6 +29,7 @@ class MockUpdate(MaxoType):
 def mock_api_client() -> AsyncMock:
     return AsyncMock(spec=MaxApiClient)
 
+
 @pytest.fixture
 def mock_bot(mock_api_client: AsyncMock) -> Bot:
     bot = Bot("test_token")
@@ -44,14 +45,16 @@ def mock_bot(mock_api_client: AsyncMock) -> Bot:
     )
     return bot
 
+
 @pytest.fixture
 def mock_feed_max_update() -> AsyncMock:
     return AsyncMock()
 
+
 @pytest.fixture
 def mock_dispatcher(mock_feed_max_update: AsyncMock) -> Dispatcher:
     dispatcher = Dispatcher()
-    dispatcher.feed_max_update = mock_feed_max_update # type: ignore[method-assign]
+    dispatcher.feed_max_update = mock_feed_max_update  # type: ignore[method-assign]
     return dispatcher
 
 

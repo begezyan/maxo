@@ -124,7 +124,10 @@ async def test_access_validator_allows_when_no_settings(
     ctx = Ctx({EVENT_FROM_USER_KEY: None})
 
     allowed = await validator.is_allowed(
-        stack=stack, context=None, event=event_message_created, ctx=ctx,
+        stack=stack,
+        context=None,
+        event=event_message_created,
+        ctx=ctx,
     )
 
     assert allowed is True
@@ -148,7 +151,10 @@ async def test_access_validator_allows_in_dialog_chat(
     )
 
     allowed = await validator.is_allowed(
-        stack=stack, context=None, event=event_message_created, ctx=ctx,
+        stack=stack,
+        context=None,
+        event=event_message_created,
+        ctx=ctx,
     )
 
     assert allowed is True
@@ -172,7 +178,10 @@ async def test_access_validator_denies_when_user_required_but_missing(
     )
 
     allowed = await validator.is_allowed(
-        stack=stack, context=None, event=event_message_created, ctx=ctx,
+        stack=stack,
+        context=None,
+        event=event_message_created,
+        ctx=ctx,
     )
 
     assert allowed is False

@@ -44,7 +44,9 @@ from .fixtures import DummyBoundRequest, DummyRequest, FailingCheck, PassingChec
     ],
 )
 async def test_security_checks(
-    checks: list[SecurityCheck], expected: bool, bot: Bot,
+    checks: list[SecurityCheck],
+    expected: bool,
+    bot: Bot,
 ) -> None:
     sec = Security(*checks)
     req = DummyBoundRequest()

@@ -72,7 +72,7 @@ def test_path_routing(
     token: str,
     path_params: dict[str, str] | dict[Any, Any],
     expected_url: str,
-    expected_token: str,
+    expected_token: str | None,
 ) -> None:
     routing = PathRouting(url=url, param=param)
     assert routing.webhook_point(Bot(token)) == expected_url
@@ -165,7 +165,7 @@ def test_query_routing(
     token: str,
     query_params: dict[str, str] | dict[Any, Any],
     expected_url: str,
-    expected_token: str,
+    expected_token: str | None,
 ) -> None:
     routing = QueryRouting(url=url, param=param)
     webhook_url = routing.webhook_point(Bot(token))

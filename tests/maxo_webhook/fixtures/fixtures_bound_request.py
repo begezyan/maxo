@@ -47,6 +47,7 @@ class DummyMapping(MappingABC[Mapping[str, Any]]):
             return value
         return [value]
 
+
 class DummyBoundRequest(BoundRequest[DummyRequest]):
     def __init__(self, request: DummyRequest | None = None) -> None:
         super().__init__(request or DummyRequest())
