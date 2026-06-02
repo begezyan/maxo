@@ -22,7 +22,7 @@ class GetUpdates(MaxoMethod[UpdateList], slots=False):
 
      Если параметр `marker` **не передан** или передано значение `null`, вы получите только последнее обновление 
 
-    **Пример запроса:**
+    #### Пример запроса:
     ```bash
     curl -X GET "https://platform-api.max.ru/updates" \
       -H "Authorization: {access_token}"
