@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 
 from maxo.omit import Omittable, Omitted
-from maxo.routing.updates.mixins.bot import BotMethodsFacade
+from maxo.routing.mixins.bot import BotMethodsFacade
 from maxo.types.get_subscriptions_result import GetSubscriptionsResult
 from maxo.types.simple_query_result import SimpleQueryResult
 

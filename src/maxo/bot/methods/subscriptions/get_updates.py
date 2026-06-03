@@ -59,7 +59,7 @@ class GetUpdates(MaxoMethod[UpdateList], slots=False):
         except LoadError:
             raw = response.data
             marker = raw.get("marker")
-            updates = []
+            updates: list[Updates] = []
             for raw_upd in raw.get("updates", []):
                 try:
                     updates.append(response_loader.load(raw_upd, Updates))

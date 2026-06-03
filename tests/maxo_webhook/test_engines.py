@@ -56,7 +56,6 @@ class TestSimpleEngine:
     def test_get_bot_from_request(self, engine: SimpleEngine, bot: MagicMock):
         assert engine._get_bot_from_request(MagicMock()) is bot
 
-    @pytest.mark.asyncio
     async def test_set_webhook(
         self,
         engine: SimpleEngine,
@@ -75,7 +74,6 @@ class TestSimpleEngine:
         assert call_kwargs["url"] == "https://example.com/webhook"
         assert call_kwargs["update_types"] == ["message"]
 
-    @pytest.mark.asyncio
     async def test_on_startup(self, engine: SimpleEngine, dispatcher: Dispatcher):
         dispatcher.feed_signal = AsyncMock()
         await engine.on_startup(app=MagicMock())
@@ -89,7 +87,6 @@ class TestSimpleEngine:
             AfterStartup,
         )
 
-    @pytest.mark.asyncio
     async def test_on_shutdown(
         self,
         engine: SimpleEngine,

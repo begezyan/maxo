@@ -58,7 +58,6 @@ async def run_generator_once(generator):
     await asyncio.gather(task, return_exceptions=True)
 
 
-@pytest.mark.asyncio
 async def test_handles_load_error_and_skips_update(
     long_polling: LongPolling,
     mock_bot: Bot,
@@ -123,7 +122,6 @@ async def test_handles_load_error_and_skips_update(
             await updates_generator.__anext__()
 
 
-@pytest.mark.asyncio
 async def test_handles_load_error_with_no_marker(
     long_polling: LongPolling,
     mock_bot: Bot,
@@ -155,7 +153,6 @@ async def test_handles_load_error_with_no_marker(
         mock_backoff_sleep.assert_called_once()
 
 
-@pytest.mark.asyncio
 async def test_handles_general_exception(
     long_polling: LongPolling,
     mock_bot: Bot,

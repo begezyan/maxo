@@ -1,12 +1,9 @@
-import pytest
-
 from maxo.dialogs import DialogManager
 from maxo.dialogs.widgets.kbd import ListGroup
 from maxo.dialogs.widgets.kbd.button import Button, Url
 from maxo.dialogs.widgets.text import Const, Format
 
 
-@pytest.mark.asyncio
 async def test_render_list_group_with_url_button(mock_manager: DialogManager) -> None:
     list_group = ListGroup(
         Url(Const("Url"), url=Const("https://test.com")),
@@ -23,7 +20,6 @@ async def test_render_list_group_with_url_button(mock_manager: DialogManager) ->
     assert keyboard[0][0].url == "https://test.com"
 
 
-@pytest.mark.asyncio
 async def test_render_list_group_with_callback_button(
     mock_manager: DialogManager,
 ) -> None:

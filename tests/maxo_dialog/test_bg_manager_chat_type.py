@@ -144,7 +144,6 @@ class TestBgManagerChatTypePropagation:
 class TestUpdateContextMiddlewareDialogEvent:
     """UpdateContextMiddleware must populate ctx for DialogUpdateEvent."""
 
-    @pytest.mark.asyncio
     async def test_sets_event_from_user(self) -> None:
         """https://github.com/K1rL3s/maxo/issues/78: EVENT_FROM_USER_KEY must be set."""
         middleware = UpdateContextMiddleware()
@@ -173,7 +172,6 @@ class TestUpdateContextMiddlewareDialogEvent:
         assert EVENT_FROM_USER_KEY in captured_ctx
         assert captured_ctx[EVENT_FROM_USER_KEY].user_id == 100
 
-    @pytest.mark.asyncio
     async def test_sets_update_context_with_chat_id(self) -> None:
         """https://github.com/K1rL3s/maxo/issues/79: chat_id must not be None."""
         middleware = UpdateContextMiddleware()
@@ -242,7 +240,6 @@ def message_manager() -> MockMessageManager:
     return MockMessageManager()
 
 
-@pytest.mark.asyncio
 async def test_bg_start_dialog_then_message_handled(
     message_manager: MockMessageManager,
 ) -> None:
@@ -271,7 +268,6 @@ async def test_bg_start_dialog_then_message_handled(
     assert received_texts == ["hello from user"]
 
 
-@pytest.mark.asyncio
 async def test_bg_start_wrong_chat_type_message_unhandled(
     message_manager: MockMessageManager,
 ) -> None:

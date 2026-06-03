@@ -30,8 +30,11 @@ class BaseObserver(Observer[_UpdateT, _HandlerT, _HandlerFnT], ABC):
 
     __slots__ = (
         "_filter",
+        "_handlers",
         "_inner_middleware",
+        "_middleware",
         "_outer_middleware",
+        "_state",
     )
 
     def __init__(self) -> None:

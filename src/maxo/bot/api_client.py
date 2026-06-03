@@ -32,6 +32,8 @@ from collections.abc import AsyncGenerator, Callable
 from typing import Any, BinaryIO, Never
 
 from aiohttp import ClientSession, ClientTimeout
+from aiohttp.hdrs import AUTHORIZATION, USER_AGENT
+from aiohttp.http import SERVER_SOFTWARE
 from anyio import open_file
 from unihttp.clients.aiohttp import AiohttpAsyncClient
 from unihttp.http import HTTPResponse
@@ -74,10 +76,10 @@ class MaxApiClient(AiohttpAsyncClient):
         if session is None:
             session = ClientSession()
 
-        if "Authorization" not in session.headers:
-            session.headers["Authorization"] = self._token
-        if "User-Agent" not in session.headers:
-            session.headers["User-Agent"] = f"maxo/{__version__}"
+        if AUTHORIZATION not in session.headers:
+            session.headers[AUTHORIZATION] = self._token
+        if USER_AGENT not in session.headers:
+            session.headers[USER_AGENT] = f"{SERVER_SOFTWARE} maxo/{__version__}"
 
         super().__init__(
             base_url=base_url,

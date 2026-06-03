@@ -215,7 +215,7 @@ def create_retort(
         retort = warming_up_retort(retort, warming_up=WarmingUpType.TYPES)
         retort = warming_up_retort(retort, warming_up=WarmingUpType.METHOD)
 
-    return retort
+    return typing.cast(Retort, retort)
 
 
 def create_retort_with_bot(
@@ -237,4 +237,4 @@ def create_retort_with_bot(
         retort = warming_up_retort(retort, warming_up=WarmingUpType.TYPES)
         retort = warming_up_retort(retort, warming_up=WarmingUpType.METHOD)
 
-    return retort
+    return typing.cast(Retort, retort)

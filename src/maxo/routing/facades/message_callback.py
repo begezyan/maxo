@@ -1,8 +1,8 @@
 from maxo.omit import Omittable
 from maxo.routing.facades.base import BaseUpdateFacade
+from maxo.routing.mixins import MessageMethodsFacade
+from maxo.routing.mixins.callback import CallbackMethodsFacade
 from maxo.routing.updates.message_callback import MessageCallback
-from maxo.routing.updates.mixins.callback import CallbackMethodsFacade
-from maxo.routing.updates.mixins.message import MessageMethodsFacade
 from maxo.types.callback import Callback
 from maxo.types.message import Message
 from maxo.types.user import User
@@ -10,8 +10,8 @@ from maxo.types.user import User
 
 class MessageCallbackFacade(
     BaseUpdateFacade[MessageCallback],
-    MessageMethodsFacade,
     CallbackMethodsFacade,
+    MessageMethodsFacade,
 ):
     @property
     def message(self) -> Message:

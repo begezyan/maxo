@@ -1,5 +1,5 @@
 from abc import abstractmethod
-from typing import Optional, Self, Union
+from typing import Any, Optional, Self, Union, cast
 
 from maxo.dialogs.api.internal import TextWidget
 from maxo.dialogs.api.protocols import DialogManager
@@ -19,7 +19,7 @@ class Text(Whenable, BaseWidget, TextWidget):
     @add_exception_note
     async def render_text(
         self,
-        data: dict,
+        data: dict[Any, Any],
         manager: DialogManager,
     ) -> str:
         """
@@ -33,7 +33,7 @@ class Text(Whenable, BaseWidget, TextWidget):
         return await self._render_text(data, manager)
 
     @abstractmethod
-    async def _render_text(self, data: dict, manager: DialogManager) -> str:
+    async def _render_text(self, data: dict[Any, Any], manager: DialogManager) -> str:
         """
         Create text.
 
@@ -65,9 +65,9 @@ class Text(Whenable, BaseWidget, TextWidget):
             other = Const(other)
         return Or(other, self)
 
-    def find(self, widget_id: str) -> Optional["Text"]:
+    def find(self, widget_id: str) -> Optional["TextWidget"]:
         # no reimplementation, just change return type
-        return super().find(widget_id)
+        return cast(TextWidget | None, super().find(widget_id))
 
 
 class Const(Text):
@@ -77,7 +77,7 @@ class Const(Text):
 
     async def _render_text(
         self,
-        data: dict,
+        data: dict[Any, Any],
         manager: DialogManager,
     ) -> str:
         return self.text
@@ -96,7 +96,7 @@ class Multi(Text):
 
     async def _render_text(
         self,
-        data: dict,
+        data: dict[Any, Any],
         manager: DialogManager,
     ) -> str:
         texts = [await t.render_text(data, manager) for t in self.texts]
@@ -127,7 +127,7 @@ class Multi(Text):
     def find(self, widget_id: str) -> TextWidget | None:
         for text in self.texts:
             if found := text.find(widget_id):
-                return found
+                return cast(TextWidget, found)
         return None
 
 
@@ -138,7 +138,7 @@ class Or(Text):
 
     async def _render_text(
         self,
-        data: dict,
+        data: dict[Any, Any],
         manager: DialogManager,
     ) -> str:
         for text in self.texts:
@@ -168,5 +168,5 @@ class Or(Text):
     def find(self, widget_id: str) -> TextWidget | None:
         for text in self.texts:
             if found := text.find(widget_id):
-                return found
+                return cast(TextWidget, found)
         return None

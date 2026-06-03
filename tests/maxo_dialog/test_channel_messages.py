@@ -52,7 +52,6 @@ def channel_client(dp: Dispatcher) -> BotClient:
     return BotClient(dp, user_id=1, chat_id=-100, chat_type=ChatType.CHANNEL)
 
 
-@pytest.mark.asyncio
 async def test_storage_proxy_channel_message_created(
     channel_client: BotClient,
     captured_ctx: dict[str, Any],
@@ -67,7 +66,6 @@ async def test_storage_proxy_channel_message_created(
     assert ev_ctx.chat_type == ChatType.CHANNEL
 
 
-@pytest.mark.asyncio
 async def test_storage_proxy_channel_message_edited(
     channel_client: BotClient,
 ) -> None:
@@ -75,7 +73,6 @@ async def test_storage_proxy_channel_message_edited(
     await channel_client.send_channel_message_edited("Edited", mid="42")
 
 
-@pytest.mark.asyncio
 async def test_storage_proxy_channel_message_removed(
     channel_client: BotClient,
     captured_ctx: dict[str, Any],
@@ -84,7 +81,6 @@ async def test_storage_proxy_channel_message_removed(
     await channel_client.send_channel_message_removed(mid="42")
 
 
-@pytest.mark.asyncio
 async def test_event_context_user_none_visible_in_handler(
     channel_client: BotClient,
     captured_ctx: dict[str, Any],
@@ -99,7 +95,6 @@ async def test_event_context_user_none_visible_in_handler(
     assert ev_ctx.chat_id == -100
 
 
-@pytest.mark.asyncio
 async def test_access_validator_allows_when_no_settings() -> None:
     """Если access_settings отсутствуют - доступ разрешён даже без user."""
     validator = DefaultAccessValidator()
@@ -111,7 +106,6 @@ async def test_access_validator_allows_when_no_settings() -> None:
     assert allowed is True
 
 
-@pytest.mark.asyncio
 async def test_access_validator_allows_in_dialog_chat() -> None:
     """В приватном чате (DIALOG) доступ разрешён даже при заданных user_ids."""
     validator = DefaultAccessValidator()
@@ -129,7 +123,6 @@ async def test_access_validator_allows_in_dialog_chat() -> None:
     assert allowed is True
 
 
-@pytest.mark.asyncio
 async def test_access_validator_denies_when_user_required_but_missing() -> None:
     """В канале без user и при заданных user_ids - доступ запрещён (не AttributeError)."""
     validator = DefaultAccessValidator()
