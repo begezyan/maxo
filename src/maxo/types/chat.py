@@ -71,6 +71,8 @@ class Chat(MaxoType):
     title: str | None = None
     """Отображаемое название чата или канала. Может быть `null` для диалогов"""
 
+    chat_message_id: Omittable[str | None] = Omitted()
+    """Идентификатор сообщения с кнопкой, через которую был инициирован чата"""
     dialog_with_user: Omittable[UserWithPhoto | None] = Omitted()
     """Данные о пользователе в диалоге (только для чатов типа `"dialog"`)"""
     link: Omittable[str | None] = Omitted()

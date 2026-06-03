@@ -39,6 +39,7 @@ class SendMessage(MaxoMethod[SendMessageResult]):
         }
       ]
      }'
+    ```
 
     Args:
         attachments: Вложения сообщения. Если поле равно `null`, изменений не произойдет. Если пусто, все вложения будут удалены

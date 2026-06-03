@@ -14,7 +14,7 @@ class Subscribe(MaxoMethod[SimpleQueryResult]):
     > - Для повышения безопасности **с 25 мая** прекращается поддержка получения вебхуков по HTTP, а также самоподписных сертификатов. Рекомендуем заранее перейти на HTTPS и сертификаты от доверенных центров. Чтобы обновить подписку на события, используйте текущий метод
     > - Получение обновлений с помощью [Long Polling](https://dev.max.ru/docs-api/methods/GET/updates) ограничено по скорости и сроку хранения событий - этот способ не подходит для production-окружения. Рекомендуем на всех этапах работы использовать [Webhook](https://dev.max.ru/docs-api/methods/POST/subscriptions)
 
-     ## Модель доставки событий
+    ## Модель доставки событий
 
     После вызова метода `POST /subscriptions` события отправляются на указанный Webhook-endpoint в виде HTTPS POST-запросов с объектом [`Update`](https://dev.max.ru/docs-api/objects/Update)
 
