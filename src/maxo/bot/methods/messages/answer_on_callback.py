@@ -11,7 +11,7 @@ class AnswerOnCallback(MaxoMethod[SimpleQueryResult]):
 
     Этот метод используется для отправки ответа после того, как пользователь нажал на кнопку. Ответом может быть обновленное сообщение и/или одноразовое уведомление для пользователя
 
-    Пример запроса:
+    #### Пример запроса:
     ```bash
     curl -X POST "https://platform-api.max.ru/answers?callback_id=callback_id" \
       -H "Authorization: {access_token}" \

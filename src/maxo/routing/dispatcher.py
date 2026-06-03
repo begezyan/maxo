@@ -91,7 +91,7 @@ class Dispatcher(Router):
         else:
             duration = (loop.time() - start_time) * 1000
             loggers.dispatcher.info(
-                "%s update completed %r. Update type=%r marker=%r. Duration %d ms",
+                "%s update: %r. Update type=%r marker=%r. Duration %d ms",
                 "Handled" if result is not UNHANDLED else "Not handled",
                 result,
                 update.update.__class__.__name__,
