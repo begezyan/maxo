@@ -5,7 +5,6 @@ import pytest
 
 from maxo.bot.bot import Bot
 from maxo.routing.mixins import AttachmentsFacade, MediaInput, MessageMethodsFacade
-from maxo.routing.mixins.message import MessageMethodsFacade
 from maxo.types import Message, PhotoAttachmentRequest, VideoAttachmentRequest
 from maxo.utils.upload_media import BufferedInputFile
 
