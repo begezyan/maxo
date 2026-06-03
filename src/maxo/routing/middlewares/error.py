@@ -25,7 +25,7 @@ class ErrorMiddleware(BaseMiddleware[Any]):
                 exception=exception,
                 update=update,
             ).as_(bot)
-            new_ctx = dict(ctx)
+            new_ctx = Ctx(dict(ctx))
             new_ctx["update"] = exception_event
             result = await self._router.trigger(new_ctx)
             if result is UNHANDLED:

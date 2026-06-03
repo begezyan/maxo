@@ -17,7 +17,7 @@ class Case(Text):
     def __init__(
         self,
         texts: dict[Any, TextWidget],
-        selector: str | Selector | DialogMagic,
+        selector: str | Selector[Any] | DialogMagic,
         when: WhenCondition = None,
     ) -> None:
         super().__init__(when=when)
@@ -30,7 +30,7 @@ class Case(Text):
             self.selector = selector
         self._has_default = ... in self.texts
 
-    async def _render_text(self, data: dict, manager: DialogManager) -> str:
+    async def _render_text(self, data: dict[Any, Any], manager: DialogManager) -> str:
         selection = self.selector(data, self, manager)
         if selection not in self.texts:
             if self._has_default:

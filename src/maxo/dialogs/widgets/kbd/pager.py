@@ -1,6 +1,6 @@
 from abc import ABC
 from enum import Enum
-from typing import TypedDict, cast
+from typing import Any, TypedDict, cast
 
 from maxo.dialogs.api.internal import RawKeyboard, TextWidget
 from maxo.dialogs.api.protocols import DialogManager, DialogProtocol
@@ -108,7 +108,7 @@ class SwitchPage(BasePager):
 
     async def _prepare_data(
         self,
-        data: dict,
+        data: dict[Any, Any],
         target_page: int,
         current_page: int,
         pages: int,
@@ -124,7 +124,7 @@ class SwitchPage(BasePager):
 
     async def render_keyboard(
         self,
-        data: dict,
+        data: dict[Any, Any],
         manager: DialogManager,
     ) -> RawKeyboard:
         scroll = self._find_scroll(manager)
@@ -256,7 +256,7 @@ class NumberedPager(BasePager):
 
     async def _prepare_data(
         self,
-        data: dict,
+        data: dict[Any, Any],
         current_page: int,
         pages: int,
     ) -> PagerData:
@@ -269,7 +269,7 @@ class NumberedPager(BasePager):
 
     async def _prepare_page_data(
         self,
-        data: dict,
+        data: dict[Any, Any],
         target_page: int,
     ) -> PagerData:
         data = data.copy()
@@ -279,7 +279,7 @@ class NumberedPager(BasePager):
 
     async def render_keyboard(
         self,
-        data: dict,
+        data: dict[Any, Any],
         manager: DialogManager,
     ) -> RawKeyboard:
         scroll = self._find_scroll(manager)

@@ -74,7 +74,7 @@ class Select(Keyboard, Generic[T]):
 
     async def _render_keyboard(
         self,
-        data: dict,
+        data: dict[Any, Any],
         manager: DialogManager,
     ) -> RawKeyboard:
         return [
@@ -89,7 +89,7 @@ class Select(Keyboard, Generic[T]):
         pos: int,
         item: Any,
         target_item: Any,
-        data: dict,
+        data: dict[Any, Any],
         manager: DialogManager,
     ) -> CallbackButton:
         """
@@ -176,7 +176,7 @@ class StatefulSelect(Select[T], ABC, Generic[T]):
     @abstractmethod
     def _is_text_checked(
         self,
-        data: dict,
+        data: dict[Any, Any],
         case: Case,
         manager: DialogManager,
     ) -> bool:
@@ -290,7 +290,7 @@ class Radio(StatefulSelect[T], Generic[T]):
 
     def _is_text_checked(
         self,
-        data: dict,
+        data: dict[Any, Any],
         case: Case,
         manager: DialogManager,
     ) -> bool:
@@ -368,7 +368,7 @@ class Multiselect(StatefulSelect[T], Generic[T]):
 
     def _is_text_checked(
         self,
-        data: dict,
+        data: dict[Any, Any],
         case: Case,
         manager: DialogManager,
     ) -> bool:
@@ -495,7 +495,7 @@ class Toggle(Radio[T], Generic[T]):
 
     async def _render_keyboard(
         self,
-        data: dict,
+        data: dict[Any, Any],
         manager: DialogManager,
     ) -> RawKeyboard:
         items_it = iter(self.items_getter(data))

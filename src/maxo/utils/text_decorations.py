@@ -80,7 +80,7 @@ class TextDecoration(ABC):
 
         if entity.type == MarkupElementType.LINK:
             link_entity = cast(LinkMarkup, entity)
-            return self.link(value=text, link=cast(str, link_entity.url))
+            return self.link(value=text, link=link_entity.url)
 
         # This case is not possible because of `if` above,
         # but if any new entity is added to API it will be here too

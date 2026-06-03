@@ -16,13 +16,13 @@ class GetMessages(MaxoMethod[MessageList]):
 
     - `message_ids` - метод возвращает информацию о запрошенных сообщениях. Можно указать один идентификатор или несколько
 
-    Пример запроса с использованием `chat_id`:
+    #### Пример запроса с использованием `chat_id`:
     ```bash
     curl -X GET "https://platform-api.max.ru/messages?chat_id={chat_id}" \
       -H "Authorization: {access_token}"
     ```
 
-    Пример запроса с использованием `message_ids`:
+    #### Пример запроса с использованием `message_ids`:
     ```bash
     curl -X GET "https://platform-api.max.ru/messages?message_ids={message_id1},{message_id2}" \
       -H "Authorization: {access_token}"
@@ -31,9 +31,9 @@ class GetMessages(MaxoMethod[MessageList]):
     Args:
         chat_id: ID чата, чтобы получить сообщения из определённого чата. Обязательный параметр, если не указан `message_ids`
         count: Максимальное количество сообщений в ответе
-        from_: Время начала для запрашиваемых сообщений (в формате Unix timestamp)
+        from_: Время, до которого будут запрошены все сообщения с начала чата (в формате Unix timestamp)
         message_ids: Список ID сообщений, которые нужно получить (через запятую). Обязательный параметр, если не указан `chat_id`
-        to: Время окончания для запрашиваемых сообщений (в формате Unix timestamp)
+        to: Время, начиная с которого будут запрошены все сообщения до конца чата (в формате Unix timestamp)
 
     Источник: https://dev.max.ru/docs-api/methods/GET/messages
     """
@@ -46,8 +46,8 @@ class GetMessages(MaxoMethod[MessageList]):
     count: Query[Omittable[int]] = Omitted()
     """Максимальное количество сообщений в ответе"""
     from_: Query[Omittable[datetime]] = Omitted()
-    """Время начала для запрашиваемых сообщений (в формате Unix timestamp)"""
+    """Время, до которого будут запрошены все сообщения с начала чата (в формате Unix timestamp)"""
     message_ids: Query[Omittable[list[str] | None]] = Omitted()
     """Список ID сообщений, которые нужно получить (через запятую). Обязательный параметр, если не указан `chat_id`"""
     to: Query[Omittable[datetime]] = Omitted()
-    """Время окончания для запрашиваемых сообщений (в формате Unix timestamp)"""
+    """Время, начиная с которого будут запрошены все сообщения до конца чата (в формате Unix timestamp)"""

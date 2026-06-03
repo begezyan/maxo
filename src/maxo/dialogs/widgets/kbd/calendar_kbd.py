@@ -162,7 +162,7 @@ class CalendarScopeView(Protocol):
         self,
         config: CalendarConfig,
         offset: date,
-        data: dict,
+        data: dict[Any, Any],
         manager: DialogManager,
     ) -> list[list[CallbackButton]]:
         """
@@ -204,7 +204,7 @@ class CalendarDaysView(CalendarScopeView):
         self,
         selected_date: date,
         today: date,
-        data: dict,
+        data: dict[Any, Any],
         manager: DialogManager,
     ) -> CallbackButton:
         current_data = {
@@ -227,7 +227,7 @@ class CalendarDaysView(CalendarScopeView):
         self,
         config: CalendarConfig,
         offset: date,
-        data: dict,
+        data: dict[Any, Any],
         manager: DialogManager,
     ) -> list[list[CallbackButton]]:
         keyboard = []
@@ -268,7 +268,7 @@ class CalendarDaysView(CalendarScopeView):
     async def _render_week_header(
         self,
         config: CalendarConfig,
-        data: dict,
+        data: dict[Any, Any],
         manager: DialogManager,
     ) -> list[CallbackButton]:
         week_range = range(config.firstweekday, config.firstweekday + 7)
@@ -292,7 +292,7 @@ class CalendarDaysView(CalendarScopeView):
         self,
         config: CalendarConfig,
         offset: date,
-        data: dict,
+        data: dict[Any, Any],
         manager: DialogManager,
     ) -> list[CallbackButton]:
         curr_month = offset.month
@@ -353,7 +353,7 @@ class CalendarDaysView(CalendarScopeView):
         self,
         config: CalendarConfig,
         offset: date,
-        data: dict,
+        data: dict[Any, Any],
         manager: DialogManager,
     ) -> list[CallbackButton]:
         data = {
@@ -371,7 +371,7 @@ class CalendarDaysView(CalendarScopeView):
         self,
         config: CalendarConfig,
         offset: date,
-        data: dict,
+        data: dict[Any, Any],
         manager: DialogManager,
     ) -> list[list[CallbackButton]]:
         return [
@@ -405,7 +405,7 @@ class CalendarMonthView(CalendarScopeView):
         self,
         config: CalendarConfig,
         offset: date,
-        data: dict,
+        data: dict[Any, Any],
         manager: DialogManager,
     ) -> list[CallbackButton]:
         curr_year = offset.year
@@ -482,7 +482,7 @@ class CalendarMonthView(CalendarScopeView):
         self,
         month: int,
         this_month: int,
-        data: dict,
+        data: dict[Any, Any],
         offset: date,
         config: CalendarConfig,
         manager: DialogManager,
@@ -509,7 +509,7 @@ class CalendarMonthView(CalendarScopeView):
         self,
         config: CalendarConfig,
         offset: date,
-        data: dict,
+        data: dict[Any, Any],
         manager: DialogManager,
     ) -> list[list[CallbackButton]]:
         keyboard = []
@@ -536,7 +536,7 @@ class CalendarMonthView(CalendarScopeView):
         self,
         config: CalendarConfig,
         offset: date,
-        data: dict,
+        data: dict[Any, Any],
         manager: DialogManager,
     ) -> list[CallbackButton]:
         data = {
@@ -554,7 +554,7 @@ class CalendarMonthView(CalendarScopeView):
         self,
         config: CalendarConfig,
         offset: date,
-        data: dict,
+        data: dict[Any, Any],
         manager: DialogManager,
     ) -> list[list[CallbackButton]]:
         return [
@@ -583,7 +583,7 @@ class CalendarYearsView(CalendarScopeView):
         self,
         config: CalendarConfig,
         offset: date,
-        data: dict,
+        data: dict[Any, Any],
         manager: DialogManager,
     ) -> list[CallbackButton]:
         curr_year = offset.year
@@ -642,7 +642,7 @@ class CalendarYearsView(CalendarScopeView):
         self,
         year: int,
         this_year: int,
-        data: dict,
+        data: dict[Any, Any],
         config: CalendarConfig,
         manager: DialogManager,
     ) -> CallbackButton:
@@ -670,7 +670,7 @@ class CalendarYearsView(CalendarScopeView):
         self,
         config: CalendarConfig,
         offset: date,
-        data: dict,
+        data: dict[Any, Any],
         manager: DialogManager,
     ) -> list[list[CallbackButton]]:
         keyboard = []
@@ -698,7 +698,7 @@ class CalendarYearsView(CalendarScopeView):
         self,
         config: CalendarConfig,
         offset: date,
-        data: dict,
+        data: dict[Any, Any],
         manager: DialogManager,
     ) -> list[list[CallbackButton]]:
         return [
@@ -762,7 +762,7 @@ class Calendar(Keyboard):
 
     async def _get_user_config(
         self,
-        data: dict,
+        data: dict[Any, Any],
         manager: DialogManager,
     ) -> CalendarUserConfig:
         """
@@ -778,7 +778,7 @@ class Calendar(Keyboard):
 
     async def _render_keyboard(
         self,
-        data: dict,
+        data: dict[Any, Any],
         manager: DialogManager,
     ) -> RawKeyboard:
         scope = self.get_scope(manager)

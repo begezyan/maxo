@@ -10,7 +10,6 @@ def mock_manager(mock_manager: DialogManager) -> DialogManager:
     return mock_manager
 
 
-@pytest.mark.asyncio
 async def test_render_jinja(mock_manager: DialogManager) -> None:
     jinja = Jinja(
         """

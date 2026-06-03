@@ -1,4 +1,4 @@
-from collections.abc import Mapping, MutableSequence
+from collections.abc import MutableMapping, MutableSequence
 from functools import partial
 from typing import Any
 
@@ -100,7 +100,7 @@ class Router(BaseRouter):
 
         self._name = name
         self._children_routers: MutableSequence[BaseRouter] = []
-        self._state = EmptyRouterState()
+        self._state: RouterState = EmptyRouterState()
 
     def __repr__(self) -> str:
         return f"<Router {self._name!r}>"
@@ -118,7 +118,7 @@ class Router(BaseRouter):
         return self._name
 
     @property
-    def observers(self) -> Mapping[Any, Observer[Any, Any, Any]]:
+    def observers(self) -> MutableMapping[Any, Observer[Any, Any, Any]]:
         return self._observers
 
     @property

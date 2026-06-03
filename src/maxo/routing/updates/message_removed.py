@@ -1,6 +1,6 @@
 from maxo.enums.update_type import UpdateType
+from maxo.routing.mixins import ChatMethodsFacade
 from maxo.routing.updates.base import MaxUpdate
-from maxo.routing.updates.mixins import ChatMethodsFacade
 
 
 class MessageRemoved(MaxUpdate, ChatMethodsFacade):

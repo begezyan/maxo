@@ -41,7 +41,6 @@ def update() -> MessageCreated:
     )
 
 
-@pytest.mark.asyncio
 async def test_dp_signals() -> None:
     dp = Dispatcher()
     order = []
@@ -75,7 +74,6 @@ async def test_dp_signals() -> None:
     ]
 
 
-@pytest.mark.asyncio
 async def test_included_router_signals() -> None:
     dp = Dispatcher()
     deep_router = Router()
@@ -123,7 +121,6 @@ async def test_included_router_signals() -> None:
     ]
 
 
-@pytest.mark.asyncio
 async def test_included_router_observers_state() -> None:
     # ruff: noqa: E721
     dp = Dispatcher()
@@ -158,7 +155,6 @@ async def test_included_router_observers_state() -> None:
     await dp.feed_signal(AfterShutdown())
 
 
-@pytest.mark.asyncio
 async def test_dp_update_handler(update: MessageCreated, bot: Bot) -> None:
     dp = Dispatcher()
 
@@ -178,7 +174,6 @@ async def test_dp_update_handler(update: MessageCreated, bot: Bot) -> None:
     assert triggered
 
 
-@pytest.mark.asyncio
 async def test_signal_filter_false_blocks_handler() -> None:
     dp = Dispatcher()
     order = []
@@ -199,7 +194,6 @@ async def test_signal_filter_false_blocks_handler() -> None:
     assert order == ["filter"]
 
 
-@pytest.mark.asyncio
 async def test_signal_filter_called_once() -> None:
     dp = Dispatcher()
     order = []

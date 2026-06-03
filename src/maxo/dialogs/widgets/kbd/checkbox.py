@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 from collections.abc import Awaitable, Callable
+from typing import Any
 
 from maxo.dialogs.api.entities import ChatEvent
 from maxo.dialogs.api.internal import RawKeyboard, TextWidget
@@ -41,7 +42,7 @@ class BaseCheckbox(Keyboard, ABC):
 
     async def _render_keyboard(
         self,
-        data: dict,
+        data: dict[Any, Any],
         manager: DialogManager,
     ) -> RawKeyboard:
         checked = int(self.is_checked(manager))
@@ -74,7 +75,7 @@ class BaseCheckbox(Keyboard, ABC):
 
     def _is_text_checked(
         self,
-        data: dict,
+        data: dict[Any, Any],
         case: Case,
         manager: DialogManager,
     ) -> bool:

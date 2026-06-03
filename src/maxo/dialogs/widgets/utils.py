@@ -1,4 +1,5 @@
 from collections.abc import Callable, Sequence
+from typing import TypeAlias
 
 from maxo.dialogs.api.exceptions import InvalidWidgetType
 from maxo.dialogs.api.internal import DataGetter, LinkPreviewWidget, TextWidget
@@ -11,7 +12,7 @@ from .media import Media, MultiMedia
 from .text import Format, Multi as MultiText
 from .widget_event import WidgetEventProcessor
 
-WidgetSrc = (
+WidgetSrc: TypeAlias = (
     str
     | TextWidget
     | Keyboard
@@ -21,8 +22,8 @@ WidgetSrc = (
     | LinkPreviewBase
 )
 
-SingleGetterBase = DataGetter | dict
-GetterVariant = (
+SingleGetterBase: TypeAlias = DataGetter | dict
+GetterVariant: TypeAlias = (
     SingleGetterBase | list[SingleGetterBase] | tuple[SingleGetterBase, ...] | None
 )
 

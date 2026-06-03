@@ -1,4 +1,5 @@
 from pathlib import Path
+from typing import Any
 
 from maxo.dialogs.api.entities import MediaAttachment
 from maxo.dialogs.api.internal import TextWidget
@@ -38,7 +39,7 @@ class StaticMedia(Media):
 
     async def _render_media(
         self,
-        data: dict,
+        data: dict[Any, Any],
         manager: DialogManager,
     ) -> list[MediaAttachment]:
         if self.url:

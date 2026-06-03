@@ -1,12 +1,9 @@
 import datetime
 
-import pytest
-
 from maxo.dialogs import DialogManager
 from maxo.dialogs.widgets.kbd import TimeSelect
 
 
-@pytest.mark.asyncio
 async def test_render_time_select(mock_manager: DialogManager) -> None:
     select = TimeSelect("x")
 

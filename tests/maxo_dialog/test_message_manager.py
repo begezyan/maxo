@@ -2,8 +2,6 @@
 
 from unittest.mock import AsyncMock
 
-import pytest
-
 from maxo.dialogs.api.entities import OldMessage, ShowMode
 from maxo.dialogs.manager.message_manager import MessageManager
 from maxo.enums import ChatType
@@ -20,7 +18,6 @@ def _make_old_message_with_kbd(mid: str = "55") -> OldMessage:
     )
 
 
-@pytest.mark.asyncio
 async def test_remove_inline_kbd_skips_refetch() -> None:
     """remove_inline_kbd не делает get_message_by_id после edit."""
     bot = AsyncMock()
@@ -35,7 +32,6 @@ async def test_remove_inline_kbd_skips_refetch() -> None:
     assert result is None
 
 
-@pytest.mark.asyncio
 async def test_remove_kbd_no_update_returns_none() -> None:
     """remove_kbd с ShowMode.NO_UPDATE возвращает None."""
     mgr = MessageManager(media_id_storage=AsyncMock())

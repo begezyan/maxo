@@ -72,7 +72,6 @@ def second_client(dp: Dispatcher) -> BotClient:
     return BotClient(dp, chat_id=-1, user_id=2, chat_type=ChatType.CHAT)
 
 
-@pytest.mark.asyncio
 async def test_start_in_foreground_for_another_user(
     dp: Dispatcher,
     client: BotClient,
@@ -104,7 +103,6 @@ async def test_start_in_foreground_for_another_user(
     assert second_message.body.text == "stub"
 
 
-@pytest.mark.asyncio
 async def test_start_in_foreground_for_another_user_via_bg(
     dp: Dispatcher,
     client: BotClient,

@@ -3,15 +3,15 @@ from typing import TypeAlias
 from maxo.enums.update_type import UpdateType
 from maxo.errors import AttributeIsEmptyError
 from maxo.omit import Omittable, Omitted, is_defined
+from maxo.routing.mixins import MessageMethodsFacade
+from maxo.routing.mixins.callback import CallbackMethodsFacade
 from maxo.routing.updates.base import MaxUpdate
-from maxo.routing.updates.mixins.callback import CallbackMethodsFacade
-from maxo.routing.updates.mixins.message import MessageMethodsFacade
 from maxo.types.callback import Callback
 from maxo.types.message import Message
 from maxo.types.user import User
 
 
-class MessageCallback(MaxUpdate, MessageMethodsFacade, CallbackMethodsFacade):
+class MessageCallback(MaxUpdate, CallbackMethodsFacade, MessageMethodsFacade):
     """
     Вы получите это событие, как только пользователь нажмёт кнопку
 
@@ -26,7 +26,7 @@ class MessageCallback(MaxUpdate, MessageMethodsFacade, CallbackMethodsFacade):
 
     callback: Callback
 
-    message: Message | None = None
+    message: Message | None = None  # type: ignore[assignment]
     """Изначальное сообщение, содержащее встроенную клавиатуру. Может быть `null`, если оно было удалено к моменту, когда бот получил это событие"""
 
     user_locale: Omittable[str | None] = Omitted()

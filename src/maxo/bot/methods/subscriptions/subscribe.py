@@ -10,7 +10,9 @@ class Subscribe(MaxoMethod[SimpleQueryResult]):
 
     Метод настраивает доставку событий бота через Webhook  - основной механизм получения событий в продуктовых интеграциях. При активной подписке Long Polling не работает 
 
-    > ! Получение обновлений с помощью [Long Polling](https://dev.max.ru/docs-api/methods/GET/updates) ограничено по скорости и сроку хранения событий - этот способ не подходит для production-окружения. Рекомендуем на всех этапах работы использовать [Webhook](https://dev.max.ru/docs-api/methods/POST/subscriptions)
+    > ! 
+    > - Для повышения безопасности **с 25 мая** прекращается поддержка получения вебхуков по HTTP, а также самоподписных сертификатов. Рекомендуем заранее перейти на HTTPS и сертификаты от доверенных центров. Чтобы обновить подписку на события, используйте текущий метод
+    > - Получение обновлений с помощью [Long Polling](https://dev.max.ru/docs-api/methods/GET/updates) ограничено по скорости и сроку хранения событий - этот способ не подходит для production-окружения. Рекомендуем на всех этапах работы использовать [Webhook](https://dev.max.ru/docs-api/methods/POST/subscriptions)
 
     ## Модель доставки событий
 
@@ -52,7 +54,7 @@ class Subscribe(MaxoMethod[SimpleQueryResult]):
 
     Webhook-endpoint должен возвращать **HTTP 200** в течение 30 секунд. Любой другой код ответа или превышение тайм-аута считается ошибкой доставки
 
-    Пример запроса:
+    #### Пример запроса:
     ```bash
     curl -X POST "https://platform-api.max.ru/subscriptions" \
       -H "Authorization: {access_token}" \

@@ -67,7 +67,6 @@ def event_message_created() -> MessageCreated:
     )
 
 
-@pytest.mark.asyncio
 async def test_storage_proxy_channel_message_created(
     channel_client: BotClient,
     captured_ctx: dict[str, Any],
@@ -82,7 +81,6 @@ async def test_storage_proxy_channel_message_created(
     assert ev_ctx.chat_type == ChatType.CHANNEL
 
 
-@pytest.mark.asyncio
 async def test_storage_proxy_channel_message_edited(
     channel_client: BotClient,
 ) -> None:
@@ -90,7 +88,6 @@ async def test_storage_proxy_channel_message_edited(
     await channel_client.send_channel_message_edited("Edited", mid="42")
 
 
-@pytest.mark.asyncio
 async def test_storage_proxy_channel_message_removed(
     channel_client: BotClient,
     captured_ctx: dict[str, Any],
@@ -99,7 +96,6 @@ async def test_storage_proxy_channel_message_removed(
     await channel_client.send_channel_message_removed(mid="42")
 
 
-@pytest.mark.asyncio
 async def test_event_context_user_none_visible_in_handler(
     channel_client: BotClient,
     captured_ctx: dict[str, Any],
@@ -114,7 +110,6 @@ async def test_event_context_user_none_visible_in_handler(
     assert ev_ctx.chat_id == -100
 
 
-@pytest.mark.asyncio
 async def test_access_validator_allows_when_no_settings(
     event_message_created: MessageCreated,
 ) -> None:
@@ -133,7 +128,6 @@ async def test_access_validator_allows_when_no_settings(
     assert allowed is True
 
 
-@pytest.mark.asyncio
 async def test_access_validator_allows_in_dialog_chat(
     event_message_created: MessageCreated,
 ) -> None:
@@ -160,7 +154,6 @@ async def test_access_validator_allows_in_dialog_chat(
     assert allowed is True
 
 
-@pytest.mark.asyncio
 async def test_access_validator_denies_when_user_required_but_missing(
     event_message_created: MessageCreated,
 ) -> None:

@@ -11,7 +11,6 @@ from maxo.transport.webhook.security.security import Security
 from .fixtures import DummyBoundRequest, DummyRequest, FailingCheck, PassingCheck
 
 
-@pytest.mark.asyncio
 @pytest.mark.parametrize(
     ("checks", "expected"),
     [
@@ -53,7 +52,6 @@ async def test_security_checks(
     assert await sec.verify(bot, req) is expected
 
 
-@pytest.mark.asyncio
 @pytest.mark.parametrize(
     ("checks", "secret_token", "request_token", "expected"),
     [

@@ -22,7 +22,7 @@ class GetUpdates(MaxoMethod[UpdateList], slots=False):
 
      Если параметр `marker` **не передан** или передано значение `null`, вы получите только последнее обновление 
 
-    **Пример запроса:**
+    #### Пример запроса:
     ```bash
     curl -X GET "https://platform-api.max.ru/updates" \
       -H "Authorization: {access_token}"
@@ -59,7 +59,7 @@ class GetUpdates(MaxoMethod[UpdateList], slots=False):
         except LoadError:
             raw = response.data
             marker = raw.get("marker")
-            updates = []
+            updates: list[Updates] = []
             for raw_upd in raw.get("updates", []):
                 try:
                     updates.append(response_loader.load(raw_upd, Updates))

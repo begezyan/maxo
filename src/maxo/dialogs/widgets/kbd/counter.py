@@ -1,5 +1,5 @@
 from abc import abstractmethod
-from typing import Protocol
+from typing import Any, Protocol
 
 from maxo.dialogs.api.entities import ChatEvent
 from maxo.dialogs.api.internal import RawKeyboard, TextWidget
@@ -103,7 +103,7 @@ class Counter(Keyboard):
 
     async def _render_keyboard(
         self,
-        data: dict,
+        data: dict[Any, Any],
         manager: DialogManager,
     ) -> RawKeyboard:
         row = []

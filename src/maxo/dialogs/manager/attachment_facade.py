@@ -1,8 +1,8 @@
 from maxo import Bot
 from maxo.dialogs.api.entities import MediaId
 from maxo.dialogs.api.protocols import MediaIdStorageProtocol
-from maxo.enums import UploadType
-from maxo.routing.updates.mixins import AttachmentsFacade
+from maxo.enums import AttachmentType, UploadType
+from maxo.routing.mixins import AttachmentsFacade
 from maxo.utils.upload_media import FSInputFile, InputFile
 
 
@@ -24,7 +24,7 @@ class DialogAttachmentsFacade(AttachmentsFacade):
             await self._media_id_storage.save_media_id(
                 path=file.path,
                 url=None,
-                type=file.type,
+                type=AttachmentType(file.type.value),
                 media_id=MediaId(token=token),
             )
 
